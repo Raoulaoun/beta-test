@@ -205,4 +205,16 @@ Not enough history: come back 2026-12-01 (1.9 months, 64 trades)
 
 ## samples/
 
-No files in /home/user/beta-test/samples
+Two real MT5 XLSX statements. Both parse, and each matches its own broker Results block
+(trade count and net P&L to the cent). Both hold about 3 days of trading, so both get
+"Not enough history".
+
+Evaluation date: 2026-11-16
+
+| File | Account | Broker | Type | Size | Months | Trades | Score | Band | Risk | Disc. | Cons. | Risk-adj. | Depth | Red flags | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ReportHistory-A.xlsx | •••933 | Credit Financier Invest (International) Ltd. | demo | under $1k | 0.1 | 16 | — (back 2026-12-13) | Not enough history |  |  |  |  |  | — | — |
+| ReportHistory-B.xlsx | •••709 | Royal ETP LLC | demo | under $1k | 0.1 | 10 | — (back 2027-01-15) | Not enough history |  |  |  |  |  | — | — |
+
+Diagnostic only (history minimum bypassed, not a product output): A scores 10 with
+blown_account and no_stops; B scores 10 with grid, blown_account and no_stops.
