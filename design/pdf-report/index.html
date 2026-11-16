@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html><head><script>window.__resources = {"https://unpkg.com/react@18.3.1/umd/react.production.min.js": "assets/2c5d6fe5-84c9-4c82-aa54-f3aaaa45873a.js", "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "assets/2c3986d6-f19a-448f-8c7a-3aa64085e1a6.js"};</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/c62cb6ed-21e3-4186-8d78-bf2c2fa6ae1d.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>:root {
+  /* ---- Primary: navy (base + 2 tints) ---- */
+  --color-navy-base: #0B1F3A;      /* primary brand navy, dark surfaces, headings */
+  --color-navy-surface: #13294A;   /* tint 1 — elevated dark panels, hover on dark */
+  --color-navy-border: #2C466B;    /* tint 2 — borders/dividers on dark surfaces */
+  --color-navy-wash: #EDF0F5;      /* faint navy wash for selected rows on light bg */
+
+  /* ---- Accent: beta green (base + 1 tint) ---- */
+  --color-green-base: #0E6B4F;     /* accent, primary CTA, positive P&L */
+  --color-green-tint: #3F9174;     /* lighter tint — positive icon/text on light bg */
+  --color-green-surface: #E3F1EB;  /* positive state background wash */
+  --color-green-press: #0A5A42;    /* pressed/hover state, darker than base */
+
+  /* ---- Neutrals ---- */
+  --color-bg: #FAFAF8;             /* warm off-white app background */
+  --color-surface: #FFFFFF;        /* card/panel surface */
+  --color-slate-900: #1C2430;      /* primary text */
+  --color-slate-700: #4C5A6E;      /* secondary text */
+  --color-slate-500: #7C8AA0;      /* tertiary text, placeholders, icons */
+  --color-slate-300: #D6DBE3;      /* default borders */
+  --color-slate-200: #E7E9EC;      /* subtle dividers */
+  --color-slate-100: #F1F1EE;      /* subtle surface alt, close to bg */
+
+  /* ---- Semantic ---- */
+  --color-red-base: #A23B2E;       /* muted institutional red — negative P&L, breach */
+  --color-red-surface: #F5E4E1;
+  --color-amber-base: #A9781F;     /* muted amber/gold — warnings, 90% risk line */
+  --color-amber-surface: #F5EBD6;
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-700);
+  --text-tertiary: var(--color-slate-500);
+  --text-on-dark: #F5F6F4;
+  --text-on-dark-secondary: rgba(245, 246, 244, 0.64);
+  --text-on-dark-tertiary: rgba(245, 246, 244, 0.4);
+
+  --surface-page: var(--color-bg);
+  --surface-card: var(--color-surface);
+  --surface-alt: var(--color-slate-100);
+  --surface-dark: var(--color-navy-base);
+  --surface-dark-elevated: var(--color-navy-surface);
+  --surface-selected: var(--color-navy-wash);
+
+  --border-default: var(--color-slate-300);
+  --border-subtle: var(--color-slate-200);
+  --border-dark: var(--color-navy-border);
+
+  --accent-primary: var(--color-green-base);
+  --accent-primary-hover: var(--color-green-press);
+  --accent-primary-tint: var(--color-green-tint);
+
+  --positive: var(--color-green-base);
+  --positive-tint: var(--color-green-tint);
+  --positive-surface: var(--color-green-surface);
+
+  --negative: var(--color-red-base);
+  --negative-surface: var(--color-red-surface);
+
+  --warning: var(--color-amber-base);
+  --warning-surface: var(--color-amber-surface);
+
+  --focus-ring: rgba(14, 107, 79, 0.22);
+}
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/65a110d5-487b-4d39-8e89-0e86975c3ab6.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/9d48cfca-1339-46bb-9957-90ebd9f3b791.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/0c39e1d5-0b7b-4314-99df-b365876411a0.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/a13f7fcc-785f-4b51-a8f3-2e740c3af7d8.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/ceee2955-adc8-47c7-a601-a908ce680e90.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/ec0ae7a2-7b51-494b-a9c6-90af93137924.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/005c7c80-1037-4ae0-9da7-9d5244182dbf.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/65a110d5-487b-4d39-8e89-0e86975c3ab6.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/9d48cfca-1339-46bb-9957-90ebd9f3b791.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/0c39e1d5-0b7b-4314-99df-b365876411a0.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/a13f7fcc-785f-4b51-a8f3-2e740c3af7d8.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/ceee2955-adc8-47c7-a601-a908ce680e90.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/ec0ae7a2-7b51-494b-a9c6-90af93137924.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/005c7c80-1037-4ae0-9da7-9d5244182dbf.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/65a110d5-487b-4d39-8e89-0e86975c3ab6.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/9d48cfca-1339-46bb-9957-90ebd9f3b791.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/0c39e1d5-0b7b-4314-99df-b365876411a0.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/a13f7fcc-785f-4b51-a8f3-2e740c3af7d8.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/ceee2955-adc8-47c7-a601-a908ce680e90.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/ec0ae7a2-7b51-494b-a9c6-90af93137924.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/005c7c80-1037-4ae0-9da7-9d5244182dbf.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/65a110d5-487b-4d39-8e89-0e86975c3ab6.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/9d48cfca-1339-46bb-9957-90ebd9f3b791.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/0c39e1d5-0b7b-4314-99df-b365876411a0.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/a13f7fcc-785f-4b51-a8f3-2e740c3af7d8.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/ceee2955-adc8-47c7-a601-a908ce680e90.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/ec0ae7a2-7b51-494b-a9c6-90af93137924.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/005c7c80-1037-4ae0-9da7-9d5244182dbf.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/e5bd4c02-f445-4371-adff-4ddcbb85bb51.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/c9e637b0-ca3c-4810-bc7a-cd28b0be5844.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/d437fb1b-2c89-4c35-b206-c6bfc9e2177d.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/3107f2b0-78f8-4edf-b500-3228660b18e2.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/c756fdf3-42a6-4fd9-b899-ed864522e953.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/bbb67cb0-57d9-4e69-84dd-ead42e84a604.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/2e9b5bdf-59fb-4387-b095-7ba5678897c0.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/e5bd4c02-f445-4371-adff-4ddcbb85bb51.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/c9e637b0-ca3c-4810-bc7a-cd28b0be5844.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/d437fb1b-2c89-4c35-b206-c6bfc9e2177d.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/3107f2b0-78f8-4edf-b500-3228660b18e2.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/c756fdf3-42a6-4fd9-b899-ed864522e953.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/bbb67cb0-57d9-4e69-84dd-ead42e84a604.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/2e9b5bdf-59fb-4387-b095-7ba5678897c0.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+:root {
+  --font-sans: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  /* Used only for very large display numerals/titles where slightly tighter
+     tracking reads more institutional; falls back to Inter everywhere else. */
+  --font-sans-tight: 'Inter Tight', var(--font-sans);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Type scale (UI copy, headings) ---- */
+  --font-size-display: 40px;
+  --line-height-display: 1.1;
+
+  --font-size-h1: 32px;
+  --line-height-h1: 1.2;
+
+  --font-size-h2: 24px;
+  --line-height-h2: 1.3;
+
+  --font-size-h3: 18px;
+  --line-height-h3: 1.4;
+
+  --font-size-body-lg: 16px;
+  --line-height-body-lg: 1.55;
+
+  --font-size-body: 14px;
+  --line-height-body: 1.5;
+
+  --font-size-body-sm: 13px;
+  --line-height-body-sm: 1.45;
+
+  --font-size-caption: 12px;
+  --line-height-caption: 1.4;
+  --tracking-caption: 0.01em;
+
+  --font-size-micro: 11px;
+  --line-height-micro: 1.3;
+  --tracking-micro: 0.06em;
+
+  /* ---- Numeric scale — tabular figures mandatory ---- */
+  --font-size-stat-xl: 48px;
+  --line-height-stat-xl: 1.05;
+
+  --font-size-stat-lg: 32px;
+  --line-height-stat-lg: 1.1;
+
+  --font-size-num-table: 14px;
+  --line-height-num-table: 1.4;
+
+  --font-size-num-sm: 13px;
+  --line-height-num-sm: 1.3;
+}
+
+.tabular-nums,
+.ds-numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'cv05' 1;
+  font-family: var(--font-sans);
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+}
+
+:root {
+  /* Restrained, precise corners — never the rounded-pill card look of retail fintech */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+}
+
+:root {
+  /* Shadows are near-invisible; hairline borders carry most surface separation.
+     Reserve --shadow-elevated for true overlays (menus, modals, popovers). */
+  --shadow-card: 0 1px 2px rgba(11, 31, 58, 0.04);
+  --shadow-elevated: 0 8px 24px rgba(11, 31, 58, 0.10), 0 2px 6px rgba(11, 31, 58, 0.06);
+  --shadow-focus: 0 0 0 3px var(--focus-ring);
+}
+
+/* Beta public website layer — extends the core tokens. Every site page and site component reads from here. */
+:root {
+  /* ---- Colour ---- */
+  --site-navy: var(--color-navy-base, #0B1F3A);
+  --site-green: var(--accent-primary, #0E6B4F);
+  --site-green-tint: var(--accent-primary-tint, #3F9174);
+  --site-green-wash: var(--color-green-surface, #E3F1EB);
+  --site-green-line: rgba(14,107,79,0.28);
+  --site-mint: #9FDCBE;
+  --site-page: var(--surface-page, #FAFAF8);
+  --site-card: var(--surface-card, #FFFFFF);
+  --site-alt: var(--surface-alt, #F1F1EE);
+  --site-ink: var(--text-primary);
+  --site-ink-2: var(--text-secondary);
+  --site-ink-3: var(--text-tertiary);
+  --site-border: var(--border-default);
+  --site-border-subtle: var(--border-subtle);
+
+  /* on-dark ink + surfaces */
+  --site-on-dark: #F5F6F4;
+  --site-on-dark-strong: rgba(245,246,244,0.92);
+  --site-on-dark-nav: rgba(245,246,244,0.86);
+  --site-on-dark-body: rgba(245,246,244,0.82);
+  --site-on-dark-muted: rgba(245,246,244,0.72);
+  --site-on-dark-faint: rgba(245,246,244,0.55);
+  --site-on-dark-label: rgba(245,246,244,0.5);
+  --site-on-dark-line: rgba(245,246,244,0.12);
+  --site-on-dark-line-2: rgba(245,246,244,0.14);
+  --site-on-dark-ghost: rgba(245,246,244,0.28);
+  --site-on-dark-ghost-hover: rgba(245,246,244,0.6);
+  --site-on-dark-fill: rgba(245,246,244,0.09);
+  --site-on-dark-fill-2: rgba(245,246,244,0.07);
+  --site-on-dark-fill-hover: rgba(245,246,244,0.11);
+  --site-on-dark-underline: rgba(245,246,244,0.35);
+  --site-menu-scrim: rgba(11,31,58,0.6);
+
+  /* ---- Gradients (atmosphere only — never read as "up") ---- */
+  --site-grad-hero: linear-gradient(168deg, #0B1F3A 0%, #0D2C3F 38%, #0E4A44 74%, #0E6B4F 118%);
+  --site-grad-panel: linear-gradient(150deg, #0E6B4F 0%, #0E4A44 52%, #0B1F3A 100%);
+  --site-grad-band: linear-gradient(162deg, #0E6B4F 0%, #0E4A44 46%, #0B1F3A 100%);
+  --site-glow-hero: radial-gradient(closest-side, rgba(63,145,116,0.30), rgba(63,145,116,0));
+  --site-glow-band: radial-gradient(closest-side, rgba(127,204,167,0.18), rgba(127,204,167,0));
+
+  /* ---- Type ---- */
+  --site-font-display: var(--font-sans-tight);
+  --site-font-body: var(--font-sans);
+  --site-font-label: var(--font-sans); /* mono slot: swap here when labels move to monospace */
+
+  --site-fs-hero: clamp(56px,8.6vw,124px);
+  --site-fs-h2: clamp(38px,5.6vw,80px);
+  --site-fs-h2-split: clamp(38px,5vw,72px);
+  --site-fs-h3: clamp(36px,4.6vw,64px);
+  --site-fs-card-title: clamp(26px,2.6vw,36px);
+  --site-fs-lead: clamp(17px,1.7vw,21px);
+  --site-fs-intro: clamp(16px,1.6vw,19px);
+  --site-fs-body: 17px;
+  --site-fs-small: 15px;
+  --site-fs-nav: 13px;
+  --site-fs-label: 12px;
+  --site-fs-micro: 11px;
+
+  --site-track-hero: -0.045em;
+  --site-track-display: -0.04em;
+  --site-track-nav: 0.06em;
+  --site-track-label: 0.08em;
+  --site-track-micro: 0.12em;
+  --site-lh-hero: 0.92;
+  --site-lh-display: 0.98;
+  --site-lh-body: 1.6;
+
+  /* ---- Space + layout ---- */
+  --site-max: 1280px;
+  --site-gutter: 40px;
+  --site-inset: 12px;
+  --site-section-y: clamp(88px,11vw,150px);
+  --site-section-y-tight: clamp(64px,8vw,110px);
+  --site-hero-top: clamp(56px,9vw,120px);
+  --site-hero-bottom: clamp(56px,8vw,110px);
+  --site-band-y: clamp(72px,9vw,130px);
+  --site-nav-h: 92px;
+  --site-btn-h: 46px;
+  --site-btn-h-lg: 54px;
+  --site-eyebrow-h: 38px;
+
+  /* ---- Radii ---- */
+  --site-r-panel: 28px;
+  --site-r-card-lg: 24px;
+  --site-r-card: 20px;
+  --site-r-tab: 14px;
+  --site-r-pill: 999px;
+
+  /* ---- Shadows ---- */
+  --site-shadow-float: 0 30px 60px -24px rgba(11,31,58,0.55);
+  --site-shadow-lift: 0 24px 48px -22px rgba(0,0,0,0.5);
+
+  /* ---- Motion ---- */
+  --site-dur-fast: 150ms;
+  --site-dur-base: 240ms;
+  --site-dur-slow: 400ms;
+  --site-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (max-width: 600px) {
+  :root { --site-gutter: 20px; }
+}
+
+/* ---- Layout utilities (media queries can't be inline) ---- */
+.site-grid-hero  { display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; }
+.site-grid-split { display:grid; grid-template-columns:1fr 1fr; }
+.site-grid-about { display:grid; grid-template-columns:1fr 1fr; gap:clamp(36px,6vw,96px); align-items:center; }
+.site-grid-aud   { display:grid; grid-template-columns:0.9fr 1fr 1fr; gap:24px; align-items:start; }
+.site-grid-2     { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.site-desk { display:block; }
+.site-mob  { display:none; }
+.site-nav-desk { display:flex; }
+.site-nav-mob  { display:none; }
+@media (max-width: 1000px) {
+  .site-grid-hero, .site-grid-split, .site-grid-about, .site-grid-aud { grid-template-columns:1fr; }
+  .site-desk { display:none; }
+  .site-mob  { display:flex; }
+  .site-nav-desk { display:none; }
+  .site-nav-mob  { display:flex; }
+}
+@media (max-width: 600px) {
+  .site-grid-2 { grid-template-columns:1fr; }
+  .site-wrap-mob { white-space:normal !important; }
+}
+.site-scroll-x { display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; }
+.site-scroll-x::-webkit-scrollbar { display:none; }
+
+</style>
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  * { box-sizing:border-box; }
+  a { color:#0E6B4F; text-decoration:none; }
+  a:hover { color:#0B1F3A; }
+</style>
+<script src="assets/8204a881-4e1a-49a6-b36d-e98aa4aba818.js"></script>
+</helmet>
+<doc-page size="a4">
+
+  <!-- 1 COVER -->
+  <section class="page" id="p1" data-screen-label="01 Cover" style="font-family:var(--site-font-body);color:#F5F6F4;background:linear-gradient(168deg,#0B1F3A 0%,#0B1F3A 40%,#0D2C3F 64%,#0E4A44 86%,#0E6B4F 116%);display:flex;flex-direction:column;padding:56px 56px 40px;position:relative;overflow:hidden">
+    <div style="position:absolute;right:-30%;bottom:-20%;width:90%;height:60%;border-radius:50%;background:radial-gradient(closest-side,rgba(63,145,116,0.28),rgba(63,145,116,0))"></div>
+    <div style="position:relative;display:flex;align-items:center;gap:12px">
+      <img src="assets/ae80ecd8-009e-45fe-8c92-77adbe575514.png" alt="Beta" style="height:26px;width:auto;display:block">
+      <span style="font-family:var(--site-font-display);font-weight:700;font-size:24px;letter-spacing:-0.035em;line-height:1;color:#F5F6F4">beta</span>
+      <span style="width:1px;height:20px;background:rgba(245,246,244,0.24)"></span>
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#C3CBD5">The Manager Test</span>
+    </div>
+    <div style="position:relative;margin-top:96px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#9FDCBE">Manager-Readiness Report</span>
+      <h1 style="margin:16px 0 0;font-family:var(--site-font-display);font-size:52px;font-weight:700;letter-spacing:-0.045em;line-height:1;color:#F5F6F4">Karim Haddad</h1>
+    </div>
+    <div style="position:relative;margin-top:56px;display:flex;align-items:center;gap:40px">
+      <div style="position:relative;width:200px;height:200px;flex-shrink:0">
+        <svg sc-camel-view-box="0 0 200 200" style="width:100%;height:100%;transform:rotate(-90deg)"><circle cx="100" cy="100" r="88" fill="none" stroke="rgba(245,246,244,0.14)" stroke-width="12"></circle><circle cx="100" cy="100" r="88" fill="none" stroke="#9FDCBE" stroke-width="12" stroke-linecap="round" stroke-dasharray="370.4 552.9"></circle></svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-family:var(--site-font-display);font-size:76px;font-weight:700;letter-spacing:-0.05em;line-height:0.9">67</span><span style="font-size:12px;font-weight:600;color:#C3CBD5;margin-top:4px">out of 100</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:var(--site-font-display);font-size:32px;font-weight:700;letter-spacing:-0.03em;line-height:1.05;color:#9FDCBE">Emerging Manager</span>
+        <span style="font-size:15px;line-height:1.5;color:rgba(245,246,244,0.85)">Close, with a few things to fix</span>
+        <span style="font-size:12px;color:#C3CBD5;margin-top:6px">Band 60–79 of four: Developing, Building, Emerging Manager, Professional Grade</span>
+      </div>
+    </div>
+    <div style="position:relative;margin-top:auto;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(245,246,244,0.18)">
+      <div style="padding:14px 0;border-bottom:1px solid rgba(245,246,244,0.18);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5">Date</span><span style="font-size:15px;font-weight:600">16 November 2026</span></div>
+      <div style="padding:14px 0 14px 20px;border-bottom:1px solid rgba(245,246,244,0.18);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5">Broker</span><span style="font-size:15px;font-weight:600">[Broker name]</span></div>
+      <div style="padding:14px 0;border-bottom:1px solid rgba(245,246,244,0.18);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5">Account</span><span style="font-size:15px;font-weight:600;letter-spacing:0.04em">•••• •••• 4821</span></div>
+      <div style="padding:14px 0 14px 20px;border-bottom:1px solid rgba(245,246,244,0.18);display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5">Record analyzed</span><span style="font-size:15px;font-weight:600">Live account · 14 months · 186 trades</span></div>
+    </div>
+    <div style="position:relative;margin-top:22px;display:flex;flex-direction:column;gap:6px;font-size:9.5px;line-height:1.5;color:#AEB8C4"><span style="font-weight:700;color:#C3CBD5">The Manager Test by Beta · 1 of 6</span><span>The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</span></div>
+  </section>
+
+  <!-- 2 PILLARS -->
+  <section class="page" id="p2" data-screen-label="02 Pillars" style="font-family:var(--site-font-body);color:#1C2430;background:#FFFFFF;display:flex;flex-direction:column;padding:52px 52px 36px">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#0E6B4F">Your five pillars</span>
+    <h2 style="margin:10px 0 6px;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.035em;line-height:1.05;color:#0B1F3A">Every metric behind your score</h2>
+    <p style="margin:0 0 18px;font-size:13px;line-height:1.5;color:#4C5A6E">Each metric shows your value, the point that earns full marks, and where professional managers usually sit.</p>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:0 0 8px;border-bottom:1.5px solid #0B1F3A;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4C5A6E"><span>Metric</span><span>You</span><span>Full marks</span><span>Pro managers</span></div>
+
+    <div style="padding:12px 0 6px;display:flex;align-items:center;gap:12px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A;flex:1">Risk control <span style="font-weight:500;color:#6B7684;font-size:12px">· 25%</span></span><span style="width:120px;height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><span style="display:block;height:100%;width:74%;background:#0E6B4F"></span></span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;width:28px;text-align:right">74</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Maximum drawdown</span><span style="font-weight:700;color:#A9781F">18%</span><span>10% or less</span><span>8–15%</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Average risk per trade</span><span style="font-weight:700;color:#0E6B4F">1.4%</span><span>1% or less</span><span>0.5–1.5%</span></div>
+
+    <div style="padding:14px 0 6px;display:flex;align-items:center;gap:12px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A;flex:1">Discipline <span style="font-weight:500;color:#6B7684;font-size:12px">· 20%</span></span><span style="width:120px;height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><span style="display:block;height:100%;width:58%;background:#0E6B4F"></span></span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;width:28px;text-align:right">58</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Size change after a loss</span><span style="font-weight:700;color:#A23B2E">1.6×</span><span>1.0×</span><span>1.0–1.1×</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Trades with a stop loss</span><span style="font-weight:700;color:#A9781F">64%</span><span>100%</span><span>90–100%</span></div>
+
+    <div style="padding:14px 0 6px;display:flex;align-items:center;gap:12px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A;flex:1">Consistency <span style="font-weight:500;color:#6B7684;font-size:12px">· 20%</span></span><span style="width:120px;height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><span style="display:block;height:100%;width:71%;background:#0E6B4F"></span></span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;width:28px;text-align:right">71</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Months within risk limit</span><span style="font-weight:700;color:#0E6B4F">12 of 14</span><span>Every month</span><span>90–100%</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Share of result from best day</span><span style="font-weight:700;color:#A9781F">22%</span><span>10% or less</span><span>5–12%</span></div>
+
+    <div style="padding:14px 0 6px;display:flex;align-items:center;gap:12px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A;flex:1">Risk-adjusted return <span style="font-weight:500;color:#6B7684;font-size:12px">· 20%</span></span><span style="width:120px;height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><span style="display:block;height:100%;width:66%;background:#0E6B4F"></span></span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;width:28px;text-align:right">66</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Sortino ratio</span><span style="font-weight:700;color:#A9781F">1.3</span><span>2.0 or more</span><span>1.4–2.2</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Result relative to drawdown</span><span style="font-weight:700;color:#A9781F">1.1</span><span>2.0 or more</span><span>1.2–2.0</span></div>
+
+    <div style="padding:14px 0 6px;display:flex;align-items:center;gap:12px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A;flex:1">Track record depth <span style="font-weight:500;color:#6B7684;font-size:12px">· 15%</span></span><span style="width:120px;height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><span style="display:block;height:100%;width:62%;background:#0E6B4F"></span></span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;width:28px;text-align:right">62</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Months of history</span><span style="font-weight:700;color:#A9781F">14</span><span>36 or more</span><span>24 or more</span></div>
+    <div style="display:grid;grid-template-columns:1.6fr 0.8fr 0.9fr 0.9fr;gap:0 12px;padding:7px 0;border-bottom:1px solid #DDE2E7;font-size:12.5px"><span>Closed trades</span><span style="font-weight:700;color:#A9781F">186</span><span>500 or more</span><span>300 or more</span></div>
+
+    <div style="margin-top:14px;display:flex;gap:18px;font-size:11px;color:#4C5A6E"><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#0E6B4F"></span>In the professional range</span><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#A9781F"></span>Below the professional range</span><span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#A23B2E"></span>Priority fix</span></div>
+
+    <div style="margin-top:auto;padding-top:12px;border-top:1px solid #DDE2E7;display:flex;flex-direction:column;gap:4px;font-size:9.5px;line-height:1.5;color:#6B7684"><span style="font-weight:700;color:#0B1F3A">The Manager Test by Beta · 2 of 6</span><span>The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</span></div>
+  </section>
+
+  <!-- 3 RED FLAGS -->
+  <section class="page" id="p3" data-screen-label="03 Red flags" style="font-family:var(--site-font-body);color:#1C2430;background:#FFFFFF;display:flex;flex-direction:column;padding:52px 52px 36px">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#0E6B4F">Red flags</span>
+    <h2 style="margin:10px 0 6px;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.035em;line-height:1.05;color:#0B1F3A">No red flags found</h2>
+    <p style="margin:0 0 24px;font-size:13px;line-height:1.55;color:#4C5A6E;max-width:62ch">Some patterns tell an investor more than any score. We check every statement for them. Martingale, grid trading or a blown account caps your score at 40, whatever the profit.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:6px 16px;padding:16px 18px;border:1px solid #DDE2E7;border-radius:14px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A">Martingale</span><span style="align-self:start;padding:3px 10px;border-radius:999px;background:#E7F1ED;font-size:11px;font-weight:700;color:#0E6B4F">Clear</span><span style="grid-column:1 / -1;font-size:12.5px;line-height:1.55">Doubling size after each loss to win it back. One bad run wipes out the account. We found no losing streak followed by stepped-up size.</span></div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:6px 16px;padding:16px 18px;border:1px solid #DDE2E7;border-radius:14px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A">Grid trading</span><span style="align-self:start;padding:3px 10px;border-radius:999px;background:#E7F1ED;font-size:11px;font-weight:700;color:#0E6B4F">Clear</span><span style="grid-column:1 / -1;font-size:12.5px;line-height:1.55">Stacking orders at fixed intervals with no stop. Looks steady until the market trends. We found no clusters of evenly spaced open positions.</span></div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:6px 16px;padding:16px 18px;border:1px solid #DDE2E7;border-radius:14px"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A">Blown account</span><span style="align-self:start;padding:3px 10px;border-radius:999px;background:#E7F1ED;font-size:11px;font-weight:700;color:#0E6B4F">Clear</span><span style="grid-column:1 / -1;font-size:12.5px;line-height:1.55">A drawdown that took the account close to zero, or a margin stop-out. Your deepest drawdown was 18%.</span></div>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:6px 16px;padding:16px 18px;border:1px solid rgba(169,120,31,0.4);border-radius:14px;background:#F5EBD6"><span style="font-family:var(--site-font-display);font-size:16px;font-weight:700;color:#0B1F3A">Revenge sizing</span><span style="align-self:start;padding:3px 10px;border-radius:999px;background:#FFFFFF;font-size:11px;font-weight:700;color:#7A5A16">Watch</span><span style="grid-column:1 / -1;font-size:12.5px;line-height:1.55;color:#3D2C0B">Not a cap, but worth fixing. After a loss, you trade 1.6× bigger. Investors read this as emotion driving size. It is fix 1 in your plan.</span></div>
+    </div>
+
+    <div style="margin-top:22px;padding:18px 20px;border-radius:14px;background:#0B1F3A;color:#F5F6F4;display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9FDCBE">Why these cap your score</span>
+      <span style="font-size:13px;line-height:1.55;color:rgba(245,246,244,0.88)">These strategies can show a smooth record for months and then lose everything in days. An investor can't see the risk in the result, so the score doesn't reward the result while they are present.</span>
+    </div>
+
+    <div style="margin-top:auto;padding-top:12px;border-top:1px solid #DDE2E7;display:flex;flex-direction:column;gap:4px;font-size:9.5px;line-height:1.5;color:#6B7684"><span style="font-weight:700;color:#0B1F3A">The Manager Test by Beta · 3 of 6</span><span>The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</span></div>
+  </section>
+
+  <!-- 4 YOUR PLAN -->
+  <section class="page" id="p4" data-screen-label="04 Your plan" style="font-family:var(--site-font-body);color:#1C2430;background:#FFFFFF;display:flex;flex-direction:column;padding:52px 52px 36px">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#0E6B4F">Your plan</span>
+    <h2 style="margin:10px 0 20px;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.035em;line-height:1.05;color:#0B1F3A">Your top 3 fixes, step by step</h2>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 18px;border:1px solid #DDE2E7;border-radius:14px">
+        <span style="width:40px;height:40px;border-radius:12px;background:#0B1F3A;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:18px">1</span>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:var(--site-font-display);font-size:17px;font-weight:700;color:#0B1F3A">Keep your size flat after a loss <span style="font-size:11px;font-weight:600;color:#0E6B4F;letter-spacing:0.04em">· DISCIPLINE</span></span>
+          <ol style="margin:0;padding-left:18px;font-size:12.5px;line-height:1.6"><li>Set one position size per account and write it down before the week starts.</li><li>After any losing trade, the next trade uses the same size or smaller.</li><li>After two losses in a day, stop trading until the next session.</li></ol></div>
+      </div>
+      <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 18px;border:1px solid #DDE2E7;border-radius:14px">
+        <span style="width:40px;height:40px;border-radius:12px;background:#0B1F3A;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:18px">2</span>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:var(--site-font-display);font-size:17px;font-weight:700;color:#0B1F3A">Put a stop on every trade <span style="font-size:11px;font-weight:600;color:#0E6B4F;letter-spacing:0.04em">· DISCIPLINE</span></span>
+          <ol style="margin:0;padding-left:18px;font-size:12.5px;line-height:1.6"><li>Decide where you are wrong before you enter, and place the stop with the order.</li><li>Never widen a stop once the trade is open.</li><li>Review any trade without a stop at the end of each week.</li></ol></div>
+      </div>
+      <div style="display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 18px;border:1px solid #DDE2E7;border-radius:14px">
+        <span style="width:40px;height:40px;border-radius:12px;background:#0B1F3A;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:18px">3</span>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:var(--site-font-display);font-size:17px;font-weight:700;color:#0B1F3A">Bring risk per trade to 1% <span style="font-size:11px;font-weight:600;color:#0E6B4F;letter-spacing:0.04em">· RISK CONTROL</span></span>
+          <ol style="margin:0;padding-left:18px;font-size:12.5px;line-height:1.6"><li>Size each position from the stop distance, not from a fixed lot.</li><li>Use the free position size calculator before every entry.</li><li>Cap total open risk at 3% across all positions.</li></ol></div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;padding:18px 20px;border-radius:14px;background:#E7F1ED">
+      <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Retest date</span><span style="font-size:13px;line-height:1.5;color:#0B1F3A">Apply these fixes, then take the test again with your new statement.</span></div>
+      <span style="font-family:var(--site-font-display);font-size:24px;font-weight:700;letter-spacing:-0.025em;color:#0B1F3A;white-space:nowrap">15 January 2027</span>
+    </div>
+
+    <div style="margin-top:auto;padding-top:12px;border-top:1px solid #DDE2E7;display:flex;flex-direction:column;gap:4px;font-size:9.5px;line-height:1.5;color:#6B7684"><span style="font-weight:700;color:#0B1F3A">The Manager Test by Beta · 4 of 6</span><span>The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</span></div>
+  </section>
+
+  <!-- 5 WHAT MANAGERS ARE JUDGED ON -->
+  <section class="page" id="p5" data-screen-label="05 What managers are judged on" style="font-family:var(--site-font-body);color:#1C2430;background:#FAFAF8;display:flex;flex-direction:column;padding:52px 52px 36px">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#0E6B4F">How professional managers compare</span>
+    <h2 style="margin:10px 0 8px;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.035em;line-height:1.05;color:#0B1F3A">What managers are judged on</h2>
+    <p style="margin:0 0 26px;font-size:13px;line-height:1.55;color:#4C5A6E;max-width:60ch">An investor reads a record in a fixed order. Risk first, consistency second, returns last. Your score is weighted the same way.</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:grid;grid-template-columns:64px 1fr 72px;align-items:center;gap:16px;padding:20px;border-radius:16px;background:#0B1F3A;color:#F5F6F4"><span style="font-family:var(--site-font-display);font-size:40px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:#9FDCBE">1</span><div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--site-font-display);font-size:20px;font-weight:700">Risk first</span><span style="font-size:12.5px;line-height:1.5;color:rgba(245,246,244,0.85)">How much can they lose, and do they stick to their own limits? Risk control and discipline.</span></div><span style="font-family:var(--site-font-display);font-size:26px;font-weight:700;text-align:right">45%</span></div>
+      <div style="display:grid;grid-template-columns:64px 1fr 72px;align-items:center;gap:16px;padding:20px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7"><span style="font-family:var(--site-font-display);font-size:40px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:#0E6B4F">2</span><div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--site-font-display);font-size:20px;font-weight:700;color:#0B1F3A">Consistency second</span><span style="font-size:12.5px;line-height:1.5">Is the result spread over many months and trades, or a few lucky days? Consistency and track record depth.</span></div><span style="font-family:var(--site-font-display);font-size:26px;font-weight:700;color:#0B1F3A;text-align:right">35%</span></div>
+      <div style="display:grid;grid-template-columns:64px 1fr 72px;align-items:center;gap:16px;padding:20px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7"><span style="font-family:var(--site-font-display);font-size:40px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:#7C8AA0">3</span><div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--site-font-display);font-size:20px;font-weight:700;color:#0B1F3A">Returns last</span><span style="font-size:12.5px;line-height:1.5">Only measured against the risk taken to get them. Risk-adjusted return.</span></div><span style="font-family:var(--site-font-display);font-size:26px;font-weight:700;color:#0B1F3A;text-align:right">20%</span></div>
+    </div>
+
+    <h3 style="margin:30px 0 12px;font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A">Questions an investor asks before handing over capital</h3>
+    <div style="display:flex;flex-direction:column;border-top:1px solid #DDE2E7">
+      <div style="padding:10px 0;border-bottom:1px solid #DDE2E7;font-size:13px">What is the most this manager has ever lost, from peak to trough?</div>
+      <div style="padding:10px 0;border-bottom:1px solid #DDE2E7;font-size:13px">Does every trade have a defined exit before it is opened?</div>
+      <div style="padding:10px 0;border-bottom:1px solid #DDE2E7;font-size:13px">What happens to position size after a losing week?</div>
+      <div style="padding:10px 0;border-bottom:1px solid #DDE2E7;font-size:13px">How long is the record, and how many trades is it built on?</div>
+    </div>
+
+    <div style="margin-top:auto;padding-top:12px;border-top:1px solid #DDE2E7;display:flex;flex-direction:column;gap:4px;font-size:9.5px;line-height:1.5;color:#6B7684"><span style="font-weight:700;color:#0B1F3A">The Manager Test by Beta · 5 of 6</span><span>The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</span></div>
+  </section>
+
+  <!-- 6 NEXT STEP -->
+  <section class="page" id="p6" data-screen-label="06 Next step" style="font-family:var(--site-font-body);color:#1C2430;background:#FFFFFF;display:flex;flex-direction:column;padding:52px 52px 36px">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#0E6B4F">Next step</span>
+    <h2 style="margin:10px 0 22px;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.035em;line-height:1.05;color:#0B1F3A">Where to go from here</h2>
+
+    <div style="padding:24px;border-radius:16px;background:linear-gradient(162deg,#0E6B4F 0%,#0E4A44 50%,#0B1F3A 100%);color:#F5F6F4;display:flex;flex-direction:column;gap:8px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9FDCBE">Free webinar · Thursday 26 November · 8:00 PM Beirut</span>
+      <span style="font-family:var(--site-font-display);font-size:24px;font-weight:700;letter-spacing:-0.025em;line-height:1.1">Your Money Management Journey Starts Here</span>
+      <span style="font-size:13px;line-height:1.55;color:rgba(245,246,244,0.88)">From trading for friends to managing professionally, bring your score</span>
+      <span style="font-size:13px;font-weight:700;color:#FFFFFF;margin-top:4px">betaapp.me/managers/webinar</span>
+    </div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="padding:20px;border-radius:16px;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Telegram</span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;line-height:1.15">Join the Beta Managers Room</span><span style="font-size:12.5px;font-weight:600;color:#0B1F3A;margin-top:4px">[Telegram link]</span></div>
+      <div style="padding:20px;border-radius:16px;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Beta</span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;line-height:1.15">How traders manage money with Beta</span><span style="font-size:12.5px;font-weight:600;color:#0B1F3A;margin-top:4px">betaapp.me</span></div>
+    </div>
+
+    <div style="margin-top:24px;padding:22px;border-radius:16px;background:#E7F1ED;display:flex;align-items:center;gap:18px">
+      <img src="assets/b886f3ed-914d-4743-b6ab-7af6aa81de20.png" alt="Beta" style="height:40px;width:auto;display:block;flex-shrink:0">
+      <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--site-font-display);font-size:20px;font-weight:700;letter-spacing:-0.02em;color:#0B1F3A">Managed, never held.</span><span style="font-size:12.5px;line-height:1.55">With Beta, client capital stays in the client's own broker account, in their name. The manager directs the trading through a real agreement.</span></div>
+    </div>
+
+    <div style="margin-top:24px;padding:18px 20px;border:1px solid #DDE2E7;border-radius:14px;display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4C5A6E">Disclaimer</span>
+      <span style="font-size:12.5px;line-height:1.6;color:#1C2430">The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</span>
+    </div>
+
+    <div style="margin-top:auto;padding-top:12px;border-top:1px solid #DDE2E7;display:flex;flex-direction:column;gap:4px;font-size:9.5px;line-height:1.5;color:#6B7684"><span style="font-weight:700;color:#0B1F3A">The Manager Test by Beta · 6 of 6</span><span>The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</span></div>
+  </section>
+</doc-page>
+</x-dc>
+
+
+</body></html>

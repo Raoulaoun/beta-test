@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html><head><script>window.__resources = {"./Manager%20Test%20Share%20Card.dc.html": "assets/84aaec57-1b10-463f-bde2-6c27290ac01e.html", "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "assets/0032ef57-b58a-437d-8993-2b82a45651f4.js", "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "assets/13211b1e-08ba-4d17-b2d2-81516a267b8e.js"};</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/f9341901-bcf6-4ac3-8add-a731684fad27.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>:root {
+  /* ---- Primary: navy (base + 2 tints) ---- */
+  --color-navy-base: #0B1F3A;      /* primary brand navy, dark surfaces, headings */
+  --color-navy-surface: #13294A;   /* tint 1 — elevated dark panels, hover on dark */
+  --color-navy-border: #2C466B;    /* tint 2 — borders/dividers on dark surfaces */
+  --color-navy-wash: #EDF0F5;      /* faint navy wash for selected rows on light bg */
+
+  /* ---- Accent: beta green (base + 1 tint) ---- */
+  --color-green-base: #0E6B4F;     /* accent, primary CTA, positive P&L */
+  --color-green-tint: #3F9174;     /* lighter tint — positive icon/text on light bg */
+  --color-green-surface: #E3F1EB;  /* positive state background wash */
+  --color-green-press: #0A5A42;    /* pressed/hover state, darker than base */
+
+  /* ---- Neutrals ---- */
+  --color-bg: #FAFAF8;             /* warm off-white app background */
+  --color-surface: #FFFFFF;        /* card/panel surface */
+  --color-slate-900: #1C2430;      /* primary text */
+  --color-slate-700: #4C5A6E;      /* secondary text */
+  --color-slate-500: #7C8AA0;      /* tertiary text, placeholders, icons */
+  --color-slate-300: #D6DBE3;      /* default borders */
+  --color-slate-200: #E7E9EC;      /* subtle dividers */
+  --color-slate-100: #F1F1EE;      /* subtle surface alt, close to bg */
+
+  /* ---- Semantic ---- */
+  --color-red-base: #A23B2E;       /* muted institutional red — negative P&L, breach */
+  --color-red-surface: #F5E4E1;
+  --color-amber-base: #A9781F;     /* muted amber/gold — warnings, 90% risk line */
+  --color-amber-surface: #F5EBD6;
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-700);
+  --text-tertiary: var(--color-slate-500);
+  --text-on-dark: #F5F6F4;
+  --text-on-dark-secondary: rgba(245, 246, 244, 0.64);
+  --text-on-dark-tertiary: rgba(245, 246, 244, 0.4);
+
+  --surface-page: var(--color-bg);
+  --surface-card: var(--color-surface);
+  --surface-alt: var(--color-slate-100);
+  --surface-dark: var(--color-navy-base);
+  --surface-dark-elevated: var(--color-navy-surface);
+  --surface-selected: var(--color-navy-wash);
+
+  --border-default: var(--color-slate-300);
+  --border-subtle: var(--color-slate-200);
+  --border-dark: var(--color-navy-border);
+
+  --accent-primary: var(--color-green-base);
+  --accent-primary-hover: var(--color-green-press);
+  --accent-primary-tint: var(--color-green-tint);
+
+  --positive: var(--color-green-base);
+  --positive-tint: var(--color-green-tint);
+  --positive-surface: var(--color-green-surface);
+
+  --negative: var(--color-red-base);
+  --negative-surface: var(--color-red-surface);
+
+  --warning: var(--color-amber-base);
+  --warning-surface: var(--color-amber-surface);
+
+  --focus-ring: rgba(14, 107, 79, 0.22);
+}
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/f3709589-0121-473f-b669-a635125a0989.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/9b391e8e-d079-41ab-a783-a9348a0cc543.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/d33bdbcd-a5f6-4fad-8834-82d6482a5fe9.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/50e51cf6-f4b2-4435-9ca4-52bca61ed3dd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/92275e21-8892-406d-8374-8415f21d94c6.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/05a02308-6ea6-4f32-a233-b5fcab4ab9d0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/ed830c74-f3b3-4036-bc4f-ccca25dcc084.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/f3709589-0121-473f-b669-a635125a0989.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/9b391e8e-d079-41ab-a783-a9348a0cc543.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/d33bdbcd-a5f6-4fad-8834-82d6482a5fe9.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/50e51cf6-f4b2-4435-9ca4-52bca61ed3dd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/92275e21-8892-406d-8374-8415f21d94c6.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/05a02308-6ea6-4f32-a233-b5fcab4ab9d0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/ed830c74-f3b3-4036-bc4f-ccca25dcc084.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/f3709589-0121-473f-b669-a635125a0989.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/9b391e8e-d079-41ab-a783-a9348a0cc543.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/d33bdbcd-a5f6-4fad-8834-82d6482a5fe9.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/50e51cf6-f4b2-4435-9ca4-52bca61ed3dd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/92275e21-8892-406d-8374-8415f21d94c6.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/05a02308-6ea6-4f32-a233-b5fcab4ab9d0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/ed830c74-f3b3-4036-bc4f-ccca25dcc084.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/f3709589-0121-473f-b669-a635125a0989.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/9b391e8e-d079-41ab-a783-a9348a0cc543.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/d33bdbcd-a5f6-4fad-8834-82d6482a5fe9.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/50e51cf6-f4b2-4435-9ca4-52bca61ed3dd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/92275e21-8892-406d-8374-8415f21d94c6.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/05a02308-6ea6-4f32-a233-b5fcab4ab9d0.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/ed830c74-f3b3-4036-bc4f-ccca25dcc084.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/ed771c7a-a14c-41ba-ba87-7c4637f538e0.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/39ab1f39-c46f-4282-8bc4-8393761401ab.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/bbb0cbd5-6176-4940-bd2c-43bcae592951.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/be45e550-d135-4714-b43d-5b642db067b3.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/2e720313-7885-4173-9d81-34e7658e8e55.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/b2ee53c2-c0f0-4e38-98cc-d790d38e4ae8.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/7f949a51-0385-4c6e-850a-29dd0025ccae.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/ed771c7a-a14c-41ba-ba87-7c4637f538e0.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/39ab1f39-c46f-4282-8bc4-8393761401ab.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/bbb0cbd5-6176-4940-bd2c-43bcae592951.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/be45e550-d135-4714-b43d-5b642db067b3.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/2e720313-7885-4173-9d81-34e7658e8e55.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/b2ee53c2-c0f0-4e38-98cc-d790d38e4ae8.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/7f949a51-0385-4c6e-850a-29dd0025ccae.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+:root {
+  --font-sans: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  /* Used only for very large display numerals/titles where slightly tighter
+     tracking reads more institutional; falls back to Inter everywhere else. */
+  --font-sans-tight: 'Inter Tight', var(--font-sans);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Type scale (UI copy, headings) ---- */
+  --font-size-display: 40px;
+  --line-height-display: 1.1;
+
+  --font-size-h1: 32px;
+  --line-height-h1: 1.2;
+
+  --font-size-h2: 24px;
+  --line-height-h2: 1.3;
+
+  --font-size-h3: 18px;
+  --line-height-h3: 1.4;
+
+  --font-size-body-lg: 16px;
+  --line-height-body-lg: 1.55;
+
+  --font-size-body: 14px;
+  --line-height-body: 1.5;
+
+  --font-size-body-sm: 13px;
+  --line-height-body-sm: 1.45;
+
+  --font-size-caption: 12px;
+  --line-height-caption: 1.4;
+  --tracking-caption: 0.01em;
+
+  --font-size-micro: 11px;
+  --line-height-micro: 1.3;
+  --tracking-micro: 0.06em;
+
+  /* ---- Numeric scale — tabular figures mandatory ---- */
+  --font-size-stat-xl: 48px;
+  --line-height-stat-xl: 1.05;
+
+  --font-size-stat-lg: 32px;
+  --line-height-stat-lg: 1.1;
+
+  --font-size-num-table: 14px;
+  --line-height-num-table: 1.4;
+
+  --font-size-num-sm: 13px;
+  --line-height-num-sm: 1.3;
+}
+
+.tabular-nums,
+.ds-numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'cv05' 1;
+  font-family: var(--font-sans);
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+}
+
+:root {
+  /* Restrained, precise corners — never the rounded-pill card look of retail fintech */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+}
+
+:root {
+  /* Shadows are near-invisible; hairline borders carry most surface separation.
+     Reserve --shadow-elevated for true overlays (menus, modals, popovers). */
+  --shadow-card: 0 1px 2px rgba(11, 31, 58, 0.04);
+  --shadow-elevated: 0 8px 24px rgba(11, 31, 58, 0.10), 0 2px 6px rgba(11, 31, 58, 0.06);
+  --shadow-focus: 0 0 0 3px var(--focus-ring);
+}
+
+/* Beta public website layer — extends the core tokens. Every site page and site component reads from here. */
+:root {
+  /* ---- Colour ---- */
+  --site-navy: var(--color-navy-base, #0B1F3A);
+  --site-green: var(--accent-primary, #0E6B4F);
+  --site-green-tint: var(--accent-primary-tint, #3F9174);
+  --site-green-wash: var(--color-green-surface, #E3F1EB);
+  --site-green-line: rgba(14,107,79,0.28);
+  --site-mint: #9FDCBE;
+  --site-page: var(--surface-page, #FAFAF8);
+  --site-card: var(--surface-card, #FFFFFF);
+  --site-alt: var(--surface-alt, #F1F1EE);
+  --site-ink: var(--text-primary);
+  --site-ink-2: var(--text-secondary);
+  --site-ink-3: var(--text-tertiary);
+  --site-border: var(--border-default);
+  --site-border-subtle: var(--border-subtle);
+
+  /* on-dark ink + surfaces */
+  --site-on-dark: #F5F6F4;
+  --site-on-dark-strong: rgba(245,246,244,0.92);
+  --site-on-dark-nav: rgba(245,246,244,0.86);
+  --site-on-dark-body: rgba(245,246,244,0.82);
+  --site-on-dark-muted: rgba(245,246,244,0.72);
+  --site-on-dark-faint: rgba(245,246,244,0.55);
+  --site-on-dark-label: rgba(245,246,244,0.5);
+  --site-on-dark-line: rgba(245,246,244,0.12);
+  --site-on-dark-line-2: rgba(245,246,244,0.14);
+  --site-on-dark-ghost: rgba(245,246,244,0.28);
+  --site-on-dark-ghost-hover: rgba(245,246,244,0.6);
+  --site-on-dark-fill: rgba(245,246,244,0.09);
+  --site-on-dark-fill-2: rgba(245,246,244,0.07);
+  --site-on-dark-fill-hover: rgba(245,246,244,0.11);
+  --site-on-dark-underline: rgba(245,246,244,0.35);
+  --site-menu-scrim: rgba(11,31,58,0.6);
+
+  /* ---- Gradients (atmosphere only — never read as "up") ---- */
+  --site-grad-hero: linear-gradient(168deg, #0B1F3A 0%, #0D2C3F 38%, #0E4A44 74%, #0E6B4F 118%);
+  --site-grad-panel: linear-gradient(150deg, #0E6B4F 0%, #0E4A44 52%, #0B1F3A 100%);
+  --site-grad-band: linear-gradient(162deg, #0E6B4F 0%, #0E4A44 46%, #0B1F3A 100%);
+  --site-glow-hero: radial-gradient(closest-side, rgba(63,145,116,0.30), rgba(63,145,116,0));
+  --site-glow-band: radial-gradient(closest-side, rgba(127,204,167,0.18), rgba(127,204,167,0));
+
+  /* ---- Type ---- */
+  --site-font-display: var(--font-sans-tight);
+  --site-font-body: var(--font-sans);
+  --site-font-label: var(--font-sans); /* mono slot: swap here when labels move to monospace */
+
+  --site-fs-hero: clamp(56px,8.6vw,124px);
+  --site-fs-h2: clamp(38px,5.6vw,80px);
+  --site-fs-h2-split: clamp(38px,5vw,72px);
+  --site-fs-h3: clamp(36px,4.6vw,64px);
+  --site-fs-card-title: clamp(26px,2.6vw,36px);
+  --site-fs-lead: clamp(17px,1.7vw,21px);
+  --site-fs-intro: clamp(16px,1.6vw,19px);
+  --site-fs-body: 17px;
+  --site-fs-small: 15px;
+  --site-fs-nav: 13px;
+  --site-fs-label: 12px;
+  --site-fs-micro: 11px;
+
+  --site-track-hero: -0.045em;
+  --site-track-display: -0.04em;
+  --site-track-nav: 0.06em;
+  --site-track-label: 0.08em;
+  --site-track-micro: 0.12em;
+  --site-lh-hero: 0.92;
+  --site-lh-display: 0.98;
+  --site-lh-body: 1.6;
+
+  /* ---- Space + layout ---- */
+  --site-max: 1280px;
+  --site-gutter: 40px;
+  --site-inset: 12px;
+  --site-section-y: clamp(88px,11vw,150px);
+  --site-section-y-tight: clamp(64px,8vw,110px);
+  --site-hero-top: clamp(56px,9vw,120px);
+  --site-hero-bottom: clamp(56px,8vw,110px);
+  --site-band-y: clamp(72px,9vw,130px);
+  --site-nav-h: 92px;
+  --site-btn-h: 46px;
+  --site-btn-h-lg: 54px;
+  --site-eyebrow-h: 38px;
+
+  /* ---- Radii ---- */
+  --site-r-panel: 28px;
+  --site-r-card-lg: 24px;
+  --site-r-card: 20px;
+  --site-r-tab: 14px;
+  --site-r-pill: 999px;
+
+  /* ---- Shadows ---- */
+  --site-shadow-float: 0 30px 60px -24px rgba(11,31,58,0.55);
+  --site-shadow-lift: 0 24px 48px -22px rgba(0,0,0,0.5);
+
+  /* ---- Motion ---- */
+  --site-dur-fast: 150ms;
+  --site-dur-base: 240ms;
+  --site-dur-slow: 400ms;
+  --site-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (max-width: 600px) {
+  :root { --site-gutter: 20px; }
+}
+
+/* ---- Layout utilities (media queries can't be inline) ---- */
+.site-grid-hero  { display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; }
+.site-grid-split { display:grid; grid-template-columns:1fr 1fr; }
+.site-grid-about { display:grid; grid-template-columns:1fr 1fr; gap:clamp(36px,6vw,96px); align-items:center; }
+.site-grid-aud   { display:grid; grid-template-columns:0.9fr 1fr 1fr; gap:24px; align-items:start; }
+.site-grid-2     { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.site-desk { display:block; }
+.site-mob  { display:none; }
+.site-nav-desk { display:flex; }
+.site-nav-mob  { display:none; }
+@media (max-width: 1000px) {
+  .site-grid-hero, .site-grid-split, .site-grid-about, .site-grid-aud { grid-template-columns:1fr; }
+  .site-desk { display:none; }
+  .site-mob  { display:flex; }
+  .site-nav-desk { display:none; }
+  .site-nav-mob  { display:flex; }
+}
+@media (max-width: 600px) {
+  .site-grid-2 { grid-template-columns:1fr; }
+  .site-wrap-mob { white-space:normal !important; }
+}
+.site-scroll-x { display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; }
+.site-scroll-x::-webkit-scrollbar { display:none; }
+
+</style>
+<style>
+  html, body { margin:0; padding:0; background:#FAFAF8; }
+  * { box-sizing:border-box; }
+  a { color:#0E6B4F; text-decoration:none; }
+  a:hover { color:#0B1F3A; }
+  button, input, select, textarea { font-family:inherit; }
+  input:focus, select:focus { outline:none; box-shadow:0 0 0 3px rgba(14,107,79,0.22); }
+  button:focus-visible, a:focus-visible, label:focus-within { outline:2px solid #0E6B4F; outline-offset:2px; }
+  @keyframes mtspin { to { transform:rotate(360deg); } }
+  @keyframes mtfill { from { width:0; } }
+  .mt-spin { animation:mtspin 0.9s linear infinite; }
+  .mt-wrap { max-width:1200px; margin:0 auto; padding:0 20px; width:100%; }
+  .mt-hero, .mt-steps, .mt-pillars, .mt-bands, .mt-next, .mt-sent, .mt-foot { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; }
+  .mt-hero { gap:36px; }
+  .mt-res { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; grid-template-areas:"score" "form" "details"; }
+  .mt-a-score { grid-area:score; } .mt-a-form { grid-area:form; } .mt-a-details { grid-area:details; }
+  .mt-sent { gap:20px; }
+  .mt-pad { padding:24px; }
+  .mt-dsk { display:none; }
+  @media (min-width:900px) {
+    .mt-wrap { padding:0 40px; }
+    .mt-hero { grid-template-columns:minmax(0,1.05fr) minmax(0,0.95fr); gap:64px; align-items:center; }
+    .mt-steps { grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; }
+    .mt-pillars { grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
+    .mt-bands { grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    .mt-next { grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+    .mt-sent { grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr); gap:48px; align-items:start; }
+    .mt-foot { grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:48px; }
+    .mt-res { grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr); gap:24px 32px; grid-template-areas:"score form" "details form"; align-items:start; }
+    .mt-a-form { position:sticky; top:24px; }
+    .mt-pad { padding:36px; }
+    .mt-dsk { display:block; }
+    .mt-mob { display:none; }
+  }
+</style>
+</helmet>
+
+<div style="font-family:var(--site-font-body);color:#1C2430;background:#FAFAF8;min-height:100vh;overflow-x:clip" data-screen-label="The Manager Test">
+
+  <!-- ============ LANDING ============ -->
+  <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+    <section style="position:relative;margin:8px;border-radius:24px;overflow:hidden;background:linear-gradient(168deg,#0B1F3A 0%,#0D2C3F 38%,#0E4A44 74%,#0E6B4F 118%);color:#F5F6F4">
+      <div aria-hidden="true" style="position:absolute;right:-20%;bottom:-40%;width:80%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(63,145,116,0.30),rgba(63,145,116,0))"></div>
+      <header class="mt-wrap" style="position:relative;height:76px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="display:flex;align-items:center;gap:12px;min-width:0">
+          <img src="assets/688236c7-0c12-4a1b-a0c1-09fd44fcb378.png" alt="Beta" style="height:24px;width:auto;display:block">
+          <span style="font-family:var(--site-font-display);font-size:22px;font-weight:700;letter-spacing:-0.035em;line-height:1;color:#F5F6F4">beta</span>
+          <span style="width:1px;height:20px;background:rgba(245,246,244,0.24)"></span>
+          <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5;white-space:nowrap">The Manager Test</span>
+        </div>
+        <a href="#how" style="display:inline-flex;align-items:center;min-height:44px;font-size:13px;font-weight:600;color:#C3CBD5;white-space:nowrap" style-hover="color:#F5F6F4">How it works</a>
+      </header>
+      <div class="mt-wrap" style="position:relative;padding-top:clamp(20px,5vw,64px);padding-bottom:clamp(28px,7vw,96px)">
+        <div class="mt-hero">
+          <div style="display:flex;flex-direction:column;align-items:flex-start;min-width:0">
+            <span style="display:inline-flex;align-items:center;gap:10px;min-height:34px;padding:7px 14px;border-radius:999px;background:rgba(245,246,244,0.09);border:1px solid rgba(245,246,244,0.12);font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(245,246,244,0.92)"><span style="width:7px;height:7px;border-radius:50%;background:#3F9174;box-shadow:0 0 0 4px rgba(63,145,116,0.25)"></span>Free · Results in 60 seconds</span>
+            <h1 style="font-family:var(--site-font-display);font-size:clamp(36px,5.4vw,72px);font-weight:700;letter-spacing:-0.04em;line-height:1;color:#F5F6F4;margin:22px 0 0;text-wrap:balance">Are you ready to manage other people's money?</h1>
+            <p style="font-size:clamp(16px,1.5vw,19px);line-height:1.6;color:rgba(245,246,244,0.82);margin:18px 0 0;max-width:50ch;text-wrap:pretty">Upload your MT5 statement and get your Manager-Readiness score, judged the way an investor would judge you: risk and discipline first, returns last.</p>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;min-width:0">
+            <label sc-camel-on-drag-over="{{ onDragOver }}" sc-camel-on-drag-leave="{{ onDragLeave }}" sc-camel-on-drop="{{ onDrop }}" style="position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:clamp(28px,4vw,48px) 24px;border-radius:24px;background:#FAFAF8;border:2px dashed {{ dropBorder }};cursor:pointer;box-shadow:0 30px 60px -24px rgba(0,0,0,0.5)">
+              <input type="file" accept=".xlsx,.html,.htm" sc-camel-on-change="{{ onFile }}" style="position:absolute;width:1px;height:1px;opacity:0">
+              <span style="width:60px;height:60px;border-radius:18px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 18v-6"></path><path d="m9 15 3-3 3 3"></path></svg></span>
+              <span style="font-family:var(--site-font-display);font-size:clamp(20px,2vw,24px);font-weight:700;letter-spacing:-0.02em;line-height:1.2;color:#0B1F3A">Drop your MT5 statement here</span>
+              <span style="font-size:14px;color:#6B7684">XLSX or HTML report · up to 10 MB</span>
+              <span style="margin-top:6px;display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 30px;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase">Choose file</span>
+            </label>
+            <p style="display:flex;align-items:flex-start;gap:10px;margin:0;font-size:13px;line-height:1.5;color:rgba(245,246,244,0.78)"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#9FDCBE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>We don't store your statement. It's analyzed in memory and deleted right away.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- tutorial -->
+    <section id="export" class="mt-wrap" style="padding-top:clamp(56px,8vw,104px);padding-bottom:clamp(40px,6vw,72px)">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Export your statement</span>
+      <h2 style="font-family:var(--site-font-display);font-size:clamp(28px,3.6vw,44px);font-weight:700;letter-spacing:-0.035em;line-height:1.05;color:#0B1F3A;margin:14px 0 24px;text-wrap:balance">Four steps in MetaTrader 5.</h2>
+      <div role="tablist" aria-label="Export instructions" style="display:inline-flex;padding:4px;border-radius:999px;background:#FFFFFF;border:1px solid #DDE2E7;margin-bottom:24px">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="2">
+          <button type="button" role="tab" aria-selected="{{ t.sel }}" sc-camel-on-click="{{ t.onClick }}" style="min-height:44px;padding:0 20px;border:none;border-radius:999px;background:{{ t.bg }};color:{{ t.fg }};font-size:14px;font-weight:600;cursor:pointer">{{ t.label }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ tabDesktop }}" hint-placeholder-val="{{ true }}">
+        <div class="mt-steps">
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-d1" shape="rounded" radius="12" placeholder="Screenshot: History tab" style="width:100%;aspect-ratio:16 / 10;display:block" hint-size="100%,160px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">1</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Open the History tab (Toolbox, Ctrl+T)</span></div></div>
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-d2" shape="rounded" radius="12" placeholder="Screenshot: All History" style="width:100%;aspect-ratio:16 / 10;display:block" hint-size="100%,160px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">2</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Right-click → All History</span></div></div>
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-d3" shape="rounded" radius="12" placeholder="Screenshot: Report menu" style="width:100%;aspect-ratio:16 / 10;display:block" hint-size="100%,160px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">3</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Right-click → Report → Open XML (or HTML), save the file</span></div></div>
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-d4" shape="rounded" radius="12" placeholder="Screenshot: upload box" style="width:100%;aspect-ratio:16 / 10;display:block" hint-size="100%,160px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">4</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Upload it here</span></div></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ tabMobile }}" hint-placeholder-val="{{ false }}">
+        <div class="mt-steps">
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-m1" shape="rounded" radius="12" placeholder="Screenshot: History, full period" style="width:100%;aspect-ratio:4 / 5;display:block" hint-size="100%,240px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">1</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Open History, set the full period</span></div></div>
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-m2" shape="rounded" radius="12" placeholder="Screenshot: Request report" style="width:100%;aspect-ratio:4 / 5;display:block" hint-size="100%,240px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">2</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Request your report (sent by email)</span></div></div>
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-m3" shape="rounded" radius="12" placeholder="Screenshot: Email attachment" style="width:100%;aspect-ratio:4 / 5;display:block" hint-size="100%,240px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">3</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Save the attached file</span></div></div>
+          <div style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:14px"><x-import component-from-global-scope="image-slot" from="assets/40553fa4-809a-4aa2-a451-c1192a122cdc.js#/image-slot.js" id="mt-m4" shape="rounded" radius="12" placeholder="Screenshot: Upload on phone" style="width:100%;aspect-ratio:4 / 5;display:block" hint-size="100%,240px"></x-import><div style="display:flex;gap:12px;padding:0 6px 8px"><span style="width:28px;height:28px;flex-shrink:0;border-radius:9px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-weight:700;font-size:14px">4</span><span style="font-size:15px;line-height:1.5;color:#0B1F3A">Upload it here</span></div></div>
+        </div>
+      </sc-if>
+    </section>
+
+    <!-- how you're scored -->
+    <section id="how" style="background:#FFFFFF;border-top:1px solid #DDE2E7;border-bottom:1px solid #DDE2E7">
+      <div class="mt-wrap" style="padding-top:clamp(56px,8vw,104px);padding-bottom:clamp(56px,8vw,104px)">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">How you're scored</span>
+        <h2 style="font-family:var(--site-font-display);font-size:clamp(28px,3.6vw,44px);font-weight:700;letter-spacing:-0.035em;line-height:1.05;color:#0B1F3A;margin:14px 0 28px;text-wrap:balance">Judged like a manager, not a gambler.</h2>
+        <div class="mt-pillars">
+          <sc-for list="{{ weights }}" as="w" hint-placeholder-count="5">
+            <div style="background:#FAFAF8;border:1px solid #DDE2E7;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px">
+              <span style="font-family:var(--site-font-display);font-size:40px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:#0B1F3A">{{ w.pct }}</span>
+              <div style="height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ w.bar }};background:#0E6B4F;border-radius:999px"></div></div>
+              <span style="font-size:15px;font-weight:600;line-height:1.35;color:#0B1F3A">{{ w.name }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px;display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border-radius:16px;background:#F5EBD6">
+          <svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="#A9781F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+          <span style="font-size:15px;line-height:1.5;font-weight:500;color:#5C4210">Martingale, grid trading or a blown account caps your score, whatever the profit.</span>
+        </div>
+
+        <h3 style="font-family:var(--site-font-display);font-size:clamp(22px,2.4vw,28px);font-weight:700;letter-spacing:-0.025em;color:#0B1F3A;margin:56px 0 20px">Four bands</h3>
+        <div class="mt-bands">
+          <sc-for list="{{ bandList }}" as="b" hint-placeholder-count="4">
+            <div style="border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px;background:{{ b.bg }};border:1px solid {{ b.border }}">
+              <span style="font-family:var(--site-font-display);font-size:15px;font-weight:700;letter-spacing:0.02em;color:{{ b.accent }};font-variant-numeric:tabular-nums">{{ b.range }}</span>
+              <span style="font-family:var(--site-font-display);font-size:22px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;color:{{ b.title }}">{{ b.name }}</span>
+              <span style="font-size:14px;line-height:1.5;color:{{ b.body }}">{{ b.desc }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ APP HEADER (non-landing) ============ -->
+  <sc-if value="{{ notLanding }}" hint-placeholder-val="{{ false }}">
+    <header class="mt-wrap" style="height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #DDE2E7">
+      <a href="?screen=landing" sc-camel-on-click="{{ goHome }}" style="display:flex;align-items:center;gap:12px;min-width:0">
+        <img src="assets/da914aa3-8ef8-41d4-b76f-e4910315f9e4.png" alt="Beta" style="height:24px;width:auto;display:block">
+        <span style="font-family:var(--site-font-display);font-size:22px;font-weight:700;letter-spacing:-0.035em;line-height:1;color:#0B1F3A">beta</span>
+        <span style="width:1px;height:20px;background:#DDE2E7"></span>
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684;white-space:nowrap">The Manager Test</span>
+      </a>
+    </header>
+  </sc-if>
+
+  <!-- ============ ANALYZING ============ -->
+  <sc-if value="{{ isAnalyzing }}" hint-placeholder-val="{{ false }}">
+    <section class="mt-wrap" style="padding-top:clamp(48px,10vw,120px);padding-bottom:clamp(64px,10vw,140px);display:flex;justify-content:center">
+      <div role="status" aria-live="polite" class="mt-pad" style="width:100%;max-width:520px;background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;background:#FAFAF8;border:1px solid #DDE2E7">
+          <span style="width:36px;height:36px;border-radius:10px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg></span>
+          <span style="font-size:15px;font-weight:600;color:#0B1F3A;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ fileName }}</span>
+        </div>
+        <h1 style="font-family:var(--site-font-display);font-size:clamp(26px,3vw,32px);font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#0B1F3A;margin:0">Scoring your record</h1>
+        <div style="height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ progress }};background:#0E6B4F;border-radius:999px;transition:width 0.6s ease"></div></div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:14px;min-height:44px">
+              <span style="width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                <sc-if value="{{ s.done }}" hint-placeholder-val="{{ false }}"><span style="width:24px;height:24px;border-radius:50%;background:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" sc-camel-view-box="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span></sc-if>
+                <sc-if value="{{ s.active }}" hint-placeholder-val="{{ false }}"><span class="mt-spin" style="width:20px;height:20px;border-radius:50%;border:2.5px solid #E7F1ED;border-top-color:#0E6B4F;display:block"></span></sc-if>
+                <sc-if value="{{ s.pending }}" hint-placeholder-val="{{ true }}"><span style="width:20px;height:20px;border-radius:50%;border:2px solid #DDE2E7;display:block"></span></sc-if>
+              </span>
+              <span style="font-size:16px;font-weight:{{ s.weight }};color:{{ s.color }}">{{ s.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:0;font-size:13px;line-height:1.5;color:#6B7684">Your statement is analyzed in memory and deleted right away.</p>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ ERROR ============ -->
+  <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+    <section class="mt-wrap" style="padding-top:clamp(48px,10vw,120px);padding-bottom:clamp(64px,10vw,140px);display:flex;justify-content:center">
+      <div role="alert" class="mt-pad" style="width:100%;max-width:560px;background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+        <span style="width:52px;height:52px;border-radius:16px;background:#F5EBD6;color:#A9781F;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 12v3"></path><path d="M12 18h.01"></path></svg></span>
+        <span style="font-size:13px;font-weight:600;color:#6B7684;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ fileName }}</span>
+        <h1 style="font-family:var(--site-font-display);font-size:clamp(24px,3vw,32px);font-weight:700;letter-spacing:-0.03em;line-height:1.12;color:#0B1F3A;margin:0;text-wrap:balance">{{ errTitle }}</h1>
+        <p style="margin:0;font-size:16px;line-height:1.6;color:#1C2430;text-wrap:pretty">{{ errBody }}</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin-top:6px;width:100%">
+          <label style="position:relative;display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 26px;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">Upload another file<input type="file" accept=".xlsx,.html,.htm" sc-camel-on-change="{{ onFile }}" style="position:absolute;width:1px;height:1px;opacity:0"></label>
+          <a href="#export" sc-camel-on-click="{{ goExport }}" style="display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:600;color:#0E6B4F"><span style="border-bottom:1px solid rgba(14,107,79,0.4);padding-bottom:2px">See how to export from MT5</span></a>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ RESULTS / NOT ENOUGH HISTORY ============ -->
+  <sc-if value="{{ isResultLike }}" hint-placeholder-val="{{ false }}">
+    <section class="mt-wrap" style="padding-top:clamp(16px,3vw,40px);padding-bottom:clamp(56px,8vw,104px)">
+      <div class="mt-res">
+
+        <div class="mt-a-score" style="position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(168deg,#0B1F3A 0%,#0D2C3F 40%,#0E4A44 82%,#0E6B4F 122%);color:#F5F6F4">
+          <div aria-hidden="true" style="position:absolute;right:-30%;bottom:-40%;width:90%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(63,145,116,0.28),rgba(63,145,116,0))"></div>
+          <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+            <div class="mt-pad" style="position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px">
+              <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5">Your Manager-Readiness score</span>
+              <div style="position:relative;width:clamp(180px,22vw,220px);aspect-ratio:1">
+                <svg sc-camel-view-box="0 0 200 200" style="width:100%;height:100%;transform:rotate(-90deg)"><circle cx="100" cy="100" r="88" fill="none" stroke="rgba(245,246,244,0.14)" stroke-width="12"></circle><circle cx="100" cy="100" r="88" fill="none" stroke="#9FDCBE" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ dash }}"></circle></svg>
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-family:var(--site-font-display);font-size:clamp(64px,7vw,80px);font-weight:700;letter-spacing:-0.05em;line-height:0.9;color:#F5F6F4;font-variant-numeric:tabular-nums">{{ score }}</span><span style="font-size:14px;font-weight:600;color:#C3CBD5;margin-top:4px">out of 100</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+                <span style="font-family:var(--site-font-display);font-size:clamp(24px,2.6vw,30px);font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:#9FDCBE">{{ bandName }}</span>
+                <span style="font-size:15px;line-height:1.45;color:rgba(245,246,244,0.82)">{{ bandDesc }}</span>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
+                <sc-for list="{{ chips }}" as="c" hint-placeholder-count="3"><span style="display:inline-flex;align-items:center;min-height:32px;padding:6px 14px;border-radius:999px;background:rgba(245,246,244,0.08);border:1px solid rgba(245,246,244,0.16);font-size:13px;font-weight:600;color:#E6EAEE">{{ c }}</span></sc-for>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ isShort }}" hint-placeholder-val="{{ false }}">
+            <div class="mt-pad" style="position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+              <span style="width:56px;height:56px;border-radius:18px;background:rgba(245,246,244,0.1);color:#9FDCBE;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg></span>
+              <h1 style="font-family:var(--site-font-display);font-size:clamp(28px,3.4vw,40px);font-weight:700;letter-spacing:-0.035em;line-height:1.08;color:#F5F6F4;margin:0;text-wrap:balance">Not enough history yet. Come back on {{ comeBack }} for your score.</h1>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ shortChips }}" as="c" hint-placeholder-count="3"><span style="display:inline-flex;align-items:center;min-height:32px;padding:6px 14px;border-radius:999px;background:rgba(245,246,244,0.08);border:1px solid rgba(245,246,244,0.16);font-size:13px;font-weight:600;color:#E6EAEE">{{ c }}</span></sc-for>
+              </div>
+              <div style="width:100%;display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid rgba(245,246,244,0.16)">
+                <div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:14px;color:rgba(245,246,244,0.82)"><span>Months of history</span><span style="font-weight:700;color:#F5F6F4">2 of 3</span></div><div style="height:6px;border-radius:999px;background:rgba(245,246,244,0.14);overflow:hidden"><div style="height:100%;width:67%;background:#9FDCBE;border-radius:999px"></div></div></div>
+                <div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:14px;color:rgba(245,246,244,0.82)"><span>Closed trades</span><span style="font-weight:700;color:#F5F6F4">21 of 30</span></div><div style="height:6px;border-radius:999px;background:rgba(245,246,244,0.14);overflow:hidden"><div style="height:100%;width:70%;background:#9FDCBE;border-radius:999px"></div></div></div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- lead form -->
+        <form id="report" sc-camel-on-submit="{{ submit }}" novalidate="{{ true }}" class="mt-a-form mt-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px;min-width:0;scroll-margin-top:16px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <h2 style="font-family:var(--site-font-display);font-size:clamp(22px,2.4vw,28px);font-weight:700;letter-spacing:-0.025em;line-height:1.12;color:#0B1F3A;margin:0;text-wrap:balance">Get your full report and improvement plan</h2>
+            <p style="margin:0;font-size:15px;color:#6B7684">Free PDF, sent to your email in a minute.</p>
+          </div>
+          <ul style="list-style:none;margin:0;padding:14px 16px;border-radius:16px;background:#E7F1ED;display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ benefits }}" as="b" hint-placeholder-count="4">
+              <li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.45;font-weight:500;color:#0B1F3A"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#0E6B4F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M20 6 9 17l-5-5"></path></svg>{{ b }}</li>
+            </sc-for>
+          </ul>
+
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <label for="mt-name" style="font-size:14px;font-weight:600;color:#0B1F3A">Full name</label>
+            <input id="mt-name" type="text" autocomplete="name" value="{{ name }}" sc-camel-on-input="{{ setName }}" aria-invalid="{{ invName }}" style="height:50px;padding:0 14px;border-radius:12px;border:1px solid {{ nameBorder }};background:#FFFFFF;font-size:16px;color:#1C2430">
+            <sc-if value="{{ errName }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:#A23B2E">{{ errName }}</span></sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <label for="mt-email" style="font-size:14px;font-weight:600;color:#0B1F3A">Email</label>
+            <input id="mt-email" type="email" autocomplete="email" inputmode="email" value="{{ email }}" sc-camel-on-input="{{ setEmail }}" aria-invalid="{{ invEmail }}" style="height:50px;padding:0 14px;border-radius:12px;border:1px solid {{ emailBorder }};background:#FFFFFF;font-size:16px;color:#1C2430">
+            <sc-if value="{{ errEmail }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:#A23B2E">{{ errEmail }}</span></sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <label for="mt-phone" style="font-size:14px;font-weight:600;color:#0B1F3A">Phone (WhatsApp)</label>
+            <div style="display:flex;gap:8px">
+              <sc-raw-select aria-label="Country code" value="{{ cc }}" sc-camel-on-change="{{ setCc }}" style="height:50px;width:112px;flex-shrink:0;padding:0 10px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:15px;font-weight:600;color:#0B1F3A">
+                <sc-for list="{{ countries }}" as="k" hint-placeholder-count="1"><option value="{{ k.v }}">{{ k.l }}</option></sc-for>
+              </sc-raw-select>
+              <input id="mt-phone" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="3 123 456" value="{{ phone }}" sc-camel-on-input="{{ setPhone }}" aria-invalid="{{ invPhone }}" style="height:50px;min-width:0;flex:1;padding:0 14px;border-radius:12px;border:1px solid {{ phoneBorder }};background:#FFFFFF;font-size:16px;color:#1C2430">
+            </div>
+            <sc-if value="{{ errPhone }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:#A23B2E">{{ errPhone }}</span></sc-if>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <span id="mt-manage-l" style="font-size:14px;font-weight:600;color:#0B1F3A">Are you already managing money for others?</span>
+            <div role="radiogroup" aria-labelledby="mt-manage-l" style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ manageOpts }}" as="o" hint-placeholder-count="3">
+                <button type="button" role="radio" aria-checked="{{ o.on }}" sc-camel-on-click="{{ o.onClick }}" style="min-height:44px;padding:10px 16px;border-radius:999px;border:1px solid {{ o.border }};background:{{ o.bg }};color:{{ o.fg }};font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap">{{ o.label }}</button>
+              </sc-for>
+            </div>
+            <sc-if value="{{ errManage }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:#A23B2E">{{ errManage }}</span></sc-if>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{ checks }}" as="c" hint-placeholder-count="2">
+              <label style="position:relative;display:flex;align-items:flex-start;gap:12px;cursor:pointer;min-height:44px;padding-top:4px">
+                <input type="checkbox" checked="{{ c.on }}" sc-camel-on-change="{{ c.toggle }}" style="position:absolute;opacity:0;width:1px;height:1px">
+                <span style="width:22px;height:22px;flex-shrink:0;border-radius:6px;border:1.5px solid {{ c.border }};background:{{ c.bg }};display:flex;align-items:center;justify-content:center"><svg width="13" height="13" sc-camel-view-box="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:{{ c.tick }}"><path d="M20 6 9 17l-5-5"></path></svg></span>
+                <span style="font-size:14px;line-height:1.5;color:#1C2430">{{ c.label }}</span>
+              </label>
+            </sc-for>
+            <sc-if value="{{ errConsent }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:#A23B2E;padding-left:34px">{{ errConsent }}</span></sc-if>
+          </div>
+
+          <button type="submit" disabled="{{ isSubmitting }}" aria-busy="{{ busy }}" style="height:56px;border:none;border-radius:999px;background:#0E6B4F;opacity:{{ btnOpacity }};color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px">
+            <sc-if value="{{ isSubmitting }}" hint-placeholder-val="{{ false }}"><span class="mt-spin" style="width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.35);border-top-color:#FFFFFF;display:inline-block"></span></sc-if>
+            Send my full report
+          </button>
+        </form>
+
+        <!-- details -->
+        <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+          <div class="mt-a-details" style="display:flex;flex-direction:column;gap:16px;min-width:0">
+            <div class="mt-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:10px">
+              <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Key insight</span>
+              <p style="margin:0;font-family:var(--site-font-display);font-size:clamp(24px,2.8vw,32px);font-weight:700;letter-spacing:-0.03em;line-height:1.12;color:#0B1F3A;text-wrap:balance">After a loss, you trade 1.6× bigger.</p>
+            </div>
+            <div class="mt-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px">
+              <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Your five pillars</span>
+              <sc-for list="{{ pillars }}" as="p" hint-placeholder-count="5">
+                <div style="display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-size:15px;font-weight:600;color:#0B1F3A">{{ p.name }} <span style="font-weight:500;color:#6B7684">· {{ p.pct }}</span></span><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A;font-variant-numeric:tabular-nums">{{ p.score }}</span></div>
+                  <div style="height:8px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ p.w }};background:#0E6B4F;border-radius:999px;animation:mtfill 0.9s ease"></div></div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ flagsNone }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;align-items:flex-start;gap:14px;padding:20px 22px;border-radius:20px;background:#E7F1ED">
+                <span style="width:32px;height:32px;flex-shrink:0;border-radius:50%;background:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+                <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A">No red flags found</span><span style="font-size:14px;line-height:1.5;color:#1C2430">No martingale, grid trading or blown account in your history.</span></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ flagsWarn }}" hint-placeholder-val="{{ false }}">
+              <div role="note" style="display:flex;align-items:flex-start;gap:14px;padding:20px 22px;border-radius:20px;background:#F5E4E1;border:1px solid rgba(162,59,46,0.25)">
+                <span style="width:32px;height:32px;flex-shrink:0;border-radius:50%;background:#A23B2E;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v5"></path><path d="M12 17h.01"></path></svg></span>
+                <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#7A2A20">Martingale detected. Score capped at 40.</span><span style="font-size:14px;line-height:1.5;color:#1C2430">Martingale, grid trading or a blown account caps your score, whatever the profit.</span></div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+      <p style="margin:28px 0 0;max-width:80ch;font-size:13px;line-height:1.6;color:#6B7684">The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</p>
+    </section>
+  </sc-if>
+
+  <!-- ============ REPORT SENT ============ -->
+  <sc-if value="{{ isSent }}" hint-placeholder-val="{{ false }}">
+    <section class="mt-wrap" style="padding-top:clamp(24px,5vw,64px);padding-bottom:clamp(56px,8vw,104px)">
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:14px;margin-bottom:clamp(28px,4vw,48px)">
+        <span style="width:56px;height:56px;border-radius:50%;background:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="26" height="26" sc-camel-view-box="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        <h1 style="font-family:var(--site-font-display);font-size:clamp(34px,5vw,60px);font-weight:700;letter-spacing:-0.04em;line-height:1;color:#0B1F3A;margin:6px 0 0">Your report is on its way</h1>
+        <p style="margin:0;font-size:17px;line-height:1.5;color:#1C2430">to <strong style="font-weight:700;color:#0B1F3A">{{ sentTo }}</strong></p>
+      </div>
+      <div class="mt-sent">
+        <div class="mt-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;align-items:center;gap:20px">
+          <span style="align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Your share card</span>
+          <div style="position:relative;width:243px;height:432px;border-radius:14px;overflow:hidden;box-shadow:0 24px 48px -20px rgba(11,31,58,0.5)">
+            <div style="position:absolute;top:0;left:0;width:1080px;height:1920px;transform:scale(0.225);transform-origin:top left">
+              <dc-import name="Manager Test Share Card" format="story" first-name="{{ firstName }}" show-name="{{ showName }}" score="{{ score }}" band="{{ bandName }}" hint-size="1080px,1920px"></dc-import>
+            </div>
+          </div>
+          <label style="position:relative;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:48px;cursor:pointer;padding:0 4px">
+            <span style="font-size:15px;font-weight:500;color:#0B1F3A">Show my first name on the card</span>
+            <input type="checkbox" role="switch" checked="{{ showName }}" sc-camel-on-change="{{ toggleShowName }}" style="position:absolute;opacity:0;width:1px;height:1px">
+            <span style="position:relative;width:48px;height:28px;flex-shrink:0;border-radius:999px;background:{{ switchBg }};transition:background 0.2s"><span style="position:absolute;top:3px;left:{{ knobLeft }};width:22px;height:22px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(11,31,58,0.3);transition:left 0.2s"></span></span>
+          </label>
+          <div style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <a href="{{ storyHref }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;height:50px;border-radius:999px;background:#0B1F3A;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase" style-hover="background:#14304F;color:#FFFFFF">Download story</a>
+            <a href="{{ postHref }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;height:50px;border-radius:999px;border:1px solid #DDE2E7;background:#FFFFFF;color:#0B1F3A;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase" style-hover="border-color:#0B1F3A;color:#0B1F3A">Download post</a>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+          <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Next steps</span>
+          <a href="./Beta Webinar.dc.html" style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:26px;border-radius:24px;background:linear-gradient(162deg,#0E6B4F 0%,#0E4A44 50%,#0B1F3A 100%);color:#F5F6F4" style-hover="color:#F5F6F4">
+            <span style="display:inline-flex;align-self:flex-start;align-items:center;min-height:28px;padding:4px 12px;border-radius:999px;background:rgba(245,246,244,0.12);font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9FDCBE">Free webinar</span>
+            <span style="font-family:var(--site-font-display);font-size:clamp(22px,2.4vw,26px);font-weight:700;letter-spacing:-0.025em;line-height:1.12;color:#F5F6F4">Your Money Management Journey Starts Here</span>
+            <span style="font-size:15px;line-height:1.55;color:rgba(245,246,244,0.82)">From trading for friends to managing professionally, bring your score</span>
+            <span style="display:inline-flex;align-items:center;gap:8px;margin-top:6px;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#F5F6F4">Save my seat →</span>
+          </a>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr);gap:16px">
+            <a href="#" style="display:flex;align-items:center;gap:16px;padding:22px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7;color:#0B1F3A" style-hover="border-color:#0B1F3A;color:#0B1F3A">
+              <span style="width:44px;height:44px;flex-shrink:0;border-radius:14px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"></path><path d="M22 2 11 13"></path></svg></span>
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;letter-spacing:-0.015em">Join the Beta Managers Room</span><span style="font-size:14px;color:#6B7684">Telegram</span></span>
+              <span style="font-size:20px;color:#0E6B4F">→</span>
+            </a>
+            <a href="https://betaapp.me" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:16px;padding:22px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7;color:#0B1F3A" style-hover="border-color:#0B1F3A;color:#0B1F3A">
+              <span style="width:44px;height:44px;flex-shrink:0;border-radius:14px;background:#E7F1ED;display:flex;align-items:center;justify-content:center"><img src="assets/da914aa3-8ef8-41d4-b76f-e4910315f9e4.png" alt="" style="height:20px;width:auto;display:block"></span>
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1"><span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;letter-spacing:-0.015em">How traders manage money with Beta</span><span style="font-size:14px;color:#6B7684">betaapp.me</span></span>
+              <span style="font-size:20px;color:#0E6B4F">→</span>
+            </a>
+          </div>
+          <p style="display:flex;align-items:center;gap:10px;margin:4px 0 0;font-size:14px;line-height:1.5;color:#6B7684"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#0E6B4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>Improving your record? Take the test again in 60 days.</p>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="background:#0B1F3A;color:#C3CBD5;margin-top:0">
+    <div class="mt-wrap" style="padding-top:48px;padding-bottom:40px">
+      <div class="mt-foot">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:10px"><img src="assets/688236c7-0c12-4a1b-a0c1-09fd44fcb378.png" alt="Beta" style="height:22px;width:auto;display:block"><span style="font-family:var(--site-font-display);font-size:20px;font-weight:700;letter-spacing:-0.035em;line-height:1;color:#F5F6F4">beta</span></div>
+          <span style="font-family:var(--site-font-display);font-size:22px;font-weight:700;letter-spacing:-0.025em;color:#F5F6F4">Managed, never held.</span>
+          <p style="margin:0;font-size:13px;line-height:1.6;color:#9AA5B3;max-width:62ch">The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</p>
+        </div>
+        <nav aria-label="Footer" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px">
+          <a href="./Manager Test Calculators.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:600;color:#F5F6F4" style-hover="color:#9FDCBE">Free calculators →</a>
+          <a href="#" style="display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;color:#C3CBD5" style-hover="color:#F5F6F4">Privacy policy</a>
+          <a href="https://betaapp.me" style="display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;color:#C3CBD5" style-hover="color:#F5F6F4">betaapp.me</a>
+        </nav>
+      </div>
+      <div style="margin-top:32px;padding-top:20px;border-top:1px solid rgba(245,246,244,0.12);font-size:12px;color:#7C8AA0">managertest.betaapp.me · The Manager Test by Beta</div>
+    </div>
+  </footer>
+
+  <!-- ============ EXIT MODAL ============ -->
+  <sc-if value="{{ exitOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:50;background:rgba(11,31,58,0.62);display:flex;align-items:center;justify-content:center;padding:20px" sc-camel-on-click="{{ closeExit }}">
+      <div role="dialog" aria-modal="true" aria-labelledby="mt-exit-t" sc-camel-on-click="{{ stop }}" style="position:relative;width:100%;max-width:440px;background:#FFFFFF;border-radius:24px;padding:32px;display:flex;flex-direction:column;gap:14px;box-shadow:0 40px 80px -30px rgba(0,0,0,0.6)">
+        <button type="button" aria-label="Close" sc-camel-on-click="{{ closeExit }}" style="position:absolute;top:12px;right:12px;width:44px;height:44px;border:none;border-radius:50%;background:transparent;color:#6B7684;font-size:24px;line-height:1;cursor:pointer">×</button>
+        <span style="width:52px;height:52px;border-radius:16px;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h5"></path></svg></span>
+        <h2 id="mt-exit-t" style="font-family:var(--site-font-display);font-size:26px;font-weight:700;letter-spacing:-0.025em;line-height:1.12;color:#0B1F3A;margin:4px 0 0;padding-right:28px">Get your improvement plan before you go.</h2>
+        <p style="margin:0;font-size:15px;line-height:1.55;color:#1C2430">Your top 3 fixes, sent to your email as a free PDF.</p>
+        <button type="button" sc-camel-on-click="{{ exitToForm }}" style="margin-top:8px;height:54px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">Send my full report</button>
+        <button type="button" sc-camel-on-click="{{ closeExit }}" style="min-height:44px;border:none;background:transparent;font-size:14px;font-weight:600;color:#6B7684;cursor:pointer">No thanks</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;landing&quot;,&quot;analyzing&quot;,&quot;error&quot;,&quot;results&quot;,&quot;short&quot;,&quot;sent&quot;],&quot;default&quot;:&quot;landing&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;mt4&quot;,&quot;empty&quot;,&quot;notstatement&quot;,&quot;toolarge&quot;],&quot;default&quot;:&quot;mt4&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;},&quot;flags&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;none&quot;,&quot;warn&quot;],&quot;default&quot;:&quot;none&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'landing', err: 'mt4', flags: 'none', tab: 'desktop', drag: false, fileName: 'ReportHistory.xlsx', step: 0,
+    name: '', email: '', cc: '+961', phone: '', manage: '', consent: false, updates: false, remind: true, errors: {}, status: 'idle',
+    sentTo: 'karim@example.com', showName: true, exitOpen: false };
+
+  componentDidMount() {
+    const q = new URLSearchParams(window.location.search);
+    const p = this.props;
+    const screen = q.get('screen') || p.screen || 'landing';
+    const s = { screen, err: q.get('err') || p.error || 'mt4', flags: q.get('flags') || p.flags || 'none' };
+    if (q.get('tab') === 'mobile') s.tab = 'mobile';
+    if (screen === 'analyzing') s.step = Number(q.get('step') ?? 1);
+    if (screen === 'sent') Object.assign(s, { name: 'Karim Haddad' });
+    if (q.get('form') === 'errors') { const v = { name: '', email: 'karim@', phone: '3 12', manage: '', consent: false }; Object.assign(s, v, { errors: this.validate(v) }); }
+    if (q.get('exit') === '1') s.exitOpen = true;
+    this.setState(s);
+    this.onLeave = (e) => {
+      if (e.clientY > 0 || this.state.exitOpen) return;
+      if (!['results', 'short'].includes(this.state.screen)) return;
+      try { if (sessionStorage.getItem('mt_exit_shown')) return; sessionStorage.setItem('mt_exit_shown', '1'); } catch (_) {}
+      this.setState({ exitOpen: true });
+    };
+    document.addEventListener('mouseout', this.onLeave);
+  }
+  componentDidUpdate(prev) {
+    const p = this.props;
+    if (prev.screen !== p.screen && p.screen) this.setState({ screen: p.screen });
+    if (prev.flags !== p.flags && p.flags) this.setState({ flags: p.flags });
+    if (prev.error !== p.error && p.error) this.setState({ err: p.error });
+  }
+  componentWillUnmount() { document.removeEventListener('mouseout', this.onLeave); clearInterval(this.iv); clearTimeout(this.t); }
+
+  handleFile(f) {
+    if (!f) return;
+    const n = f.name || 'statement';
+    const ext = (n.split('.').pop() || '').toLowerCase();
+    window.scrollTo(0, 0);
+    if (f.size > 10 * 1024 * 1024) return this.setState({ screen: 'error', err: 'toolarge', fileName: n });
+    if (/mt4|\.ex4/i.test(n)) return this.setState({ screen: 'error', err: 'mt4', fileName: n });
+    if (!['xlsx', 'html', 'htm'].includes(ext)) return this.setState({ screen: 'error', err: 'notstatement', fileName: n });
+    if (f.size === 0) return this.setState({ screen: 'error', err: 'empty', fileName: n });
+    this.setState({ screen: 'analyzing', step: 0, fileName: n });
+    clearInterval(this.iv);
+    this.iv = setInterval(() => {
+      if (this.state.step >= 2) { clearInterval(this.iv); this.t = setTimeout(() => this.setState({ screen: /short/i.test(n) ? 'short' : 'results' }), 700); }
+      this.setState((s) => ({ step: Math.min(3, s.step + 1) }));
+    }, 1000);
+  }
+
+  validate(v) {
+    const e = {};
+    if (!v.name.trim()) e.name = 'Please enter your full name';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim())) e.email = 'Please enter a valid email';
+    if (v.phone.replace(/\D/g, '').length < 6) e.phone = 'Please enter a valid WhatsApp number';
+    if (!v.manage) e.manage = 'Please choose an option';
+    if (!v.consent) e.consent = 'Please tick this box so we can send your report';
+    return e;
+  }
+  clearErr(k) { if (this.state.errors[k]) this.setState((s) => { const e = { ...s.errors }; delete e[k]; return { errors: e }; }); }
+
+  submit = (ev) => {
+    ev && ev.preventDefault && ev.preventDefault();
+    if (this.state.status === 'submitting') return;
+    const errors = this.validate(this.state);
+    if (Object.keys(errors).length) {
+      this.setState({ errors });
+      const first = ['name', 'email', 'phone'].find((k) => errors[k]);
+      if (first) { const el = document.getElementById('mt-' + first); el && el.focus(); }
+      return;
+    }
+    this.setState({ status: 'submitting', errors: {} });
+    this.t = setTimeout(() => { window.scrollTo(0, 0); this.setState({ status: 'idle', screen: 'sent', sentTo: this.state.email.trim() }); }, 1200);
+  };
+
+  renderVals() {
+    const s = this.state, er = s.errors;
+    const warn = s.flags === 'warn';
+    const score = warn ? 40 : 67;
+    const bandsDef = [
+      { range: '0–39', name: 'Developing', desc: 'Trading for yourself, not yet for others', min: 0 },
+      { range: '40–59', name: 'Building', desc: 'Promising, with clear gaps', min: 40 },
+      { range: '60–79', name: 'Emerging Manager', desc: 'Close, with a few things to fix', min: 60 },
+      { range: '80–100', name: 'Professional Grade', desc: "Your record looks like a manager's", min: 80 },
+    ];
+    const band = [...bandsDef].reverse().find((b) => score >= b.min);
+    const P = [['Risk control', 25, 74], ['Discipline', 20, 58], ['Consistency', 20, 71], ['Risk-adjusted return', 20, 66], ['Track record depth', 15, 62]];
+    const C = 2 * Math.PI * 88;
+    const b = (k) => (er[k] ? '#A23B2E' : '#DDE2E7');
+    const errs = {
+      mt4: ['This looks like an MT4 file. We only support MT5 for now.', 'Export the report from MetaTrader 5 and upload it again.'],
+      empty: ['This report has no trades in it.', 'Make sure you chose All History before saving the report, then try again.'],
+      notstatement: ["This doesn't look like an MT5 statement.", 'Upload the XLSX or HTML report saved from the History tab in MetaTrader 5.'],
+      toolarge: ['This file is over 10 MB.', 'Save the report as XLSX, which is usually much smaller, and try again.'],
+    };
+    const e = errs[s.err] || errs.mt4;
+    const stepLabels = ['Reading your trades…', 'Checking risk…', 'Scoring your discipline…'];
+    const chk = (on, label, toggle, isErr) => ({ on, label, toggle, tick: on ? '1' : '0', bg: on ? '#0E6B4F' : '#FFFFFF', border: on ? '#0E6B4F' : (isErr ? '#A23B2E' : '#B8C0CA') });
+    const checks = [chk(s.consent, 'Beta may contact me about my report by email or WhatsApp.', () => { this.setState({ consent: !s.consent }); this.clearErr('consent'); }, !!er.consent),
+      chk(s.updates, 'Send me occasional updates from Beta.', () => this.setState({ updates: !s.updates }), false)];
+    if (s.screen === 'short') checks.unshift(chk(s.remind, 'Remind me on 14 March 2027 to take the test.', () => this.setState({ remind: !s.remind }), false));
+    const firstName = (s.name.trim().split(/\s+/)[0]) || 'Karim';
+    const enc = encodeURIComponent;
+    return {
+      isLanding: s.screen === 'landing', notLanding: s.screen !== 'landing',
+      isAnalyzing: s.screen === 'analyzing', isError: s.screen === 'error',
+      isResultLike: s.screen === 'results' || s.screen === 'short', isResults: s.screen === 'results', isShort: s.screen === 'short', isSent: s.screen === 'sent',
+      goHome: (ev) => { ev.preventDefault(); this.setState({ screen: 'landing' }); window.scrollTo(0, 0); },
+      goExport: (ev) => { ev.preventDefault(); this.setState({ screen: 'landing' }); setTimeout(() => { const el = document.getElementById('export'); el && window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 12); }, 60); },
+      onFile: (ev) => { this.handleFile(ev.target.files && ev.target.files[0]); ev.target.value = ''; },
+      onDragOver: (ev) => { ev.preventDefault(); if (!s.drag) this.setState({ drag: true }); },
+      onDragLeave: () => this.setState({ drag: false }),
+      onDrop: (ev) => { ev.preventDefault(); this.setState({ drag: false }); this.handleFile(ev.dataTransfer.files && ev.dataTransfer.files[0]); },
+      dropBorder: s.drag ? '#0E6B4F' : '#B8C0CA',
+      tabs: [['desktop', 'On desktop'], ['mobile', 'On mobile']].map(([k, label]) => ({ label, sel: s.tab === k ? 'true' : 'false', onClick: () => this.setState({ tab: k }), bg: s.tab === k ? '#0B1F3A' : 'transparent', fg: s.tab === k ? '#FFFFFF' : '#0B1F3A' })),
+      tabDesktop: s.tab === 'desktop', tabMobile: s.tab === 'mobile',
+      weights: P.map(([name, w]) => ({ name, pct: w + '%', bar: (w * 4) + '%' })),
+      bandList: bandsDef.map((x, i) => { const top = i === 3; return { ...x, bg: top ? '#0B1F3A' : '#FAFAF8', border: top ? '#0B1F3A' : '#DDE2E7', accent: top ? '#9FDCBE' : '#0E6B4F', title: top ? '#F5F6F4' : '#0B1F3A', body: top ? 'rgba(245,246,244,0.82)' : '#1C2430' }; }),
+      fileName: s.fileName,
+      progress: Math.round((s.step / 3) * 100) + '%',
+      steps: stepLabels.map((label, i) => ({ label, done: i < s.step, active: i === s.step, pending: i > s.step, weight: i === s.step ? '600' : '500', color: i > s.step ? '#9AA5B3' : '#0B1F3A' })),
+      errTitle: e[0], errBody: e[1],
+      score, dash: (C * score / 100).toFixed(1) + ' ' + C.toFixed(1),
+      bandName: band.name, bandDesc: band.desc,
+      chips: ['Live account', '14 months', '186 trades'],
+      shortChips: ['Live account', '2 months', '21 trades'],
+      comeBack: '14 March 2027',
+      pillars: P.map(([name, w, v]) => ({ name, pct: w + '%', score: v, w: v + '%' })),
+      flagsNone: !warn, flagsWarn: warn,
+      benefits: ['Every metric behind your score', 'Your top 3 fixes, step by step', 'How professional managers compare', 'Your shareable score card'],
+      name: s.name, email: s.email, phone: s.phone, cc: s.cc,
+      setName: (ev) => { this.setState({ name: ev.target.value }); this.clearErr('name'); },
+      setEmail: (ev) => { this.setState({ email: ev.target.value }); this.clearErr('email'); },
+      setPhone: (ev) => { this.setState({ phone: ev.target.value }); this.clearErr('phone'); },
+      setCc: (ev) => this.setState({ cc: ev.target.value }),
+      countries: [['+961', 'LB +961'], ['+971', 'AE +971'], ['+966', 'SA +966'], ['+974', 'QA +974'], ['+965', 'KW +965'], ['+962', 'JO +962'], ['+20', 'EG +20'], ['+33', 'FR +33'], ['+44', 'GB +44'], ['+1', 'US +1']].map(([v, l]) => ({ v, l })),
+      nameBorder: b('name'), emailBorder: b('email'), phoneBorder: b('phone'),
+      invName: er.name ? 'true' : 'false', invEmail: er.email ? 'true' : 'false', invPhone: er.phone ? 'true' : 'false',
+      errName: er.name || '', errEmail: er.email || '', errPhone: er.phone || '', errManage: er.manage || '', errConsent: er.consent || '',
+      manageOpts: ['No', 'Yes, friends and family', 'Yes, formally'].map((label) => { const on = s.manage === label; return { label, on: on ? 'true' : 'false', onClick: () => { this.setState({ manage: label }); this.clearErr('manage'); }, border: on ? '#0E6B4F' : (er.manage ? '#A23B2E' : '#DDE2E7'), bg: on ? '#E7F1ED' : '#FFFFFF', fg: on ? '#0E6B4F' : '#0B1F3A' }; }),
+      checks,
+      isSubmitting: s.status === 'submitting', busy: s.status === 'submitting' ? 'true' : 'false', btnOpacity: s.status === 'submitting' ? '0.8' : '1',
+      submit: this.submit,
+      sentTo: s.sentTo, firstName, showName: s.showName,
+      toggleShowName: () => this.setState({ showName: !s.showName }),
+      switchBg: s.showName ? '#0E6B4F' : '#B8C0CA', knobLeft: s.showName ? '23px' : '3px',
+      storyHref: './Manager Test Share Card.dc.html?format=story&name=' + enc(s.showName ? firstName : ''),
+      postHref: './Manager Test Share Card.dc.html?format=post&name=' + enc(s.showName ? firstName : ''),
+      exitOpen: s.exitOpen,
+      closeExit: () => this.setState({ exitOpen: false }),
+      stop: (ev) => ev.stopPropagation(),
+      exitToForm: () => { this.setState({ exitOpen: false }); setTimeout(() => { const el = document.getElementById('report'); el && window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 16); const n = document.getElementById('mt-name'); n && n.focus({ preventScroll: true }); }, 50); },
+    };
+  }
+}
+</script>
+
+
+</body></html>

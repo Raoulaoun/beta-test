@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html><head><script>window.__resources = {"https://unpkg.com/react@18.3.1/umd/react.production.min.js": "assets/2f3d14d5-5989-47f6-a145-c58011058f9d.js", "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "assets/80c283d6-f534-45a0-ab12-e08d55dbedd1.js"};</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/8c984af0-2def-4dcf-a415-067f257a28e3.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>:root {
+  /* ---- Primary: navy (base + 2 tints) ---- */
+  --color-navy-base: #0B1F3A;      /* primary brand navy, dark surfaces, headings */
+  --color-navy-surface: #13294A;   /* tint 1 — elevated dark panels, hover on dark */
+  --color-navy-border: #2C466B;    /* tint 2 — borders/dividers on dark surfaces */
+  --color-navy-wash: #EDF0F5;      /* faint navy wash for selected rows on light bg */
+
+  /* ---- Accent: beta green (base + 1 tint) ---- */
+  --color-green-base: #0E6B4F;     /* accent, primary CTA, positive P&L */
+  --color-green-tint: #3F9174;     /* lighter tint — positive icon/text on light bg */
+  --color-green-surface: #E3F1EB;  /* positive state background wash */
+  --color-green-press: #0A5A42;    /* pressed/hover state, darker than base */
+
+  /* ---- Neutrals ---- */
+  --color-bg: #FAFAF8;             /* warm off-white app background */
+  --color-surface: #FFFFFF;        /* card/panel surface */
+  --color-slate-900: #1C2430;      /* primary text */
+  --color-slate-700: #4C5A6E;      /* secondary text */
+  --color-slate-500: #7C8AA0;      /* tertiary text, placeholders, icons */
+  --color-slate-300: #D6DBE3;      /* default borders */
+  --color-slate-200: #E7E9EC;      /* subtle dividers */
+  --color-slate-100: #F1F1EE;      /* subtle surface alt, close to bg */
+
+  /* ---- Semantic ---- */
+  --color-red-base: #A23B2E;       /* muted institutional red — negative P&L, breach */
+  --color-red-surface: #F5E4E1;
+  --color-amber-base: #A9781F;     /* muted amber/gold — warnings, 90% risk line */
+  --color-amber-surface: #F5EBD6;
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-700);
+  --text-tertiary: var(--color-slate-500);
+  --text-on-dark: #F5F6F4;
+  --text-on-dark-secondary: rgba(245, 246, 244, 0.64);
+  --text-on-dark-tertiary: rgba(245, 246, 244, 0.4);
+
+  --surface-page: var(--color-bg);
+  --surface-card: var(--color-surface);
+  --surface-alt: var(--color-slate-100);
+  --surface-dark: var(--color-navy-base);
+  --surface-dark-elevated: var(--color-navy-surface);
+  --surface-selected: var(--color-navy-wash);
+
+  --border-default: var(--color-slate-300);
+  --border-subtle: var(--color-slate-200);
+  --border-dark: var(--color-navy-border);
+
+  --accent-primary: var(--color-green-base);
+  --accent-primary-hover: var(--color-green-press);
+  --accent-primary-tint: var(--color-green-tint);
+
+  --positive: var(--color-green-base);
+  --positive-tint: var(--color-green-tint);
+  --positive-surface: var(--color-green-surface);
+
+  --negative: var(--color-red-base);
+  --negative-surface: var(--color-red-surface);
+
+  --warning: var(--color-amber-base);
+  --warning-surface: var(--color-amber-surface);
+
+  --focus-ring: rgba(14, 107, 79, 0.22);
+}
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/a29b39a6-a5e9-4639-9615-e36ce5603d6c.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/f07e8ee3-ed68-4c08-a4dc-4ef15d8d08c4.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/648684d9-1817-4d40-89e4-b65fbef3a8ae.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/5d7e26d1-7c74-4244-9cfd-2550e9c3ceea.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/d805ca8a-492e-498f-a0e5-3a31a8afabe1.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/4657f048-513c-4aa5-83aa-f4cafe9da0d4.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/579c49af-9e76-4cf6-bde1-b3abf182ec51.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/a29b39a6-a5e9-4639-9615-e36ce5603d6c.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/f07e8ee3-ed68-4c08-a4dc-4ef15d8d08c4.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/648684d9-1817-4d40-89e4-b65fbef3a8ae.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/5d7e26d1-7c74-4244-9cfd-2550e9c3ceea.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/d805ca8a-492e-498f-a0e5-3a31a8afabe1.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/4657f048-513c-4aa5-83aa-f4cafe9da0d4.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/579c49af-9e76-4cf6-bde1-b3abf182ec51.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/a29b39a6-a5e9-4639-9615-e36ce5603d6c.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/f07e8ee3-ed68-4c08-a4dc-4ef15d8d08c4.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/648684d9-1817-4d40-89e4-b65fbef3a8ae.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/5d7e26d1-7c74-4244-9cfd-2550e9c3ceea.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/d805ca8a-492e-498f-a0e5-3a31a8afabe1.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/4657f048-513c-4aa5-83aa-f4cafe9da0d4.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/579c49af-9e76-4cf6-bde1-b3abf182ec51.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/a29b39a6-a5e9-4639-9615-e36ce5603d6c.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/f07e8ee3-ed68-4c08-a4dc-4ef15d8d08c4.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/648684d9-1817-4d40-89e4-b65fbef3a8ae.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/5d7e26d1-7c74-4244-9cfd-2550e9c3ceea.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/d805ca8a-492e-498f-a0e5-3a31a8afabe1.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/4657f048-513c-4aa5-83aa-f4cafe9da0d4.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/579c49af-9e76-4cf6-bde1-b3abf182ec51.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/c2cc5680-a928-4d7d-ae5b-4b614128f435.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/5aae542f-951a-474a-a5cf-91791a1e2b0b.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/f632cdd3-ef45-4940-8c5e-0ba0fa05daf1.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/c8241116-ea39-40f5-ac19-7e26fdc18646.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/b954f7c0-d968-47a9-8e1e-f46ced744ba1.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/ea69a5ce-4e69-4876-ae7b-f78db163b649.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/b88265cb-2442-4361-b822-38ecfc61b95c.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/c2cc5680-a928-4d7d-ae5b-4b614128f435.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/5aae542f-951a-474a-a5cf-91791a1e2b0b.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/f632cdd3-ef45-4940-8c5e-0ba0fa05daf1.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/c8241116-ea39-40f5-ac19-7e26fdc18646.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/b954f7c0-d968-47a9-8e1e-f46ced744ba1.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/ea69a5ce-4e69-4876-ae7b-f78db163b649.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/b88265cb-2442-4361-b822-38ecfc61b95c.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+:root {
+  --font-sans: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  /* Used only for very large display numerals/titles where slightly tighter
+     tracking reads more institutional; falls back to Inter everywhere else. */
+  --font-sans-tight: 'Inter Tight', var(--font-sans);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Type scale (UI copy, headings) ---- */
+  --font-size-display: 40px;
+  --line-height-display: 1.1;
+
+  --font-size-h1: 32px;
+  --line-height-h1: 1.2;
+
+  --font-size-h2: 24px;
+  --line-height-h2: 1.3;
+
+  --font-size-h3: 18px;
+  --line-height-h3: 1.4;
+
+  --font-size-body-lg: 16px;
+  --line-height-body-lg: 1.55;
+
+  --font-size-body: 14px;
+  --line-height-body: 1.5;
+
+  --font-size-body-sm: 13px;
+  --line-height-body-sm: 1.45;
+
+  --font-size-caption: 12px;
+  --line-height-caption: 1.4;
+  --tracking-caption: 0.01em;
+
+  --font-size-micro: 11px;
+  --line-height-micro: 1.3;
+  --tracking-micro: 0.06em;
+
+  /* ---- Numeric scale — tabular figures mandatory ---- */
+  --font-size-stat-xl: 48px;
+  --line-height-stat-xl: 1.05;
+
+  --font-size-stat-lg: 32px;
+  --line-height-stat-lg: 1.1;
+
+  --font-size-num-table: 14px;
+  --line-height-num-table: 1.4;
+
+  --font-size-num-sm: 13px;
+  --line-height-num-sm: 1.3;
+}
+
+.tabular-nums,
+.ds-numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'cv05' 1;
+  font-family: var(--font-sans);
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+}
+
+:root {
+  /* Restrained, precise corners — never the rounded-pill card look of retail fintech */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+}
+
+:root {
+  /* Shadows are near-invisible; hairline borders carry most surface separation.
+     Reserve --shadow-elevated for true overlays (menus, modals, popovers). */
+  --shadow-card: 0 1px 2px rgba(11, 31, 58, 0.04);
+  --shadow-elevated: 0 8px 24px rgba(11, 31, 58, 0.10), 0 2px 6px rgba(11, 31, 58, 0.06);
+  --shadow-focus: 0 0 0 3px var(--focus-ring);
+}
+
+/* Beta public website layer — extends the core tokens. Every site page and site component reads from here. */
+:root {
+  /* ---- Colour ---- */
+  --site-navy: var(--color-navy-base, #0B1F3A);
+  --site-green: var(--accent-primary, #0E6B4F);
+  --site-green-tint: var(--accent-primary-tint, #3F9174);
+  --site-green-wash: var(--color-green-surface, #E3F1EB);
+  --site-green-line: rgba(14,107,79,0.28);
+  --site-mint: #9FDCBE;
+  --site-page: var(--surface-page, #FAFAF8);
+  --site-card: var(--surface-card, #FFFFFF);
+  --site-alt: var(--surface-alt, #F1F1EE);
+  --site-ink: var(--text-primary);
+  --site-ink-2: var(--text-secondary);
+  --site-ink-3: var(--text-tertiary);
+  --site-border: var(--border-default);
+  --site-border-subtle: var(--border-subtle);
+
+  /* on-dark ink + surfaces */
+  --site-on-dark: #F5F6F4;
+  --site-on-dark-strong: rgba(245,246,244,0.92);
+  --site-on-dark-nav: rgba(245,246,244,0.86);
+  --site-on-dark-body: rgba(245,246,244,0.82);
+  --site-on-dark-muted: rgba(245,246,244,0.72);
+  --site-on-dark-faint: rgba(245,246,244,0.55);
+  --site-on-dark-label: rgba(245,246,244,0.5);
+  --site-on-dark-line: rgba(245,246,244,0.12);
+  --site-on-dark-line-2: rgba(245,246,244,0.14);
+  --site-on-dark-ghost: rgba(245,246,244,0.28);
+  --site-on-dark-ghost-hover: rgba(245,246,244,0.6);
+  --site-on-dark-fill: rgba(245,246,244,0.09);
+  --site-on-dark-fill-2: rgba(245,246,244,0.07);
+  --site-on-dark-fill-hover: rgba(245,246,244,0.11);
+  --site-on-dark-underline: rgba(245,246,244,0.35);
+  --site-menu-scrim: rgba(11,31,58,0.6);
+
+  /* ---- Gradients (atmosphere only — never read as "up") ---- */
+  --site-grad-hero: linear-gradient(168deg, #0B1F3A 0%, #0D2C3F 38%, #0E4A44 74%, #0E6B4F 118%);
+  --site-grad-panel: linear-gradient(150deg, #0E6B4F 0%, #0E4A44 52%, #0B1F3A 100%);
+  --site-grad-band: linear-gradient(162deg, #0E6B4F 0%, #0E4A44 46%, #0B1F3A 100%);
+  --site-glow-hero: radial-gradient(closest-side, rgba(63,145,116,0.30), rgba(63,145,116,0));
+  --site-glow-band: radial-gradient(closest-side, rgba(127,204,167,0.18), rgba(127,204,167,0));
+
+  /* ---- Type ---- */
+  --site-font-display: var(--font-sans-tight);
+  --site-font-body: var(--font-sans);
+  --site-font-label: var(--font-sans); /* mono slot: swap here when labels move to monospace */
+
+  --site-fs-hero: clamp(56px,8.6vw,124px);
+  --site-fs-h2: clamp(38px,5.6vw,80px);
+  --site-fs-h2-split: clamp(38px,5vw,72px);
+  --site-fs-h3: clamp(36px,4.6vw,64px);
+  --site-fs-card-title: clamp(26px,2.6vw,36px);
+  --site-fs-lead: clamp(17px,1.7vw,21px);
+  --site-fs-intro: clamp(16px,1.6vw,19px);
+  --site-fs-body: 17px;
+  --site-fs-small: 15px;
+  --site-fs-nav: 13px;
+  --site-fs-label: 12px;
+  --site-fs-micro: 11px;
+
+  --site-track-hero: -0.045em;
+  --site-track-display: -0.04em;
+  --site-track-nav: 0.06em;
+  --site-track-label: 0.08em;
+  --site-track-micro: 0.12em;
+  --site-lh-hero: 0.92;
+  --site-lh-display: 0.98;
+  --site-lh-body: 1.6;
+
+  /* ---- Space + layout ---- */
+  --site-max: 1280px;
+  --site-gutter: 40px;
+  --site-inset: 12px;
+  --site-section-y: clamp(88px,11vw,150px);
+  --site-section-y-tight: clamp(64px,8vw,110px);
+  --site-hero-top: clamp(56px,9vw,120px);
+  --site-hero-bottom: clamp(56px,8vw,110px);
+  --site-band-y: clamp(72px,9vw,130px);
+  --site-nav-h: 92px;
+  --site-btn-h: 46px;
+  --site-btn-h-lg: 54px;
+  --site-eyebrow-h: 38px;
+
+  /* ---- Radii ---- */
+  --site-r-panel: 28px;
+  --site-r-card-lg: 24px;
+  --site-r-card: 20px;
+  --site-r-tab: 14px;
+  --site-r-pill: 999px;
+
+  /* ---- Shadows ---- */
+  --site-shadow-float: 0 30px 60px -24px rgba(11,31,58,0.55);
+  --site-shadow-lift: 0 24px 48px -22px rgba(0,0,0,0.5);
+
+  /* ---- Motion ---- */
+  --site-dur-fast: 150ms;
+  --site-dur-base: 240ms;
+  --site-dur-slow: 400ms;
+  --site-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (max-width: 600px) {
+  :root { --site-gutter: 20px; }
+}
+
+/* ---- Layout utilities (media queries can't be inline) ---- */
+.site-grid-hero  { display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; }
+.site-grid-split { display:grid; grid-template-columns:1fr 1fr; }
+.site-grid-about { display:grid; grid-template-columns:1fr 1fr; gap:clamp(36px,6vw,96px); align-items:center; }
+.site-grid-aud   { display:grid; grid-template-columns:0.9fr 1fr 1fr; gap:24px; align-items:start; }
+.site-grid-2     { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.site-desk { display:block; }
+.site-mob  { display:none; }
+.site-nav-desk { display:flex; }
+.site-nav-mob  { display:none; }
+@media (max-width: 1000px) {
+  .site-grid-hero, .site-grid-split, .site-grid-about, .site-grid-aud { grid-template-columns:1fr; }
+  .site-desk { display:none; }
+  .site-mob  { display:flex; }
+  .site-nav-desk { display:none; }
+  .site-nav-mob  { display:flex; }
+}
+@media (max-width: 600px) {
+  .site-grid-2 { grid-template-columns:1fr; }
+  .site-wrap-mob { white-space:normal !important; }
+}
+.site-scroll-x { display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; }
+.site-scroll-x::-webkit-scrollbar { display:none; }
+
+</style>
+<style>
+  html, body { margin:0; padding:0; background:#F3F4F2; }
+  * { box-sizing:border-box; }
+  a { color:#0E6B4F; text-decoration:none; }
+  a:hover { color:#0B1F3A; }
+  button, input, select, textarea { font-family:inherit; }
+  input:focus, select:focus, textarea:focus { outline:none; box-shadow:0 0 0 3px rgba(14,107,79,0.22); }
+  button:focus-visible, a:focus-visible { outline:2px solid #0E6B4F; outline-offset:2px; }
+</style>
+</helmet>
+
+<div style="font-family:var(--site-font-body);color:#1C2430;background:#F3F4F2;min-height:100vh;min-width:1280px;display:grid;grid-template-columns:240px minmax(0,1fr)" data-screen-label="Manager Test Admin">
+
+  <aside style="background:#0B1F3A;color:#C3CBD5;padding:24px 16px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh">
+    <div style="display:flex;flex-direction:column;gap:6px;padding:0 8px">
+      <div style="display:flex;align-items:center;gap:10px"><img src="assets/febf79fe-4801-4538-b0b3-cb836b21c45f.png" alt="Beta" style="height:22px;width:auto;display:block"><span style="font-family:var(--site-font-display);font-size:20px;font-weight:700;letter-spacing:-0.035em;line-height:1;color:#F5F6F4">beta</span></div>
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9AA5B3">Manager Test · Admin</span>
+    </div>
+    <nav aria-label="Admin" style="display:flex;flex-direction:column;gap:2px">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+        <button type="button" sc-camel-on-click="{{ n.onClick }}" aria-current="{{ n.current }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:0 12px;border:none;border-radius:10px;background:{{ n.bg }};color:{{ n.fg }};font-size:14px;font-weight:600;cursor:pointer;text-align:left">{{ n.label }}<span style="font-size:12px;font-weight:700;color:{{ n.countFg }}">{{ n.count }}</span></button>
+      </sc-for>
+    </nav>
+    <a href="./Manager Test Digest Email.html" style="display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:12px;background:rgba(245,246,244,0.06);border:1px solid rgba(245,246,244,0.1);color:#C3CBD5" style-hover="color:#F5F6F4">
+      <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#9FDCBE">Daily digest</span>
+      <span style="font-size:13px;line-height:1.45">Sent 08:00 Beirut · new leads scoring 60+</span>
+    </a>
+    <div style="margin-top:auto;padding:0 8px;font-size:12px;color:#7C8AA0">managertest.betaapp.me</div>
+  </aside>
+
+  <main style="min-width:0;padding:28px 36px 48px;display:flex;flex-direction:column;gap:20px">
+
+    <!-- LEADS -->
+    <sc-if value="{{ vLeads }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+        <div><h1 style="margin:0;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#0B1F3A">Leads</h1><p style="margin:6px 0 0;font-size:14px;color:#6B7684">{{ leadCountLabel }}</p></div>
+        <button type="button" sc-camel-on-click="{{ exportCsv }}" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;border:1px solid #DDE2E7;background:#FFFFFF;color:#0B1F3A;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path></svg>Export CSV</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;padding:16px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7">
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:#4C5A6E">Band<sc-raw-select value="{{ fBand }}" sc-camel-on-change="{{ setBand }}" style="height:40px;min-width:170px;padding:0 10px;border-radius:10px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:14px;color:#0B1F3A"><sc-for list="{{ bandOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for></sc-raw-select></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:#4C5A6E">Min score<input type="number" min="0" max="100" value="{{ fMin }}" sc-camel-on-input="{{ setMin }}" style="height:40px;width:96px;padding:0 10px;border-radius:10px;border:1px solid #DDE2E7;font-size:14px;color:#0B1F3A"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:#4C5A6E">Campaign<sc-raw-select value="{{ fCamp }}" sc-camel-on-change="{{ setCamp }}" style="height:40px;min-width:190px;padding:0 10px;border-radius:10px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:14px;color:#0B1F3A"><sc-for list="{{ campOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for></sc-raw-select></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:#4C5A6E">Stage<sc-raw-select value="{{ fStage }}" sc-camel-on-change="{{ setStage }}" style="height:40px;min-width:180px;padding:0 10px;border-radius:10px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:14px;color:#0B1F3A"><sc-for list="{{ stageOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for></sc-raw-select></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:#4C5A6E">Date<sc-raw-select value="{{ fDate }}" sc-camel-on-change="{{ setDate }}" style="height:40px;min-width:150px;padding:0 10px;border-radius:10px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:14px;color:#0B1F3A"><option value="all">All time</option><option value="7">Last 7 days</option><option value="3">Last 3 days</option><option value="1">Today</option></sc-raw-select></label>
+        <button type="button" sc-camel-on-click="{{ clearFilters }}" style="height:40px;padding:0 14px;border:none;background:transparent;color:#0E6B4F;font-size:13px;font-weight:600;cursor:pointer">Clear filters</button>
+      </div>
+      <div style="border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;overflow:hidden">
+        <sc-raw-table style="width:100%;border-collapse:collapse;font-size:13.5px">
+          <sc-raw-thead><sc-raw-tr style="background:#FAFAF8;text-align:left;color:#4C5A6E;font-size:11px;letter-spacing:0.06em;text-transform:uppercase">
+            <sc-raw-th style="padding:12px 16px;font-weight:700">Name</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Date</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Score</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Band</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Manages</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Top weakness</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Source / campaign</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Broker</sc-raw-th><sc-raw-th style="padding:12px 10px;font-weight:700">Stage</sc-raw-th><sc-raw-th style="padding:12px 16px;font-weight:700;text-align:right">WhatsApp</sc-raw-th>
+          </sc-raw-tr></sc-raw-thead>
+          <sc-raw-tbody>
+            <sc-for list="{{ rows }}" as="r" hint-placeholder-count="10">
+              <sc-raw-tr style="border-top:1px solid #EEF0F2">
+                <sc-raw-td style="padding:10px 16px"><button type="button" sc-camel-on-click="{{ r.open }}" style="border:none;background:transparent;padding:0;min-height:36px;font-size:14px;font-weight:700;color:#0B1F3A;cursor:pointer;text-align:left">{{ r.name }}</button></sc-raw-td>
+                <sc-raw-td style="padding:10px;color:#4C5A6E;white-space:nowrap">{{ r.date }}</sc-raw-td>
+                <sc-raw-td style="padding:10px"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:28px;border-radius:8px;background:{{ r.scoreBg }};color:{{ r.scoreFg }};font-weight:700;font-variant-numeric:tabular-nums">{{ r.score }}</span></sc-raw-td>
+                <sc-raw-td style="padding:10px;white-space:nowrap">{{ r.band }}</sc-raw-td>
+                <sc-raw-td style="padding:10px;white-space:nowrap;color:#4C5A6E">{{ r.manages }}</sc-raw-td>
+                <sc-raw-td style="padding:10px">{{ r.weak }}</sc-raw-td>
+                <sc-raw-td style="padding:10px;color:#4C5A6E;white-space:nowrap">{{ r.camp }}</sc-raw-td>
+                <sc-raw-td style="padding:10px;color:#4C5A6E;white-space:nowrap">{{ r.broker }}</sc-raw-td>
+                <sc-raw-td style="padding:10px"><span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:{{ r.stageBg }};color:{{ r.stageFg }};font-size:12px;font-weight:700;white-space:nowrap">{{ r.stage }}</span></sc-raw-td>
+                <sc-raw-td style="padding:10px 16px;text-align:right"><a href="{{ r.wa }}" target="_blank" rel="noopener" aria-label="{{ r.waLabel }}" style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:36px;border-radius:999px;background:#0E6B4F;color:#FFFFFF" style-hover="background:#0B5A42;color:#FFFFFF"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></a></sc-raw-td>
+              </sc-raw-tr>
+            </sc-for>
+          </sc-raw-tbody>
+        </sc-raw-table>
+        <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;font-size:14px;color:#6B7684">No leads match these filters.</div></sc-if>
+      </div>
+    </sc-if>
+
+    <!-- DETAIL -->
+    <sc-if value="{{ vDetail }}" hint-placeholder-val="{{ false }}">
+      <button type="button" sc-camel-on-click="{{ backToLeads }}" style="align-self:flex-start;display:inline-flex;align-items:center;gap:8px;min-height:44px;border:none;background:transparent;padding:0;font-size:14px;font-weight:600;color:#0E6B4F;cursor:pointer">← All leads</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h1 style="margin:0;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#0B1F3A">{{ d.name }}</h1>
+          <span style="font-size:14px;color:#4C5A6E">{{ d.email }} · {{ d.phone }} · {{ d.manages }}</span>
+          <span style="font-size:13px;color:#6B7684">{{ d.camp }} · {{ d.broker }} · first scored {{ d.date }}</span>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:12px">
+          <label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:#4C5A6E">Stage<sc-raw-select value="{{ d.stage }}" sc-camel-on-change="{{ setLeadStage }}" style="height:44px;min-width:200px;padding:0 12px;border-radius:10px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:14px;font-weight:600;color:#0B1F3A"><sc-for list="{{ stages }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for></sc-raw-select></label>
+          <a href="{{ d.wa }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase" style-hover="background:#0B5A42;color:#FFFFFF">WhatsApp</a>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);gap:20px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="padding:24px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7;display:grid;grid-template-columns:180px minmax(0,1fr);gap:28px;align-items:center">
+            <div style="position:relative;width:180px;height:180px">
+              <svg sc-camel-view-box="0 0 200 200" style="width:100%;height:100%;transform:rotate(-90deg)"><circle cx="100" cy="100" r="88" fill="none" stroke="#E7F1ED" stroke-width="12"></circle><circle cx="100" cy="100" r="88" fill="none" stroke="#0E6B4F" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ d.dash }}"></circle></svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-family:var(--site-font-display);font-size:56px;font-weight:700;letter-spacing:-0.05em;line-height:0.9;color:#0B1F3A">{{ d.score }}</span><span style="font-size:12px;font-weight:700;color:#0E6B4F;margin-top:6px;text-align:center;padding:0 16px">{{ d.band }}</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ d.pillars }}" as="p" hint-placeholder-count="5">
+                <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="font-weight:600;color:#0B1F3A">{{ p.name }}</span><span style="font-weight:700;color:#0B1F3A">{{ p.score }}</span></div><div style="height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ p.w }};background:{{ p.color }};border-radius:999px"></div></div></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:22px 24px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4C5A6E">Red flags</span>
+            <sc-for list="{{ d.flags }}" as="f" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #EEF0F2"><span style="font-size:14px;font-weight:600;color:#0B1F3A">{{ f.name }}</span><span style="padding:3px 10px;border-radius:999px;background:{{ f.bg }};color:{{ f.fg }};font-size:12px;font-weight:700">{{ f.status }}</span></div>
+            </sc-for>
+            <span style="font-size:13px;color:#4C5A6E">Key insight: {{ d.insight }}</span>
+          </div>
+          <div style="padding:22px 24px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4C5A6E">Retests</span>
+            <sc-for list="{{ d.retests }}" as="t" hint-placeholder-count="2">
+              <div style="display:grid;grid-template-columns:140px 60px minmax(0,1fr);gap:12px;align-items:center;padding:10px 0;border-top:1px solid #EEF0F2;font-size:14px"><span style="color:#4C5A6E">{{ t.date }}</span><span style="font-weight:700;color:#0B1F3A">{{ t.score }}</span><span style="color:#4C5A6E">{{ t.note }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div style="padding:22px 24px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:12px">
+            <label for="ad-note" style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4C5A6E">Notes</label>
+            <textarea id="ad-note" rows="3" value="{{ noteDraft }}" sc-camel-on-input="{{ setNote }}" placeholder="Add a note about this lead" style="padding:12px 14px;border-radius:12px;border:1px solid #DDE2E7;font-size:14px;line-height:1.5;color:#1C2430;resize:vertical"></textarea>
+            <button type="button" sc-camel-on-click="{{ addNote }}" style="align-self:flex-end;height:40px;padding:0 18px;border:none;border-radius:999px;background:#0B1F3A;color:#FFFFFF;font-size:13px;font-weight:600;cursor:pointer">Add note</button>
+            <sc-for list="{{ d.notes }}" as="n" hint-placeholder-count="2">
+              <div style="padding:12px 0;border-top:1px solid #EEF0F2;display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;color:#6B7684">{{ n.when }} · {{ n.by }}</span><span style="font-size:14px;line-height:1.5;color:#1C2430">{{ n.text }}</span></div>
+            </sc-for>
+          </div>
+          <div style="padding:22px 24px;border-radius:20px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#4C5A6E;margin-bottom:8px">Emails sent</span>
+            <sc-for list="{{ d.emails }}" as="e" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px 0;border-top:1px solid #EEF0F2"><span style="width:8px;height:8px;border-radius:50%;background:{{ e.dot }};margin-top:6px"></span><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600;color:#0B1F3A">{{ e.subject }}</span><span style="font-size:12px;color:#6B7684">{{ e.when }}</span></div><span style="font-size:12px;font-weight:700;color:{{ e.dot }}">{{ e.status }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- PIPELINE -->
+    <sc-if value="{{ vPipeline }}" hint-placeholder-val="{{ false }}">
+      <h1 style="margin:0;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#0B1F3A">Pipeline</h1>
+      <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;align-items:start">
+        <sc-for list="{{ columns }}" as="c" hint-placeholder-count="6">
+          <div style="display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:16px;background:#E9ECEA;min-height:420px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 4px 6px"><span style="font-size:13px;font-weight:700;color:#0B1F3A">{{ c.name }}</span><span style="font-size:12px;font-weight:700;color:#4C5A6E">{{ c.count }}</span></div>
+            <sc-for list="{{ c.cards }}" as="k" hint-placeholder-count="2">
+              <div style="padding:12px;border-radius:12px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:8px">
+                <button type="button" sc-camel-on-click="{{ k.open }}" style="border:none;background:transparent;padding:0;text-align:left;font-size:14px;font-weight:700;color:#0B1F3A;cursor:pointer">{{ k.name }}</button>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#4C5A6E"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:22px;border-radius:6px;background:{{ k.scoreBg }};color:{{ k.scoreFg }};font-weight:700">{{ k.score }}</span>{{ k.camp }}</div>
+                <sc-raw-select aria-label="{{ k.moveLabel }}" value="{{ k.stage }}" sc-camel-on-change="{{ k.move }}" style="height:34px;padding:0 8px;border-radius:8px;border:1px solid #DDE2E7;background:#FAFAF8;font-size:12px;color:#0B1F3A"><sc-for list="{{ stages }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for></sc-raw-select>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- FUNNEL -->
+    <sc-if value="{{ vFunnel }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+        <h1 style="margin:0;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#0B1F3A">Funnel by campaign</h1>
+        <span style="font-size:13px;color:#6B7684">Last 30 days</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+        <sc-for list="{{ funnelSteps }}" as="s" hint-placeholder-count="4">
+          <div style="padding:20px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#4C5A6E">{{ s.label }}</span>
+            <span style="font-family:var(--site-font-display);font-size:34px;font-weight:700;letter-spacing:-0.03em;color:#0B1F3A;font-variant-numeric:tabular-nums">{{ s.value }}</span>
+            <div style="height:8px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ s.w }};background:#0E6B4F;border-radius:999px"></div></div>
+            <span style="font-size:12.5px;color:{{ s.dropFg }}">{{ s.drop }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;overflow:hidden">
+        <sc-raw-table style="width:100%;border-collapse:collapse;font-size:14px">
+          <sc-raw-thead><sc-raw-tr style="background:#FAFAF8;text-align:left;color:#4C5A6E;font-size:11px;letter-spacing:0.06em;text-transform:uppercase"><sc-raw-th style="padding:12px 18px;font-weight:700">Campaign</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700;text-align:right">Visits</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700;text-align:right">Uploads</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700;text-align:right">Scored</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700;text-align:right">Leads</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700">Visit → lead</sc-raw-th><sc-raw-th style="padding:12px 18px;font-weight:700;text-align:right">Drop-off after score</sc-raw-th></sc-raw-tr></sc-raw-thead>
+          <sc-raw-tbody>
+            <sc-for list="{{ funnelRows }}" as="f" hint-placeholder-count="5">
+              <sc-raw-tr style="border-top:1px solid #EEF0F2"><sc-raw-td style="padding:14px 18px;font-weight:700;color:#0B1F3A">{{ f.camp }}</sc-raw-td><sc-raw-td style="padding:14px 12px;text-align:right;font-variant-numeric:tabular-nums">{{ f.visits }}</sc-raw-td><sc-raw-td style="padding:14px 12px;text-align:right;font-variant-numeric:tabular-nums">{{ f.uploads }}</sc-raw-td><sc-raw-td style="padding:14px 12px;text-align:right;font-variant-numeric:tabular-nums">{{ f.scored }}</sc-raw-td><sc-raw-td style="padding:14px 12px;text-align:right;font-weight:700;color:#0B1F3A;font-variant-numeric:tabular-nums">{{ f.leads }}</sc-raw-td><sc-raw-td style="padding:14px 12px"><div style="display:flex;align-items:center;gap:10px"><div style="width:120px;height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ f.convW }};background:#0E6B4F"></div></div><span style="font-size:13px;color:#4C5A6E">{{ f.conv }}</span></div></sc-raw-td><sc-raw-td style="padding:14px 18px;text-align:right;font-weight:700;color:{{ f.dropFg }}">{{ f.drop }}</sc-raw-td></sc-raw-tr>
+            </sc-for>
+          </sc-raw-tbody>
+        </sc-raw-table>
+      </div>
+    </sc-if>
+
+    <!-- DROP-OFFS -->
+    <sc-if value="{{ vDrops }}" hint-placeholder-val="{{ false }}">
+      <div><h1 style="margin:0;font-family:var(--site-font-display);font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#0B1F3A">Drop-offs</h1><p style="margin:6px 0 0;font-size:14px;color:#6B7684">Scored but didn't fill the form. Anonymous sessions, no contact details stored.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+        <div style="padding:20px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#4C5A6E">Drop-offs, 30 days</span><span style="font-family:var(--site-font-display);font-size:34px;font-weight:700;color:#0B1F3A">412</span><span style="font-size:13px;color:#4C5A6E">58% of scored sessions</span></div>
+        <div style="padding:20px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#4C5A6E">Scoring 60+</span><span style="font-family:var(--site-font-display);font-size:34px;font-weight:700;color:#0B1F3A">97</span><span style="font-size:13px;color:#4C5A6E">Highest-value drop-offs</span></div>
+        <div style="padding:20px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#4C5A6E">Exit prompt recovered</span><span style="font-family:var(--site-font-display);font-size:34px;font-weight:700;color:#0B1F3A">38</span><span style="font-size:13px;color:#4C5A6E">Filled the form after the prompt</span></div>
+      </div>
+      <div style="border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;overflow:hidden">
+        <sc-raw-table style="width:100%;border-collapse:collapse;font-size:14px">
+          <sc-raw-thead><sc-raw-tr style="background:#FAFAF8;text-align:left;color:#4C5A6E;font-size:11px;letter-spacing:0.06em;text-transform:uppercase"><sc-raw-th style="padding:12px 18px;font-weight:700">Session</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700">Date</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700">Score</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700">Band</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700">Top weakness</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700">Campaign</sc-raw-th><sc-raw-th style="padding:12px;font-weight:700">Device</sc-raw-th><sc-raw-th style="padding:12px 18px;font-weight:700">Left at</sc-raw-th></sc-raw-tr></sc-raw-thead>
+          <sc-raw-tbody>
+            <sc-for list="{{ drops }}" as="r" hint-placeholder-count="8">
+              <sc-raw-tr style="border-top:1px solid #EEF0F2"><sc-raw-td style="padding:12px 18px;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4C5A6E">{{ r.id }}</sc-raw-td><sc-raw-td style="padding:12px;color:#4C5A6E;white-space:nowrap">{{ r.date }}</sc-raw-td><sc-raw-td style="padding:12px"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:28px;border-radius:8px;background:{{ r.scoreBg }};color:{{ r.scoreFg }};font-weight:700">{{ r.score }}</span></sc-raw-td><sc-raw-td style="padding:12px;white-space:nowrap">{{ r.band }}</sc-raw-td><sc-raw-td style="padding:12px">{{ r.weak }}</sc-raw-td><sc-raw-td style="padding:12px;color:#4C5A6E">{{ r.camp }}</sc-raw-td><sc-raw-td style="padding:12px;color:#4C5A6E">{{ r.device }}</sc-raw-td><sc-raw-td style="padding:12px 18px;color:#4C5A6E">{{ r.left }}</sc-raw-td></sc-raw-tr>
+            </sc-for>
+          </sc-raw-tbody>
+        </sc-raw-table>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;leads&quot;,&quot;detail&quot;,&quot;pipeline&quot;,&quot;funnel&quot;,&quot;drops&quot;],&quot;default&quot;:&quot;leads&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  STAGES = ['New', 'Contacted', 'Webinar registered', 'Webinar attended', 'Applied', 'Not a fit'];
+  CAMPS = ['IG · 23:47 message', 'IG · Five questions', 'IG · Handshake reel', 'Webinar page', 'Organic'];
+  state = { view: 'leads', lead: 0, fBand: 'All bands', fMin: '', fCamp: 'All campaigns', fStage: 'All stages', fDate: 'all', noteDraft: '', leads: this.seed() };
+
+  seed() {
+    const names = ['Karim Haddad', 'Lara Mansour', 'Omar Khalil', 'Nadine Saab', 'Rami Fakhoury', 'Maya Azar', 'Ziad Nassar', 'Hala Chami', 'Samir Daher', 'Rita Gemayel', 'Fadi Karam', 'Yara Haddad', 'Tarek Salameh', 'Joelle Abboud', 'Hadi Bitar', 'Nour Zein', 'Elie Rizk', 'Dima Sleiman', 'Wassim Harb', 'Carla Khoury', 'Bilal Itani', 'Sara Moussa'];
+    const weak = ['Size after a loss', 'Stops missing', 'Drawdown depth', 'Short record', 'Risk per trade', 'Best-day concentration'];
+    const brokers = ['IC Markets', 'Exness', 'XM', 'Pepperstone', 'FxPro'];
+    const manages = ['No', 'Yes, friends and family', 'Yes, formally'];
+    const scores = [67, 82, 54, 71, 38, 63, 88, 47, 59, 74, 40, 66, 52, 79, 61, 35, 84, 57, 69, 44, 76, 62];
+    const stageIx = [0, 2, 1, 3, 5, 0, 4, 1, 0, 2, 5, 1, 0, 3, 2, 5, 4, 0, 1, 0, 2, 0];
+    return names.map((name, i) => ({ id: i, name, score: scores[i], day: 16 - Math.floor(i * 0.7), weak: weak[i % 6], broker: brokers[i % 5], manages: manages[(i * 2) % 3],
+      camp: this.CAMPS[(i * 3) % 5], stage: this.STAGES[stageIx[i]], phone: '+961 ' + (3 + (i % 5)) + ' ' + (100 + i * 37) + ' ' + (200 + i * 13), flag: scores[i] === 40 || scores[i] === 38,
+      notes: i === 0 ? [{ when: '15 Nov, 18:20', by: 'Raoul', text: 'Manages for 4 friends. Interested in the webinar, asked about fees.' }] : [] }));
+  }
+
+  componentDidMount() {
+    const q = new URLSearchParams(window.location.search);
+    const v = q.get('view') || this.props.view; const l = q.get('lead');
+    if (v) this.setState({ view: v }); if (l) this.setState({ lead: Number(l), view: 'detail' });
+  }
+
+  band(s) { return s >= 80 ? 'Professional Grade' : s >= 60 ? 'Emerging Manager' : s >= 40 ? 'Building' : 'Developing'; }
+  scoreCol(s) { return s >= 80 ? ['#0B1F3A', '#FFFFFF'] : s >= 60 ? ['#E7F1ED', '#0E6B4F'] : s >= 40 ? ['#F5EBD6', '#7A5A16'] : ['#EEF0F2', '#4C5A6E']; }
+  stageCol(st) { return { 'New': ['#E6ECF5', '#0B1F3A'], 'Contacted': ['#EEF0F2', '#1C2430'], 'Webinar registered': ['#E7F1ED', '#0E6B4F'], 'Webinar attended': ['#D3E8DE', '#0B5A42'], 'Applied': ['#0E6B4F', '#FFFFFF'], 'Not a fit': ['#F3F4F2', '#6B7684'] }[st]; }
+  date(d) { return d + ' Nov 2026'; }
+  wa(l) { return 'https://wa.me/' + l.phone.replace(/\D/g, '') + '?text=' + encodeURIComponent('Hi ' + l.name.split(' ')[0] + ', this is Raoul from Beta. Thanks for taking the Manager Test.'); }
+
+  filtered() {
+    const s = this.state;
+    return s.leads.filter((l) => (s.fBand === 'All bands' || this.band(l.score) === s.fBand) && (!s.fMin || l.score >= Number(s.fMin))
+      && (s.fCamp === 'All campaigns' || l.camp === s.fCamp) && (s.fStage === 'All stages' || l.stage === s.fStage) && (s.fDate === 'all' || l.day > 16 - Number(s.fDate)));
+  }
+  setLead(id, patch) { this.setState((s) => ({ leads: s.leads.map((l) => (l.id === id ? { ...l, ...patch } : l)) })); }
+
+  exportCsv = () => {
+    const rows = [['Name', 'Date', 'Score', 'Band', 'Manages for others', 'Top weakness', 'Campaign', 'Broker', 'Stage', 'Phone']]
+      .concat(this.filtered().map((l) => [l.name, this.date(l.day), l.score, this.band(l.score), l.manages, l.weak, l.camp, l.broker, l.stage, l.phone]));
+    const csv = rows.map((r) => r.map((x) => '"' + String(x).replace(/"/g, '""') + '"').join(',')).join('\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = 'manager-test-leads.csv'; a.click();
+  };
+
+  renderVals() {
+    const s = this.state, list = this.filtered();
+    const go = (v) => () => { this.setState({ view: v }); window.scrollTo(0, 0); };
+    const open = (id) => () => { this.setState({ view: 'detail', lead: id, noteDraft: '' }); window.scrollTo(0, 0); };
+    const navItems = [['leads', 'Leads', s.leads.length], ['pipeline', 'Pipeline', ''], ['funnel', 'Funnel', ''], ['drops', 'Drop-offs', 412]];
+    const L = s.leads.find((l) => l.id === s.lead) || s.leads[0];
+    const C = 2 * Math.PI * 88;
+    const base = [74, 58, 71, 66, 62].map((v, i) => Math.max(20, Math.min(98, v + Math.round((L.score - 67) * (0.8 + i * 0.1)))));
+    const funnel = [[1840, 690, 512, 214], [1320, 470, 351, 139], [2210, 610, 448, 162], [420, 260, 214, 121], [380, 150, 118, 48]];
+    const tot = funnel.reduce((a, r) => r.map((x, i) => a[i] + x), [0, 0, 0, 0]);
+    const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+    return {
+      nav: navItems.map(([k, label, count]) => { const on = s.view === k || (k === 'leads' && s.view === 'detail'); return { label, count: String(count), current: on ? 'page' : 'false', onClick: go(k), bg: on ? 'rgba(245,246,244,0.1)' : 'transparent', fg: on ? '#F5F6F4' : '#C3CBD5', countFg: on ? '#9FDCBE' : '#7C8AA0' }; }),
+      vLeads: s.view === 'leads', vDetail: s.view === 'detail', vPipeline: s.view === 'pipeline', vFunnel: s.view === 'funnel', vDrops: s.view === 'drops',
+      leadCountLabel: list.length + ' of ' + s.leads.length + ' leads · newest first',
+      exportCsv: this.exportCsv,
+      fBand: s.fBand, fMin: s.fMin, fCamp: s.fCamp, fStage: s.fStage, fDate: s.fDate,
+      bandOpts: ['All bands', 'Professional Grade', 'Emerging Manager', 'Building', 'Developing'], campOpts: ['All campaigns'].concat(this.CAMPS), stageOpts: ['All stages'].concat(this.STAGES), stages: this.STAGES,
+      setBand: (e) => this.setState({ fBand: e.target.value }), setMin: (e) => this.setState({ fMin: e.target.value }), setCamp: (e) => this.setState({ fCamp: e.target.value }), setStage: (e) => this.setState({ fStage: e.target.value }), setDate: (e) => this.setState({ fDate: e.target.value }),
+      clearFilters: () => this.setState({ fBand: 'All bands', fMin: '', fCamp: 'All campaigns', fStage: 'All stages', fDate: 'all' }),
+      noRows: list.length === 0,
+      rows: list.map((l) => { const [sb, sf] = this.scoreCol(l.score), [tb, tf] = this.stageCol(l.stage); return { name: l.name, date: this.date(l.day), score: l.score, band: this.band(l.score), manages: l.manages, weak: l.weak, camp: l.camp, broker: l.broker, stage: l.stage, scoreBg: sb, scoreFg: sf, stageBg: tb, stageFg: tf, wa: this.wa(l), waLabel: 'WhatsApp ' + l.name, open: open(l.id) }; }),
+      backToLeads: go('leads'),
+      d: { name: L.name, email: L.name.toLowerCase().replace(/\s+/g, '.') + '@example.com', phone: L.phone, manages: 'Manages: ' + L.manages, camp: L.camp, broker: L.broker, date: this.date(L.day), stage: L.stage, wa: this.wa(L),
+        score: L.score, band: this.band(L.score), dash: (C * L.score / 100).toFixed(1) + ' ' + C.toFixed(1),
+        pillars: ['Risk control', 'Discipline', 'Consistency', 'Risk-adjusted return', 'Track record depth'].map((name, i) => ({ name, score: base[i], w: base[i] + '%', color: base[i] < 60 ? '#A9781F' : '#0E6B4F' })),
+        flags: [['Martingale', L.flag], ['Grid trading', false], ['Blown account', false], ['Revenge sizing', L.weak === 'Size after a loss']].map(([name, on]) => ({ name, status: on ? 'Found' : 'Clear', bg: on ? '#F5E4E1' : '#E7F1ED', fg: on ? '#A23B2E' : '#0E6B4F' })),
+        insight: L.weak === 'Size after a loss' ? 'After a loss, trades 1.6× bigger.' : 'Weakest area: ' + L.weak.toLowerCase() + '.',
+        retests: L.id % 3 === 0 ? [{ date: this.date(L.day), score: L.score, note: 'Current score' }, { date: '12 Sep 2026', score: L.score - 9, note: 'First test' }] : [{ date: this.date(L.day), score: L.score, note: 'First test · retest due 15 Jan 2027' }],
+        notes: L.notes,
+        emails: [{ subject: 'Your Manager Test report', when: this.date(L.day) + ', 14:02', status: 'Opened', dot: '#0E6B4F' }, { subject: 'Your top 3 fixes, one at a time', when: '2 days after report', status: 'Scheduled', dot: '#7C8AA0' }, { subject: 'Webinar reminder: Thursday 26 November', when: '24 Nov 2026', status: 'Scheduled', dot: '#7C8AA0' }] },
+      setLeadStage: (e) => this.setLead(L.id, { stage: e.target.value }),
+      noteDraft: s.noteDraft, setNote: (e) => this.setState({ noteDraft: e.target.value }),
+      addNote: () => { const t = s.noteDraft.trim(); if (!t) return; this.setLead(L.id, { notes: [{ when: 'Just now', by: 'You', text: t }].concat(L.notes) }); this.setState({ noteDraft: '' }); },
+      columns: this.STAGES.map((st) => { const cs = s.leads.filter((l) => l.stage === st); return { name: st, count: cs.length, cards: cs.map((l) => { const [sb, sf] = this.scoreCol(l.score); return { name: l.name, score: l.score, camp: l.camp, stage: l.stage, scoreBg: sb, scoreFg: sf, open: open(l.id), moveLabel: 'Move ' + l.name, move: (e) => this.setLead(l.id, { stage: e.target.value }) }; }) }; }),
+      funnelSteps: ['Visits', 'Uploads', 'Scored', 'Leads'].map((label, i) => ({ label, value: tot[i].toLocaleString('en-US'), w: pct(tot[i], tot[0]) + '%', drop: i === 0 ? 'All campaigns' : pct(tot[i], tot[i - 1]) + '% of previous step · ' + (100 - pct(tot[i], tot[i - 1])) + '% drop-off', dropFg: i === 3 ? '#A9781F' : '#4C5A6E' })),
+      funnelRows: funnel.map((r, i) => { const drop = 100 - pct(r[3], r[2]); return { camp: this.CAMPS[i], visits: r[0].toLocaleString('en-US'), uploads: r[1], scored: r[2], leads: r[3], conv: (r[3] / r[0] * 100).toFixed(1) + '%', convW: Math.min(100, pct(r[3], r[0]) * 3) + '%', drop: drop + '%', dropFg: drop > 60 ? '#A23B2E' : drop > 50 ? '#A9781F' : '#0E6B4F' }; }),
+      drops: [[72, 'Drawdown depth', 'IG · 23:47 message', 'iPhone', 'Lead form'], [64, 'Size after a loss', 'IG · Handshake reel', 'Android', 'Exit prompt'], [81, 'Short record', 'IG · Five questions', 'iPhone', 'Lead form'], [45, 'Stops missing', 'IG · Handshake reel', 'Android', 'Score'], [58, 'Risk per trade', 'Organic', 'Desktop', 'Pillars'], [69, 'Best-day concentration', 'IG · 23:47 message', 'iPhone', 'Exit prompt'], [37, 'Drawdown depth', 'IG · Handshake reel', 'Android', 'Score'], [61, 'Short record', 'Webinar page', 'Desktop', 'Lead form']]
+        .map(([score, weak, camp, device, left], i) => { const [sb, sf] = this.scoreCol(score); return { id: 'anon-' + (0x7f3a + i * 911).toString(16), date: this.date(16 - Math.floor(i / 2)), score, band: this.band(score), weak, camp, device, left, scoreBg: sb, scoreFg: sf }; }),
+    };
+  }
+}
+</script>
+
+
+</body></html>
