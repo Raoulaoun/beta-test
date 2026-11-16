@@ -81,3 +81,21 @@ takes about 0.5 s. Errors show as soon as they are known.
   panel (its sub-line shown once, under the first capping row); non-capping rows (no stop losses,
   losses held open) use the amber warning palette from the design tokens.
 - "Demo account" chip.
+
+## Update: scoring 1.1.0, service errors, deploy prep
+
+Run against the production Docker images (the ones Railway builds), on a private network
+where scoring has no published port and web reaches it by name through `SCORING_URL`.
+
+- Browser upload suite: all 28 runs pass. The open-loss statement now scores 71 (was 87):
+  its 25% floating loss counts as drawdown, and the headline is no longer drawdown praise.
+- Scoring stopped: both widths show "Server error", with no export link and nothing about the
+  file (`uploads/server-error-*.png`).
+- Upload limit: 10,485,760 bytes scores (98); 10,485,761 bytes gets 413 `file_too_large` from
+  both Next.js and FastAPI, with and without a declared length.
+- Noindex: staging build sends `X-Robots-Tag: noindex, nofollow`, a robots noindex meta tag
+  and `Disallow: /`. A `SITE_ENV=production` build sends none of them.
+- Container logs after all runs: no account number.
+- Design match after the footer change (calculators and privacy links hidden): every
+  remaining difference is the removed links (mobile pages are exactly 96 px shorter).
+  `design-vs-built/` is regenerated.

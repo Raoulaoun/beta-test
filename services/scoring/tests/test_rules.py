@@ -141,9 +141,14 @@ def test_no_banned_wording_in_output(rep):
 
 
 def test_no_llm_or_network_imports():
-    src = "".join(p.read_text() for p in (Path(__file__).resolve().parents[1] / "manager_test").rglob("*.py"))
-    for name in ("anthropic", "openai", "requests", "httpx", "urllib.request", "socket"):
-        assert f"import {name}" not in src and f"from {name}" not in src, name
+    pkg = Path(__file__).resolve().parents[1] / "manager_test"
+    for f in pkg.rglob("*.py"):
+        src = f.read_text()
+        for name in ("anthropic", "openai", "requests", "httpx", "urllib.request", "aiohttp"):
+            assert f"import {name}" not in src and f"from {name}" not in src, (f.name, name)
+        # Only the server entry point touches sockets (to check it can bind IPv6).
+        if f.name != "serve.py":
+            assert "import socket" not in src, f.name
 
 
 # ---------- results-screen red-flag panel ----------

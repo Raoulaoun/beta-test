@@ -1,0 +1,13 @@
+# Build context for both Railway services is the repo root; keep it small.
+.git
+samples
+design
+docs/evidence
+tools
+**/node_modules
+**/.next
+**/__pycache__
+**/.pytest_cache
+apps/web/tests
+services/scoring/tests
+services/scoring/scripts

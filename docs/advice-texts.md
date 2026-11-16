@@ -193,6 +193,15 @@ Shown on the results screen, one row per flag. Capping flags state the cap; the 
 | Two or more flags, summary above the rows | {count} red flags found. Your score is capped at {lowest cap}. |
 | Two or more flags, none capping | {count} red flags found. |
 
+## Upload error messages
+
+Shown in the upload error card when the problem is not the file. File problems (MT4, not a report, empty, too large) use the design's messages; a service failure never uses them.
+
+| Case | Title |
+| --- | --- |
+| Scoring service down, timeout or server error (5xx) | Server error |
+| Rate limited (Phase 8) | Too many uploads |
+
 ## Headline insight templates
 
 One line on the results screen. It names the metric costing the most points; for 80+ scores, the strongest pillar instead.

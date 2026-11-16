@@ -27,8 +27,7 @@ export function Footer() {
             <p style={sx("margin:0;font-size:13px;line-height:1.6;color:#9AA5B3;max-width:62ch")}>{DISCLAIMER}</p>
           </div>
           <nav aria-label="Footer" style={sx("display:flex;flex-direction:column;align-items:flex-start;gap:4px")}>
-            <a href="/position-size" className="mt-hover-mint" style={sx("display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:600;color:#F5F6F4")}>Free calculators →</a>
-            <a href="/privacy" className="mt-hover-light" style={sx("display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;color:#C3CBD5")}>Privacy policy</a>
+            {/* "Free calculators →" (Phase 6) and "Privacy policy" (Phase 8) return when their pages ship. */}
             <a href="https://betaapp.me" className="mt-hover-light" style={sx("display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:500;color:#C3CBD5")}>betaapp.me</a>
           </nav>
         </div>

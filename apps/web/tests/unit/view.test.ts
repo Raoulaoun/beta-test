@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { chips, dash, errorScreen, longDate, panelView, pillarRows, precheck, shortProgress, CAP_NOTE } from "../../lib/view.ts";
+import { readFileSync } from "node:fs";
+import { chips, dash, errorCopy, errorScreen, isFileError, ERRORS, longDate, panelView, pillarRows, precheck, shortProgress, CAP_NOTE } from "../../lib/view.ts";
 import { DESIGN_FIXTURES } from "../../lib/fixtures.ts";
 import type { ScoreResult } from "../../lib/types.ts";
 
@@ -14,11 +15,29 @@ test("browser checks follow the design's order", () => {
   assert.equal(precheck({ name: "ReportHistory.html", size: 10 }), null);
 });
 
-test("service error codes map to design error screens", () => {
-  assert.equal(errorScreen("mt4_file"), "mt4");
-  assert.equal(errorScreen("empty_report"), "empty");
-  assert.equal(errorScreen("file_too_large"), "toolarge");
-  assert.equal(errorScreen("not_a_report"), "notstatement");
+test("only real parse problems map to file messages", () => {
+  assert.equal(errorScreen(422, "mt4_file"), "mt4");
+  assert.equal(errorScreen(422, "empty_report"), "empty");
+  assert.equal(errorScreen(422, "not_a_report"), "notstatement");
+  assert.equal(errorScreen(413, "file_too_large"), "toolarge");
+});
+
+test("service failures never blame the file", () => {
+  for (const [status, code] of [[502, "scoring_unavailable"], [500, "scoring_failed"], [503, undefined], [504, undefined],
+    [undefined, undefined], [422, "something_new"], [400, "not_a_report"], [500, "mt4_file"]] as const) {
+    const key = errorScreen(status, code);
+    assert.equal(key, "server", `${status} ${code}`);
+    assert.equal(isFileError(key), false);
+  }
+  assert.equal(errorScreen(429, undefined), "ratelimit");
+});
+
+test("service error titles match docs/advice-texts.md word for word", () => {
+  const doc = readFileSync(new URL("../../../../docs/advice-texts.md", import.meta.url), "utf8");
+  const rows = Object.fromEntries([...doc.matchAll(/^\| (.+?) \| (.+?) \|$/gm)].map((m) => [m[1], m[2]]));
+  assert.equal(errorCopy("server")[0], rows["Scoring service down, timeout or server error (5xx)"]);
+  assert.equal(errorCopy("ratelimit")[0], rows["Rate limited (Phase 8)"]);
+  assert.deepEqual(errorCopy("mt4"), ERRORS.mt4);
 });
 
 test("chips match the design and switch to Demo account", () => {

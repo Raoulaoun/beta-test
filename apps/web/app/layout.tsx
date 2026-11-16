@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
+import { isProductionSite } from "../lib/site.ts";
 import "./design.css";
 import "./app.css";
 
 export const metadata: Metadata = {
   title: "The Manager Test, by Beta",
   description: "Are you ready to manage other people's money? Upload your MT5 statement and find out in 60 seconds. Free.",
+  robots: isProductionSite() ? undefined : { index: false, follow: false },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };

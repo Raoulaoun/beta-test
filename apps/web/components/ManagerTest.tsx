@@ -82,11 +82,11 @@ export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
     try {
       const res = await fetch("/api/score", { method: "POST", body: f, headers: { "content-type": "application/octet-stream" } });
       const json = await res.json().catch(() => ({}));
-      if (!res.ok) return showError(id, errorScreen(json?.error));
+      if (!res.ok) return showError(id, errorScreen(res.status, json?.error));
       pending.current.result = json as ScoreResult;
       finishIfReady(id);
     } catch {
-      showError(id, errorScreen(undefined));
+      showError(id, errorScreen(undefined, undefined));
     }
   }, []);
 

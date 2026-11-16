@@ -42,3 +42,16 @@ def test_api_never_logs_account_number(caplog):
     r = client.post("/score", content=synth.to_html(rep))
     assert rep.account not in caplog.text
     assert rep.account not in r.text
+
+
+def test_health_fails_when_advice_texts_unreadable(monkeypatch, tmp_path):
+    from manager_test import texts
+    texts.load.cache_clear()
+    monkeypatch.setenv("ADVICE_TEXTS_PATH", str(tmp_path / "missing.md"))
+    try:
+        r = client.get("/health")
+        assert r.status_code == 503 and r.json()["error"] == "advice_texts_unreadable"
+    finally:
+        monkeypatch.delenv("ADVICE_TEXTS_PATH")
+        texts.load.cache_clear()
+    assert client.get("/health").status_code == 200

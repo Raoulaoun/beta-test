@@ -1,12 +1,25 @@
-import type { ErrKey, Pillar, RedFlagPanel, ScoreResult } from "./types.ts";
+import type { ErrKey, FileErrKey, Pillar, RedFlagPanel, ScoreResult } from "./types.ts";
 
-// Copy from design/flow (renderVals). Kept here word for word.
-export const ERRORS: Record<ErrKey, [string, string]> = {
+// File errors: copy from design/flow (renderVals), word for word.
+export const ERRORS: Record<FileErrKey, [string, string]> = {
   mt4: ["This looks like an MT4 file. We only support MT5 for now.", "Export the report from MetaTrader 5 and upload it again."],
   empty: ["This report has no trades in it.", "Make sure you chose All History before saving the report, then try again."],
   notstatement: ["This doesn't look like an MT5 statement.", "Upload the XLSX or HTML report saved from the History tab in MetaTrader 5."],
   toolarge: ["This file is over 10 MB.", "Save the report as XLSX, which is usually much smaller, and try again."],
 };
+
+// Service errors: docs/advice-texts.md, "Upload error messages", word for word. Title only
+// until body copy is supplied.
+export const SERVICE_ERRORS: Record<"server" | "ratelimit", [string, string | null]> = {
+  server: ["Server error", null],
+  ratelimit: ["Too many uploads", null],
+};
+
+export function errorCopy(key: ErrKey): [string, string | null] {
+  return key === "server" || key === "ratelimit" ? SERVICE_ERRORS[key] : ERRORS[key];
+}
+
+export const isFileError = (key: ErrKey) => key !== "server" && key !== "ratelimit";
 
 export const MAX_BYTES = 10 * 1024 * 1024;
 
@@ -21,14 +34,19 @@ export function precheck(file: { name: string; size: number }): ErrKey | null {
   return null;
 }
 
-// Scoring-service error codes to design error screens.
-export function errorScreen(code: string | undefined): ErrKey {
-  switch (code) {
-    case "mt4_file": return "mt4";
-    case "empty_report": return "empty";
-    case "file_too_large": return "toolarge";
-    default: return "notstatement";
+// Response to error screen. Only the parser's own file codes may produce a message about
+// the file; anything else (service down, timeout, 5xx, unknown) is a server error.
+export function errorScreen(status: number | undefined, code: string | undefined): ErrKey {
+  if (status === 429) return "ratelimit";
+  if (status === 413 && code === "file_too_large") return "toolarge";
+  if (status === 422) {
+    switch (code) {
+      case "mt4_file": return "mt4";
+      case "empty_report": return "empty";
+      case "not_a_report": return "notstatement";
+    }
   }
+  return "server";
 }
 
 export function roundHalfUp(x: number): number {

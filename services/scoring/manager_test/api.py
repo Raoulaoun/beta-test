@@ -11,6 +11,7 @@ from datetime import date
 from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse
 
+from . import texts
 from .engine import evaluate
 from .errors import FileTooLarge, StatementError
 from .parse.grid import MAX_BYTES
@@ -25,7 +26,16 @@ def _error(exc: StatementError) -> JSONResponse:
 
 
 @app.get("/health")
-def health() -> dict:
+def health():
+    # Also proves the approved copy is readable: without it every score would fail,
+    # so a deploy that can't read it must fail its health check instead.
+    try:
+        t = texts.load()
+        ready = bool(t["advice"] and t["headlines"] and t["panel"] and t["red_flags"])
+    except OSError:
+        ready = False
+    if not ready:
+        return JSONResponse(status_code=503, content={"ok": False, "error": "advice_texts_unreadable"})
     return {"ok": True, "scoring_version": SCORING_VERSION}
 
 

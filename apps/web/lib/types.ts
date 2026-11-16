@@ -29,5 +29,8 @@ export type ScoreResult = {
 
 export type ScoreError = { error: string; message?: string; hint?: string };
 
-// Error screens in the design (design/flow: err = mt4 | empty | notstatement | toolarge).
-export type ErrKey = "mt4" | "empty" | "notstatement" | "toolarge";
+// Error screens: the design's file errors (design/flow: err = mt4 | empty | notstatement |
+// toolarge) plus two that never blame the file (docs/advice-texts.md, Upload error messages).
+export type FileErrKey = "mt4" | "empty" | "notstatement" | "toolarge";
+export type ServiceErrKey = "server" | "ratelimit";
+export type ErrKey = FileErrKey | ServiceErrKey;
