@@ -315,6 +315,7 @@ It appears on the results screen, on every PDF page and on the calculator pages.
 
 - [ ] Counsel reviews the disclaimer, band names and follow-up email wording
 - [ ] Privacy policy published
+- [ ] **Blocker:** real export screenshots (desktop + mobile) replace the tutorial placeholders. No video clip in v1.
 
 ## Build order and acceptance tests
 

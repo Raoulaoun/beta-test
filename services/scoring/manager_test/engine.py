@@ -102,6 +102,7 @@ def evaluate(data: bytes, evaluation_date: date | None = None) -> dict:
         "band": {"code": code, "name": name, "meaning": meaning},
         "pillars": scored["pillars"],
         "red_flags": insights.red_flag_texts(found),
+        "red_flag_panel": insights.red_flag_panel(found, result["notes"]),
         "headline": insights.headline(scored["pillars"], score),
         "top_fixes": insights.top_fixes(scored["pillars"]),
         "come_back_date": None,

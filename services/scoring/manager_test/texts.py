@@ -25,6 +25,7 @@ def load(path: str | None = None) -> dict:
     advice: dict[str, dict] = {}
     red_flags: dict[str, str] = {}
     headlines: dict[str, dict] = {}
+    panel: dict[str, str] = {}
 
     section = ""
     current: str | None = None
@@ -45,6 +46,11 @@ def load(path: str | None = None) -> dict:
             else:
                 red_flags[current] = ""
             continue
+        if section.startswith("red-flag panel") and line.startswith("|"):
+            cells = [_clean(c) for c in line.strip("|").split("|")]
+            if len(cells) == 2 and cells[0] not in ("Case",) and not set(cells[0]) <= {"-", " "}:
+                panel[cells[0]] = cells[1]
+            continue
         if section.startswith("headline") and line.startswith("|"):
             cells = [_clean(c) for c in line.strip("|").split("|")]
             if len(cells) == 3 and cells[0] not in ("Metric", "---") and not set(cells[0]) <= {"-", " "}:
@@ -60,4 +66,4 @@ def load(path: str | None = None) -> dict:
         elif section.startswith("red flag"):
             red_flags[current] = _clean(red_flags[current] + " " + line)
 
-    return {"advice": advice, "red_flags": red_flags, "headlines": headlines}
+    return {"advice": advice, "red_flags": red_flags, "headlines": headlines, "panel": panel}

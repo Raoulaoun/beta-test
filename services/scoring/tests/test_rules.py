@@ -144,3 +144,55 @@ def test_no_llm_or_network_imports():
     src = "".join(p.read_text() for p in (Path(__file__).resolve().parents[1] / "manager_test").rglob("*.py"))
     for name in ("anthropic", "openai", "requests", "httpx", "urllib.request", "socket"):
         assert f"import {name}" not in src and f"from {name}" not in src, name
+
+
+# ---------- results-screen red-flag panel ----------
+
+from manager_test.insights import red_flag_panel  # noqa: E402
+
+PANEL_DOC = {
+    "martingale": "Martingale detected. Score capped at 40.",
+    "grid": "Grid trading detected. Score capped at 40.",
+    "blown_account": "Drawdown over 50% detected. Score capped at 30.",
+    "no_stops": "Almost no stop losses used. This lowers your risk control score.",
+    "losses_held_open": "Open trades in loss at the end of your statement. Your real risk may be higher than this score shows.",
+}
+
+
+def _flags(*codes):
+    return [{"code": c} for c in codes]
+
+
+def test_panel_none():
+    p = red_flag_panel([], [])
+    assert p["none"] and p["none_text"] == "No red flags found" and p["rows"] == [] and p["summary"] is None
+
+
+@pytest.mark.parametrize("code", list(PANEL_DOC))
+def test_panel_single_row_uses_doc_line(code):
+    flags = _flags(code) if code != "losses_held_open" else []
+    notes = ["losses_held_open"] if code == "losses_held_open" else []
+    p = red_flag_panel(flags, notes)
+    assert [r["text"] for r in p["rows"]] == [PANEL_DOC[code]]
+    assert p["summary"] is None
+
+
+def test_panel_multiple_uses_lowest_cap():
+    p = red_flag_panel(_flags("martingale", "blown_account", "no_stops"), [])
+    assert p["summary"] == "3 red flags found. Your score is capped at 30."
+    assert p["cap_applied"] == 30
+    assert [r["code"] for r in p["rows"]] == ["martingale", "blown_account", "no_stops"]
+
+
+def test_panel_multiple_without_cap():
+    p = red_flag_panel(_flags("no_stops"), ["losses_held_open"])
+    assert p["summary"] == "2 red flags found."
+    assert all(r["cap"] is None for r in p["rows"])
+
+
+def test_panel_in_engine_output_matches_score_cap():
+    r = evaluate(synth.to_xlsx(synth.martingale_gambler()), EVAL)
+    panel = r["red_flag_panel"]
+    assert panel["summary"] == "2 red flags found. Your score is capped at 40."
+    assert r["score"] <= panel["cap_applied"]
+    assert all(row["text"] in DOC for row in panel["rows"])

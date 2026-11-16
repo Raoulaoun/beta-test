@@ -178,6 +178,21 @@ This account lost {value} from its peak at some point. Recovering from a drop th
 
 Almost none of your trades had a stop loss. Without one, a single trade can decide the fate of the account, and an investor can't know their worst case. The way out: no order goes in without a stop.
 
+## Red-flag panel lines
+
+Shown on the results screen, one row per flag. Capping flags state the cap; the cap applied is always the lowest one, never stacked.
+
+| Case | Line |
+| --- | --- |
+| None | No red flags found |
+| Martingale | Martingale detected. Score capped at 40. |
+| Grid | Grid trading detected. Score capped at 40. |
+| Blown account | Drawdown over 50% detected. Score capped at 30. |
+| No stop losses (no cap) | Almost no stop losses used. This lowers your risk control score. |
+| Losses held open (no cap) | Open trades in loss at the end of your statement. Your real risk may be higher than this score shows. |
+| Two or more flags, summary above the rows | {count} red flags found. Your score is capped at {lowest cap}. |
+| Two or more flags, none capping | {count} red flags found. |
+
 ## Headline insight templates
 
 One line on the results screen. It names the metric costing the most points; for 80+ scores, the strongest pillar instead.
