@@ -1,0 +1,69 @@
+"""Headline insight, top-3 fixes and red-flag explanations, filled from approved copy."""
+
+from . import texts
+from .score import METRICS, PILLARS, _pct0
+
+_DEFS = {m.key: m for m in METRICS}
+
+RED_FLAG_HEADINGS = {
+    "martingale": "Martingale",
+    "grid": "Grid",
+    "blown_account": "Blown or near-blown account",
+    "no_stops": "No stop losses",
+}
+
+
+def _fill(template: str, value: str | None) -> str:
+    return template.replace("{value}", value or "")
+
+
+def _all_metrics(pillars: list[dict]) -> list[dict]:
+    order = {m.key: i for i, m in enumerate(METRICS)}
+    out = [m for p in pillars for m in p["metrics"]]
+    return sorted(out, key=lambda m: order[m["key"]])
+
+
+def _usable(metric: dict) -> bool:
+    # A metric with no value (e.g. profit shares when net profit is not positive)
+    # can't fill its template, so it is never picked for copy.
+    return metric["display"] is not None
+
+
+def headline(pillars: list[dict], score: int) -> dict:
+    lines = texts.load()["headlines"]
+    if score >= 80:
+        order = {p.key: i for i, p in enumerate(PILLARS)}
+        strongest = sorted(pillars, key=lambda p: (-p["score"], order[p["key"]]))[0]
+        candidates = [m for m in _all_metrics([strongest]) if _usable(m)]
+        best = sorted(candidates, key=lambda m: -m["score"])[0]  # stable: table order on ties
+        d = _DEFS[best["key"]]
+        return {"kind": "strength", "metric": best["key"], "pillar": strongest["key"],
+                "text": _fill(lines[d.headline_name]["strength"], best["display"])}
+    worst = sorted([m for m in _all_metrics(pillars) if _usable(m)], key=lambda m: -m["points_lost"])[0]
+    d = _DEFS[worst["key"]]
+    return {"kind": "weakness", "metric": worst["key"], "pillar": worst["pillar"],
+            "text": _fill(lines[d.headline_name]["weakness"], worst["display"])}
+
+
+def top_fixes(pillars: list[dict], n: int = 3) -> list[dict]:
+    advice = texts.load()["advice"]
+    ranked = sorted([m for m in _all_metrics(pillars) if _usable(m) and m["points_lost"] > 0],
+                    key=lambda m: -m["points_lost"])
+    out = []
+    for m in ranked[:n]:
+        a = advice[_DEFS[m["key"]].advice_name]
+        out.append({"metric": m["key"], "name": _DEFS[m["key"]].advice_name,
+                    "points_lost": m["points_lost"],
+                    "diagnosis": _fill(a["diagnosis"], m["display"]),
+                    "actions": list(a["actions"])})
+    return out
+
+
+def red_flag_texts(flags: list[dict]) -> list[dict]:
+    explanations = texts.load()["red_flags"]
+    out = []
+    for f in flags:
+        heading = RED_FLAG_HEADINGS[f["code"]]
+        value = _pct0(f["value"]) if f["code"] == "blown_account" else None
+        out.append({**f, "name": heading, "text": _fill(explanations[heading], value)})
+    return out

@@ -1,2 +1,8 @@
 # Real MT5 statements used for parser testing. Never commit them.
 samples/
+
+# Python
+__pycache__/
+.pytest_cache/
+*.pyc
+.venv/
