@@ -1,0 +1,19 @@
+[
+ ["01-landing-mobile", "screen=landing", 390, 0],
+ ["02-landing-mobile-export-tab", "screen=landing&tab=mobile", 390, 0],
+ ["03-landing-desktop", "screen=landing", 1440, 0],
+ ["04-analyzing-mobile", "screen=analyzing&step=1", 390, 0],
+ ["05-analyzing-desktop", "screen=analyzing&step=1", 1440, 0],
+ ["06-error-mt4-mobile", "screen=error&err=mt4", 390, 0],
+ ["07-error-mt4-desktop", "screen=error&err=mt4", 1440, 0],
+ ["08-error-empty-mobile", "screen=error&err=empty", 390, 0],
+ ["09-error-not-statement-mobile", "screen=error&err=notstatement", 390, 0],
+ ["10-error-too-large-mobile", "screen=error&err=toolarge", 390, 0],
+ ["11-results-mobile", "screen=results&flags=none", 390, 0],
+ ["12-results-desktop", "screen=results&flags=none", 1440, 0],
+ ["13-results-warn-mobile", "screen=results&flags=warn", 390, 0],
+ ["14-results-warn-desktop", "screen=results&flags=warn", 1440, 0],
+ ["15-form-errors-mobile", "screen=results&form=errors", 390, 0],
+ ["18-not-enough-history-mobile", "screen=short", 390, 0],
+ ["19-not-enough-history-desktop", "screen=short", 1440, 0]
+]

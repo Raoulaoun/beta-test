@@ -1,0 +1,4 @@
+/* Hover states the design declares with style-hover (inline styles can't express :hover). */
+.mt-hover-light:hover { color: #F5F6F4 !important; }
+.mt-hover-mint:hover { color: #9FDCBE !important; }
+html { scroll-behavior: auto; }
