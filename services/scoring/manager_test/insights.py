@@ -29,16 +29,23 @@ def _usable(metric: dict) -> bool:
     return metric["display"] is not None
 
 
-def headline(pillars: list[dict], score: int) -> dict:
+# Metrics that only see closed trades: never praised while losses are held open.
+CLOSED_TRADE_ONLY = {"max_drawdown", "worst_day", "avg_loss", "profit_factor", "hold_asymmetry"}
+
+
+def headline(pillars: list[dict], score: int, losses_held_open: bool = False) -> dict:
     lines = texts.load()["headlines"]
     if score >= 80:
         order = {p.key: i for i, p in enumerate(PILLARS)}
-        strongest = sorted(pillars, key=lambda p: (-p["score"], order[p["key"]]))[0]
-        candidates = [m for m in _all_metrics([strongest]) if _usable(m)]
-        best = sorted(candidates, key=lambda m: -m["score"])[0]  # stable: table order on ties
-        d = _DEFS[best["key"]]
-        return {"kind": "strength", "metric": best["key"], "pillar": strongest["key"],
-                "text": _fill(lines[d.headline_name]["strength"], best["display"])}
+        for pillar in sorted(pillars, key=lambda p: (-p["score"], order[p["key"]])):
+            candidates = [m for m in _all_metrics([pillar]) if _usable(m)
+                          and not (losses_held_open and m["key"] in CLOSED_TRADE_ONLY)]
+            if not candidates:
+                continue
+            best = sorted(candidates, key=lambda m: -m["score"])[0]  # stable: table order on ties
+            d = _DEFS[best["key"]]
+            return {"kind": "strength", "metric": best["key"], "pillar": pillar["key"],
+                    "text": _fill(lines[d.headline_name]["strength"], best["display"])}
     worst = sorted([m for m in _all_metrics(pillars) if _usable(m)], key=lambda m: -m["points_lost"])[0]
     d = _DEFS[worst["key"]]
     return {"kind": "weakness", "metric": worst["key"], "pillar": worst["pillar"],

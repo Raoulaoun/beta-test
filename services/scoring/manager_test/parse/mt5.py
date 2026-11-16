@@ -174,6 +174,15 @@ def _open_positions(rows: Grid) -> list[OpenPosition]:
     return out
 
 
+def _summary_value(rows: Grid, label: str) -> float | None:
+    """A 'Label:' row under Open Positions (Balance, Floating P/L, Equity)."""
+    for row in rows:
+        cells = _non_empty(row)
+        if len(cells) >= 2 and cells[0][1].rstrip(":").strip().lower() == label:
+            return _num(cells[1][1])
+    return None
+
+
 def _events(rows: Grid) -> list[BalanceEvent]:
     out = []
     for r in _table(rows):
@@ -201,6 +210,7 @@ def parse_grid(grid: Grid) -> Statement:
     stmt = Statement(**_parse_header(header_rows))
     stmt.positions = _positions(sections["positions"])
     stmt.open_positions = _open_positions(sections.get("open positions", []))
+    stmt.equity = _summary_value(sections.get("open positions", []), "equity")
     stmt.events = _events(sections["deals"])
     if not stmt.positions:
         raise EmptyReport()

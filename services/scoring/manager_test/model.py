@@ -59,6 +59,7 @@ class Statement:
     account_masked: str | None
     account_type_field: str | None  # "real" / "demo" / "contest", from the account line
     report_time: datetime | None
+    equity: float | None = None          # "Equity:" under Open Positions, if the report has it
     positions: list[Position] = field(default_factory=list)
     open_positions: list[OpenPosition] = field(default_factory=list)
     events: list[BalanceEvent] = field(default_factory=list)

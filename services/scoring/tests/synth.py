@@ -63,6 +63,7 @@ class Report:
     account_type: str = "real"
     company: str = "Example Markets Ltd"
     report_time: datetime = datetime(2026, 11, 10, 12, 0, 0)
+    equity: float | None = None  # statement's "Equity:" figure; computed when None
 
 
 # ---------- scenario builders ----------
@@ -192,6 +193,13 @@ def _rows(rep: Report, html: bool) -> list[tuple[str, list]]:
     for i, o in enumerate(rep.open_positions):
         rows.append(("data", [o.open_time.strftime(T_FMT), str(9000 + i), o.symbol, o.direction, o.volume,
                               o.open_price, "", "", o.open_price, f(0), f(o.profit), ""]))
+    if rep.open_positions:
+        # MT5's summary under Open Positions: label in column A, value in column D.
+        floating = sum(o.profit for o in rep.open_positions)
+        equity = rep.equity if rep.equity is not None else balance + floating
+        rows += [("data", ["", "", "", "", "", "", "", "", "", "", f(floating), ""]),
+                 ("label", ["Balance:", f(balance)]), ("label", ["Credit Facility:", f(0)]),
+                 ("label", ["Floating P/L:", f(floating)]), ("label", ["Equity:", f(equity)])]
     rows += [("section", ["Results"]), ("label", ["Total Net Profit:", f(sum(t.profit for t in rep.trades))])]
     return rows
 

@@ -298,3 +298,64 @@ def test_crm_fields_present():
     assert hist["months"] > 17 and hist["closed_trades"] == len(synth.disciplined().trades)
     assert r["scoring_version"] and r["evaluation_date"]
     assert r["drawdown_basis"] == "closed_balance"
+
+
+# ---------- open trades in floating loss at the end (scoring 1.1.0) ----------
+
+def _winners_then_open_loss(floating_share: float, equity: float | None = None, fmt_open=True):
+    start = datetime(2025, 6, 2, 10)
+    trades = [synth.Trade("EURUSD", "buy", 0.5, start + timedelta(days=3 * i), 1.1,
+                          start + timedelta(days=3 * i, hours=3), 1.102, 40.0, sl=1.09)
+              for i in range(150)]
+    final_balance = 10_000.0 + 40.0 * len(trades)
+    opens = [synth.OpenPos("EURUSD", "buy", 2.0, datetime(2026, 10, 1, 10), 1.12, -final_balance * floating_share)] if fmt_open else []
+    rep = synth.Report(trades=trades, cash=[synth.Cash(start - timedelta(days=1), 10_000.0)],
+                       open_positions=opens, equity=equity)
+    return rep, final_balance
+
+
+@pytest.mark.parametrize("fmt", FORMATS)
+def test_floating_loss_at_end_enters_drawdown_and_blocks_drawdown_praise(fmt):
+    rep, _ = _winners_then_open_loss(0.25)
+    r = run(rep, fmt)
+    assert metric(r, "max_drawdown")["value"] == pytest.approx(0.25, abs=1e-6)
+    assert r["drawdown_basis"] == "closed_balance_and_end_equity"
+    assert "losses_held_open" in r["notes"]
+    assert any(row["code"] == "losses_held_open" for row in r["red_flag_panel"]["rows"])
+    from manager_test.insights import CLOSED_TRADE_ONLY
+    assert r["headline"]["metric"] not in CLOSED_TRADE_ONLY
+    if r["headline"]["kind"] == "strength":
+        assert "drawdown" not in r["headline"]["text"].lower()
+
+
+def test_same_record_without_open_loss_has_no_drawdown():
+    rep, _ = _winners_then_open_loss(0.25, fmt_open=False)
+    r = run(rep)
+    assert metric(r, "max_drawdown")["value"] == 0
+    assert r["notes"] == [] and r["drawdown_basis"] == "closed_balance"
+    assert r["headline"]["metric"] == "max_drawdown"  # the praise the open loss must take away
+
+
+def test_statement_equity_figure_wins_over_computed():
+    # Equity includes things the open-position rows don't (e.g. credit), so the report's
+    # own Equity: line is used when present.
+    rep, final_balance = _winners_then_open_loss(0.25, equity=0.60 * (10_000.0 + 40.0 * 150))
+    r = run(rep)
+    assert metric(r, "max_drawdown")["value"] == pytest.approx(0.40, abs=1e-6)
+
+
+def test_end_equity_point_moves_worst_day_and_return_but_not_sortino():
+    clean, _ = _winners_then_open_loss(0.25, fmt_open=False)
+    held, _ = _winners_then_open_loss(0.25)
+    a, b = run(clean), run(held)
+    assert metric(b, "worst_day")["value"] == pytest.approx(0.25, abs=1e-6)
+    assert metric(b, "return_to_drawdown")["value"] < 10
+    assert metric(a, "sortino")["value_is_unbounded"] == metric(b, "sortino")["value_is_unbounded"]
+    assert metric(a, "sortino")["value"] == metric(b, "sortino")["value"]
+    assert b["score"] < a["score"]
+
+
+def test_open_trades_in_profit_change_nothing():
+    rep, _ = _winners_then_open_loss(-0.10)  # negative share = floating profit
+    r = run(rep)
+    assert r["notes"] == [] and metric(r, "max_drawdown")["value"] == 0

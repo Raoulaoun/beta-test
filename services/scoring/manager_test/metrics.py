@@ -3,8 +3,9 @@
 Returns are measured on trading P&L only. Each trading event's return is its P&L
 divided by the balance just before it; chaining those gives a trading equity index
 that deposits and withdrawals cannot move. Drawdown, worst day, annualized return
-and Sortino come from that index. The report has no floating equity, so drawdown
-is measured on closed balance.
+and Sortino come from that index. The report has no floating equity curve, so drawdown
+is measured on closed balance, plus one final equity point when open trades end the
+statement in floating loss.
 """
 
 import bisect
@@ -97,17 +98,31 @@ def compute(stmt: Statement, evaluation_date: date) -> dict:
     first_open = min(p.open_time for p in positions)
     last_close = max(p.close_time for p in positions)
     report_time = stmt.report_time or (stmt.events[-1].time if stmt.events else last_close)
+    final_balance = timeline.balances_after[-1] if timeline.balances_after else 0.0
+
+    # ----- open trades in floating loss at the end of the statement -----
+    # The closed-balance curve can't see them, so the statement's equity (balance +
+    # floating P/L) is added as a final point of the trading index. It counts for
+    # drawdown, worst day and return/drawdown; Sortino stays on closed trades.
+    floating = sum(o.floating_profit for o in stmt.open_positions)
+    end_equity = stmt.equity if stmt.equity is not None else final_balance + floating
+    floating_loss_at_end = bool(stmt.open_positions) and end_equity < final_balance
+    equity_returns = list(returns)
+    if floating_loss_at_end and final_balance > 0:
+        end_time = max(report_time, stmt.events[-1].time if stmt.events else last_close)
+        equity_returns.append((end_time, max((end_equity - final_balance) / final_balance, -1.0)))
 
     # ----- trading equity index -----
-    index = np.cumprod([1.0] + [1.0 + r for _, r in returns])
+    index = np.cumprod([1.0] + [1.0 + r for _, r in equity_returns])
     peaks = np.maximum.accumulate(index)
     drawdowns = np.where(peaks > 0, (peaks - index) / peaks, 0.0)
     max_dd = float(drawdowns.max()) if len(drawdowns) else 0.0
 
     daily: dict[date, float] = defaultdict(lambda: 1.0)
     weekday: dict[date, float] = defaultdict(lambda: 1.0)
-    for t, r in returns:
+    for t, r in equity_returns:
         daily[t.date()] *= 1.0 + r
+    for t, r in returns:
         weekday[_weekday_bucket(t.date())] *= 1.0 + r
     worst_day = max([0.0] + [1.0 - g for g in daily.values()])
 
@@ -164,12 +179,13 @@ def compute(stmt: Statement, evaluation_date: date) -> dict:
     winners = [p for p in positions if p.net > 0]
     losers = [p for p in positions if p.net < 0]
     floating_losers = [o for o in stmt.open_positions if o.floating_profit < 0]
-    losses_held_open = not losers and bool(floating_losers)
+    # With no closed loser, open losers stand in for losses (approved Phase 1 rule).
+    open_losers_count = not losers and bool(floating_losers)
 
     gross_profit = float(nets[nets > 0].sum())
     gross_loss = float(-nets[nets < 0].sum())
     loser_holds = [p.hold_seconds for p in losers]
-    if losses_held_open:
+    if open_losers_count:
         gross_loss = float(-sum(o.floating_profit for o in floating_losers))
         loser_holds = [max((report_time - o.open_time).total_seconds(), 0.0) for o in floating_losers]
 
@@ -236,7 +252,6 @@ def compute(stmt: Statement, evaluation_date: date) -> dict:
     months_history = (last_close - first_open).total_seconds() / 86400 / 30.4375
     days_since = max((evaluation_date - last_close.date()).days, 0)
 
-    final_balance = timeline.balances_after[-1] if timeline.balances_after else 0.0
     cent = is_cent_account(stmt.currency)
 
     return {
@@ -263,7 +278,8 @@ def compute(stmt: Statement, evaluation_date: date) -> dict:
             "first_trade": first_open,
             "last_trade": last_close,
             "trade_count": len(positions),
-            "losses_held_open": losses_held_open,
+            "losses_held_open": floating_loss_at_end,
+            "end_equity": end_equity,
             "annualized_return": cagr,
             "net_profit": net_profit,
             "final_balance": final_balance,

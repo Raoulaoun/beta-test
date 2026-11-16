@@ -69,7 +69,7 @@ def evaluate(data: bytes, evaluation_date: date | None = None) -> dict:
             "first_trade": ctx["first_trade"].isoformat(),
             "last_trade": ctx["last_trade"].isoformat(),
         },
-        "drawdown_basis": "closed_balance",
+        "drawdown_basis": "closed_balance_and_end_equity" if ctx["losses_held_open"] else "closed_balance",
         "notes": ["losses_held_open"] if ctx["losses_held_open"] else [],
     }
 
@@ -103,7 +103,7 @@ def evaluate(data: bytes, evaluation_date: date | None = None) -> dict:
         "pillars": scored["pillars"],
         "red_flags": insights.red_flag_texts(found),
         "red_flag_panel": insights.red_flag_panel(found, result["notes"]),
-        "headline": insights.headline(scored["pillars"], score),
+        "headline": insights.headline(scored["pillars"], score, ctx["losses_held_open"]),
         "top_fixes": insights.top_fixes(scored["pillars"]),
         "come_back_date": None,
     })
