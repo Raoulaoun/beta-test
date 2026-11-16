@@ -26,7 +26,8 @@ def test_score_raw_body():
 def test_score_errors_have_codes():
     r = client.post("/score", content=synth.MT4_HTML)
     assert r.status_code == 422
-    assert r.json() == {"error": "mt4_file", "message": "This looks like an MT4 file, we only support MT5 for now"}
+    assert r.json() == {"error": "mt4_file", "message": "This looks like an MT4 file. We only support MT5 for now.",
+                        "hint": "Export the report from MetaTrader 5 and upload it again."}
     assert client.post("/score", content=b"hello").json()["error"] == "not_a_report"
 
 

@@ -182,9 +182,16 @@ def test_empty_report(fmt):
         evaluate(FORMATS[fmt](rep), EVAL)
 
 
-def test_mt4_error_uses_spec_copy():
-    from manager_test.errors import Mt4Statement
-    assert Mt4Statement.message == "This looks like an MT4 file, we only support MT5 for now"
+def test_error_copy_matches_design():
+    import re
+    from pathlib import Path
+    from manager_test.errors import EmptyReport, FileTooLarge, Mt4Statement, NotAReport
+    flow = (Path(__file__).resolve().parents[3] / "design" / "flow" / "index.html").read_text(encoding="utf-8")
+    for key, cls in [("mt4", Mt4Statement), ("empty", EmptyReport), ("notstatement", NotAReport),
+                     ("toolarge", FileTooLarge)]:
+        line = re.search(rf"^\s*{key}: \[(['\"])(.+?)\1, '(.+?)'\],$", flow, re.M)
+        assert line, key
+        assert (cls.message, cls.hint) == (line.group(2), line.group(3)), key
 
 
 def test_file_over_10mb_rejected():
