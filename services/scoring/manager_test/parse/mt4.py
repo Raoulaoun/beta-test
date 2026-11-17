@@ -15,6 +15,7 @@ from datetime import datetime
 from ..errors import EmptyReport, NotAReport
 from ..fingerprint import account_fingerprint
 from ..model import BalanceEvent, OpenPosition, Position, Statement
+from .opening import with_opening_balance
 from .grid import html_grid
 from .mt5 import _non_empty, _num, _table, _text, _time, mask_account
 
@@ -156,6 +157,11 @@ def parse_mt4(text: str) -> Statement:
             floating_profit=sum(_num(r.get(c)) or 0.0 for c in ("profit", "swap", "commission", "taxes"))))
 
     stmt.equity = _labelled(sections.get("summary", []), "equity")
+    # The summary states the closing balance; whatever the rows don't explain was already
+    # in the account when the export starts.
+    closing = _labelled(sections.get("summary", []), "balance")
+    if closing is not None:
+        events = with_opening_balance(sorted(events, key=lambda e: e.time), closing - sum(e.amount for e in events))
     positions.sort(key=lambda p: (p.open_time, p.close_time, p.position_id))
     events.sort(key=lambda e: e.time)  # stable: report order within the same minute
     stmt.positions, stmt.events = positions, events

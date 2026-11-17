@@ -64,6 +64,7 @@ class Report:
     company: str = "Example Markets Ltd"
     report_time: datetime = datetime(2026, 11, 10, 12, 0, 0)
     equity: float | None = None  # statement's "Equity:" figure; computed when None
+    opening: float = 0.0  # balance before the first row: a date-range export, not All History
 
 
 # ---------- scenario builders ----------
@@ -182,7 +183,7 @@ def _rows(rep: Report, html: bool) -> list[tuple[str, list]]:
         events.append((t.close_time, 2, [t.symbol, opp, "out", t.volume, t.close_price, str(i),
                                          f(t.commission), f(0), f(t.swap), t.profit, ""]))
     events.sort(key=lambda e: (e[0], e[1]))
-    balance = 0.0
+    balance = rep.opening
     for n, (time, _, cells) in enumerate(events):
         amount = cells[9] + t_float(cells[6], html) + t_float(cells[8], html)
         balance += amount
@@ -308,7 +309,7 @@ def to_mt4_html(rep: Report, detailed: bool = False, company: str | None = None,
                     + td(when, " class=msdate nowrap") + td("1.10000") + td("cancelled", " colspan=4 align=right") + "</tr>")
     closed_pl = sum(t.profit + t.commission + t.swap for t in rep.trades)
     deposits = sum(c.amount for c in rep.cash)
-    balance = deposits + closed_pl
+    balance = rep.opening + deposits + closed_pl
     floating = sum(o.profit for o in rep.open_positions)
     equity = rep.equity if rep.equity is not None else balance + floating
 
@@ -368,3 +369,12 @@ def few_trades(n: int, start: datetime = datetime(2026, 10, 5, 9), days_between:
                     40.0 if win else -25.0, sl=1.09 if stops else None) for i in range(n)]
     return Report(trades=trades, cash=[Cash(start - timedelta(days=1), 10_000.0)],
                   report_time=report_time or (start + timedelta(days=days_between * n + 1)))
+
+
+def date_range_export(rep: Report, cutoff: datetime) -> Report:
+    """The same account exported from `cutoff` on ("Last N weeks" instead of All History):
+    no deposit row, and the running balance starts at what the account held then."""
+    before = [t for t in rep.trades if t.close_time < cutoff]
+    opening = sum(c.amount for c in rep.cash if c.time < cutoff) + sum(t.profit + t.commission + t.swap for t in before)
+    return replace(rep, trades=[t for t in rep.trades if t.open_time >= cutoff],
+                   cash=[c for c in rep.cash if c.time >= cutoff], opening=round(opening, 2))

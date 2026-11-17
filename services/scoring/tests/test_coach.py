@@ -9,6 +9,7 @@ import pytest
 from manager_test import coach as C
 from manager_test import texts
 from manager_test.engine import evaluate_statement
+from manager_test.version import SCORING_VERSION
 from manager_test.model import BalanceEvent, Position, Statement
 
 COPY = texts.load()["coach"]
@@ -297,7 +298,7 @@ def test_under_ten_trades_no_findings():
 
 def test_engine_attaches_coach_and_starter_has_none():
     full = evaluate_statement(mixed())
-    assert full["coach"]["findings"] and full["scoring_version"] == "1.3.0"
+    assert full["coach"]["findings"] and full["scoring_version"] == SCORING_VERSION
     starter = evaluate_statement(stmt([pos(i, START + timedelta(days=i, hours=9), 50.0) for i in range(4)]))
     assert starter["score_type"] == "starter" and starter["coach"] is None
 

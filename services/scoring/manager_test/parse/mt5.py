@@ -9,6 +9,7 @@ from datetime import datetime
 from ..errors import EmptyReport, NotAReport
 from ..fingerprint import account_fingerprint
 from ..model import BalanceEvent, OpenPosition, Position, Statement
+from .opening import with_opening_balance
 from .grid import Grid
 
 SECTIONS = {"positions", "orders", "deals", "open positions", "working orders", "results", "summary"}
@@ -190,19 +191,24 @@ def _summary_value(rows: Grid, label: str) -> float | None:
 
 
 def _events(rows: Grid) -> list[BalanceEvent]:
-    out = []
+    out, opening = [], None
     for r in _table(rows):
         t = _time(r.get("time"))
         if t is None:
             continue
         kind = _text(r.get("type")).lower()
         amount = sum(_num(r.get(c)) or 0.0 for c in ("profit", "commission", "fee", "swap"))
+        running = _num(r.get("balance"))
+        if opening is None and running is not None:
+            # The first row's running balance, minus its own amount, is what the account
+            # held before the export starts (0 for an All History export).
+            opening = running - amount
         if amount == 0:
             continue
         out.append(BalanceEvent(time=t, amount=amount, is_cash_flow=kind in CASH_FLOW_TYPES))
     # Stable sort keeps the report's own order for events in the same second.
     out.sort(key=lambda e: e.time)
-    return out
+    return with_opening_balance(out, opening)
 
 
 def parse_grid(grid: Grid) -> Statement:
