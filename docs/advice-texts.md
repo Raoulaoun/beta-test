@@ -313,3 +313,20 @@ One row per flag found. With several flags, the score is capped once, at the low
 2. Right-click the list and choose All History, so every trade is included.
 3. Right-click again and choose Save as Detailed Report (or Save as Report), then save the file.
 4. Upload the saved file here.
+
+## Coach insights (for approval)
+
+Each finding is one line plus one action. {segment}, {share}, {pf\_without} and the other fields come from the analysis. A segment needs at least 10 trades.
+
+| Area | Working for you | Costing you | Action when costing |
+| --- | --- | --- | --- |
+| Session | The {segment} session is your edge: {share} of your profit comes from it. | The {segment} session cost you {share} of your losses. Without it, your profit factor would be {pf\_without}. | Trade only the sessions where your record is positive for the next month, then compare. |
+| Hour of day | Your best hours are {segment}. | Trades opened between {segment} lost money overall. | Block those hours in your plan and review after 30 trades. |
+| Day of week | {segment} is your strongest day. | {segment} is your most expensive day: {share} of your losses. | Cut size by half on {segment} until the pattern changes. |
+| Instrument | {segment} carries your results: {share} of your profit. | {segment} produced {share} of your losses. Without it, your profit factor would be {pf\_without}. | Pause {segment} or trade it at half size until you understand why it costs you. |
+| Direction | Your {segment} trades are where your skill shows. | Your {segment} trades lose money overall. | Review your last 10 {segment} trades: what did they have in common? |
+| After a loss | You stay steady after losses. Your results don't change. | After {streak} losses in a row, your win rate drops to {winrate}. | Stop for the session after {streak} losses in a row. |
+| After a big win | You stay disciplined after big wins. | After a big win, you trade {change} bigger and give back {share} of it. | Keep the same size for the 5 trades after any big win. |
+| Exits | You let winners reach your targets. | You close {share} of winners before your own target. | Leave your take profit in place, or move your stop to breakeven instead of closing early. |
+| Fatigue | Your quality holds up through the day. | From your {n}th trade of the day, you lose money. | Set a limit of {n\_minus\_1} trades per day. |
+| Size consistency | Your risk per trade is consistent. | Your risk per trade swings from {min} to {max}. | Fix one risk percentage per trade and size every position from it. |

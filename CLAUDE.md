@@ -37,16 +37,34 @@ connection to the Beta platform codebase.
 
 ## Phases
 
-One at a time, in this order: plan → approval → build → evidence.
+One at a time, in this order: plan → approval → build → evidence. Launch ships the full
+product, not a thin version.
 
-1. Scoring engine (`services/scoring`). **Gate:** nothing else starts until it's approved.
-2. Upload flow, results screen, "not enough history" state, error states.
-3. Lead form, database, funnel CRM (`/admin`), drop-off tracking, saved result, exit prompt.
-4. PDF report and report email.
-5. Share cards (story 1080×1920, post 1080×1080).
-6. The five calculators.
-7. Follow-up sequences by band, daily digest, retest reminders.
-8. Analytics, Turnstile, rate limits, cookie notice, privacy policy, Railway deploy.
+1. Scoring engine (`services/scoring`). Done.
+2. Upload flow and results: full score, early score, starter read, MT4 and MT5, error states.
+3. Database, accounts (email-link sign-in), lead form, funnel CRM (`/admin`), drop-off
+   tracking, saved result, exit prompt.
+4. Coach insights engine and its results block.
+5. Dashboard: score history and goals.
+6. PDF report, including the coach notes page, and report email.
+7. Share cards (story 1080×1920, post 1080×1080).
+8. The five calculators.
+9. Emails: follow-up by band, daily digest, retest reminders, monthly check-up.
+10. Hardening and launch: analytics, Turnstile, rate limits, cookie notice, privacy policy,
+    production deploy on managertest.betaapp.me.
+
+Version 2, after launch: automatic tracking through an investor (read-only) password. Don't
+build it, and don't block it: results carry a `source` (`upload` now, `connected` later) and
+scoring takes a parsed statement, whatever produced it.
+
+## Data rules
+
+- An account has many results (score history). Every result stores its evaluation date and
+  scoring version.
+- Insights are stored per result as segment aggregates only, never individual trades.
+- Deleting an account deletes the account, its results and its insights.
+- Screens for coach notes, dashboard, sign-in and settings come from Claude Design. Don't
+  build them from scratch.
 
 ## Stack
 
