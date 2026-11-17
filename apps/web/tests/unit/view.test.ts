@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { chips, dash, errorCopy, errorScreen, isFileError, nudgeParts, panelView, pillarRows, precheck, progressRows, COPY, ERROR_LINES, CAP_NOTE } from "../../lib/view.ts";
+import { chips, starterChips, dash, errorCopy, errorScreen, isFileError, nudgeParts, panelView, pillarRows, precheck, progressRows, COPY, ERROR_LINES, CAP_NOTE } from "../../lib/view.ts";
 import { DESIGN_FIXTURES } from "../../lib/fixtures.ts";
 import type { ScoreResult } from "../../lib/types.ts";
 
@@ -59,6 +59,10 @@ test("chips match the design and switch to Demo account", () => {
   assert.deepEqual(chips(r), ["Live account", "14 months", "186 trades"]);
   const demo: ScoreResult = { ...r, account: { ...r.account, account_type: "demo" } };
   assert.equal(chips(demo)[0], "Demo account");
+});
+
+test("starter reads drop the months chip", () => {
+  assert.deepEqual(starterChips(DESIGN_FIXTURES.starter), ["Live account", "3 trades"]);
 });
 
 test("dial, pillars and progress bars", () => {

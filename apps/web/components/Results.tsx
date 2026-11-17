@@ -2,7 +2,7 @@
 
 import { sx } from "../lib/sx.ts";
 import type { ScoreResult } from "../lib/types.ts";
-import { chips, dash, nudgeParts, panelView, pillarRows, progressRows, CAP_NOTE, type PanelView } from "../lib/view.ts";
+import { chips, dash, nudgeParts, starterChips, panelView, pillarRows, progressRows, CAP_NOTE, type PanelView } from "../lib/view.ts";
 import { DISCLAIMER, Tick } from "./Chrome.tsx";
 import { LeadForm, type FormState } from "./LeadForm.tsx";
 
@@ -50,7 +50,7 @@ function StarterCard({ r }: { r: ScoreResult }) {
       <h1 data-testid="starter-heading" style={sx("font-family:var(--site-font-display);font-size:clamp(28px,3.4vw,40px);font-weight:700;letter-spacing:-0.035em;line-height:1.08;color:#F5F6F4;margin:0;text-wrap:balance")}>{st.heading}</h1>
       <p style={sx("margin:0;font-size:16px;line-height:1.55;color:rgba(245,246,244,0.82);text-wrap:pretty")}>{st.line}</p>
       <div style={sx("display:flex;flex-wrap:wrap;gap:8px")}>
-        {chips(r).map((c) => <span key={c} style={sx(chipCss)}>{c}</span>)}
+        {starterChips(r).map((c) => <span key={c} style={sx(chipCss)}>{c}</span>)}
       </div>
       <Progress r={r} />
     </div>

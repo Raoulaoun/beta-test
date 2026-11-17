@@ -73,6 +73,12 @@ export function chips(r: ScoreResult): string[] {
   ];
 }
 
+// Starter reads leave out the months chip: under 5 trades it mostly reads "0 months".
+export function starterChips(r: ScoreResult): string[] {
+  const [account, , trades] = chips(r);
+  return [account, trades];
+}
+
 export const DIAL_C = 2 * Math.PI * 88;
 export function dash(score: number): string {
   return (DIAL_C * score / 100).toFixed(1) + " " + DIAL_C.toFixed(1);
