@@ -64,11 +64,12 @@ export function roundHalfUp(x: number): number {
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
+// The period chip uses the engine's label: days under 2 weeks, weeks under 8, then
+// months ("2 weeks", not "0 months").
 export function chips(r: ScoreResult): string[] {
-  const months = Math.floor(r.history.months);
   return [
     r.account.account_type === "demo" ? "Demo account" : "Live account",
-    plural(months, "month", "months"),
+    r.period.label,
     plural(r.history.closed_trades, "trade", "trades"),
   ];
 }
