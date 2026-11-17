@@ -11,7 +11,9 @@
     "db:generate": "drizzle-kit generate",
     "db:bundle": "esbuild scripts/migrate.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/migrate.cjs --log-level=warning",
     "db:migrate": "npm run db:bundle && node dist/migrate.cjs",
-    "test:db": "node --test --experimental-strip-types --test-concurrency=1 tests/db/*.test.ts"
+    "test:db": "node --test --experimental-strip-types --test-concurrency=1 tests/db/*.test.ts",
+    "jobs:bundle": "esbuild scripts/retention.ts --bundle --platform=node --format=cjs --target=node22 --outfile=dist/retention.cjs --log-level=warning",
+    "jobs:retention": "npm run jobs:bundle && node dist/retention.cjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.4",
