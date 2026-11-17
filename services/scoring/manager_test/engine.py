@@ -82,8 +82,14 @@ def _starter_metrics(values: dict) -> list[dict]:
 
 
 def evaluate(data: bytes, evaluation_date: date | None = None) -> dict:
+    """Score an uploaded file."""
+    return evaluate_statement(parse_statement(data), evaluation_date)
+
+
+def evaluate_statement(stmt, evaluation_date: date | None = None) -> dict:
+    """Score a parsed statement, whatever produced it (an upload today, a connected
+    account feed in version 2)."""
     evaluation_date = evaluation_date or datetime.now(timezone.utc).date()
-    stmt = parse_statement(data)
     demo = _is_demo(stmt)
     m = metrics.compute(stmt, evaluation_date)
     ctx = m["context"]
@@ -110,6 +116,8 @@ def evaluate(data: bytes, evaluation_date: date | None = None) -> dict:
         "notes": ["losses_held_open"] if ctx["losses_held_open"] else [],
     }
     result["account"]["platform"] = stmt.platform
+    result["account"]["fingerprint"] = stmt.account_fingerprint
+    result["source"] = "upload"
 
     copy = texts.load()["copy"]
     start, end = statement_period(stmt, ctx["last_trade"])

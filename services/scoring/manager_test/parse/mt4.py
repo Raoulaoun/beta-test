@@ -13,6 +13,7 @@ import re
 from datetime import datetime
 
 from ..errors import EmptyReport, NotAReport
+from ..fingerprint import account_fingerprint
 from ..model import BalanceEvent, OpenPosition, Position, Statement
 from .grid import html_grid
 from .mt5 import _non_empty, _num, _table, _text, _time, mask_account
@@ -79,7 +80,7 @@ def parse_mt4(text: str) -> Statement:
     if "closed transactions" not in sections:
         raise NotAReport("no Closed Transactions section")
 
-    account = currency = None
+    account = currency = number = None
     report_time = None
     header_text = []
     for row in header_rows:
@@ -87,7 +88,8 @@ def parse_mt4(text: str) -> Statement:
             header_text.append(cell)
             m = re.match(r"^account:\s*(\d+)", cell, re.I)
             if m:
-                account = mask_account(m.group(1))
+                number = m.group(1)
+                account = mask_account(number)
             m = re.match(r"^currency:\s*(\S+)", cell, re.I)
             if m:
                 currency = m.group(1)
@@ -109,7 +111,9 @@ def parse_mt4(text: str) -> Statement:
     is_demo = any(DEMO.search(s or "") for s in [company, title, *header_text])
     stmt = Statement(broker=company, server=None, currency=currency, account_masked=account,
                      account_type_field="demo" if is_demo else None, report_time=report_time,
-                     platform="MT4", period=period)
+                     platform="MT4", period=period,
+                     # MT4 statements don't name the server; the broker name stands in.
+                     account_fingerprint=account_fingerprint(number, company))
 
     positions, events = [], []
     for r in _table(sections["closed transactions"]):

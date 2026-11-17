@@ -11,7 +11,7 @@ from datetime import date
 from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse
 
-from . import texts
+from . import fingerprint, texts
 from .engine import evaluate
 from .errors import FileTooLarge, StatementError
 from .parse.grid import MAX_BYTES
@@ -36,7 +36,7 @@ def health():
         ready = False
     if not ready:
         return JSONResponse(status_code=503, content={"ok": False, "error": "advice_texts_unreadable"})
-    return {"ok": True, "scoring_version": SCORING_VERSION}
+    return {"ok": True, "scoring_version": SCORING_VERSION, "fingerprint": fingerprint.enabled()}
 
 
 @app.post("/score")

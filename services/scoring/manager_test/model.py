@@ -62,6 +62,7 @@ class Statement:
     equity: float | None = None          # end-of-statement equity, if the report has it
     period: tuple[datetime, datetime] | None = None  # explicit statement period, if the report states one
     platform: str = "MT5"
+    account_fingerprint: str | None = None  # HMAC of number + server; the number itself is never kept
     positions: list[Position] = field(default_factory=list)
     open_positions: list[OpenPosition] = field(default_factory=list)
     events: list[BalanceEvent] = field(default_factory=list)

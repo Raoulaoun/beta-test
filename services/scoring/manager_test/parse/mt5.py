@@ -7,6 +7,7 @@ import re
 from datetime import datetime
 
 from ..errors import EmptyReport, NotAReport
+from ..fingerprint import account_fingerprint
 from ..model import BalanceEvent, OpenPosition, Position, Statement
 from .grid import Grid
 
@@ -70,6 +71,7 @@ def mask_account(number: str) -> str:
 def _parse_header(rows: Grid) -> dict:
     out: dict = {"broker": None, "server": None, "currency": None,
                  "account_masked": None, "account_type_field": None, "report_time": None}
+    number = None
     for row in rows:
         for label in ("account", "company", "broker", "date"):
             value = _header_value(row, label)
@@ -78,7 +80,8 @@ def _parse_header(rows: Grid) -> dict:
             if label == "account":
                 m = re.match(r"^\s*(\d+)\s*(?:\((.*)\))?", value)
                 if m:
-                    out["account_masked"] = mask_account(m.group(1))
+                    number = m.group(1)
+                    out["account_masked"] = mask_account(number)
                     parts = [p.strip() for p in (m.group(2) or "").split(",")]
                     if len(parts) >= 1 and parts[0]:
                         out["currency"] = parts[0]
@@ -90,6 +93,7 @@ def _parse_header(rows: Grid) -> dict:
                 out["broker"] = value
             elif label == "date":
                 out["report_time"] = _time(value)
+    out["account_fingerprint"] = account_fingerprint(number, out["server"])
     return out
 
 
