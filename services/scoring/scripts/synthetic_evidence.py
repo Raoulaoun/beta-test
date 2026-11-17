@@ -23,16 +23,18 @@ SCENARIOS = [
     ("Disciplined trader, demo", demo),
     ("Martingale gambler (+300%)", synth.martingale_gambler),
     ("Blown account", synth.blown),
-    ("2-month account", synth.short_history),
+    ("2-month account (early score)", synth.short_history),
+    ("3 trades (starter read)", lambda: synth.few_trades(3, win=False, stops=False)),
 ]
 
 for title, build in SCENARIOS:
     r = evaluate(synth.to_xlsx(build()), EVAL)
     print(f"\n### {title}")
-    if r["status"] != "scored":
-        print(f'{r["band"]["name"]}: come back {r["come_back_date"]} '
-              f'({r["history"]["months"]:.1f} months, {r["history"]["closed_trades"]} trades)')
+    if r["score_type"] == "starter":
+        print(f'Starter read ({r["history"]["closed_trades"]} trades): {[m["key"] for m in r["starter"]["metrics"]]}')
         continue
+    if r["score_type"] == "early":
+        print(f'{r["early"]["line"]}')
     flags = ", ".join(f["code"] for f in r["red_flags"]) or "none"
     print(f'Score {r["score"]} (uncapped {r["uncapped_score"]}), {r["band"]["name"]}, '
           f'{r["account"]["account_type"]}, red flags: {flags}')

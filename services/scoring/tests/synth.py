@@ -263,3 +263,108 @@ def spreadsheet_without_sections() -> bytes:
     buf = io.BytesIO()
     wb.save(buf)
     return buf.getvalue()
+
+
+# ---------- MT4 statements (Save as Report / Save as Detailed Report) ----------
+
+MT4_COLS = ["Ticket", "Open Time", "Type", "Size", "Item", "Price", "S / L", "T / P",
+            "Close Time", "Price", "Commission", "Taxes", "Swap", "Profit"]
+MT4_T = "%Y.%m.%d %H:%M"
+
+
+def _m4(v: float) -> str:
+    return f"{v:,.2f}".replace(",", " ")
+
+
+def to_mt4_html(rep: Report, detailed: bool = False, company: str | None = None,
+                cancelled_orders: int = 2) -> bytes:
+    """An MT4 statement in the layout the terminal writes, encoded windows-1252."""
+    company = company or (rep.company + (" Demo" if rep.account_type == "demo" else ""))
+    title = ("Detailed Statement" if detailed else "Statement") + f": {rep.account} - Test Trader"
+    td = lambda v, extra="": f"<td{extra}>{v}</td>"  # noqa: E731
+    rows = []
+    events = [(c.time, 0, "cash", c) for c in rep.cash] + [(t.open_time, 1, "trade", t) for t in rep.trades]
+    events.sort(key=lambda e: (e[0], e[1]))
+    ticket = 70000
+    for _, _, kind, obj in events:
+        ticket += 1
+        if kind == "cash":
+            rows.append("<tr align=right>" + td(ticket) + td(obj.time.strftime(MT4_T), " class=msdate nowrap")
+                        + td("balance") + td("Deposit" if obj.amount > 0 else "Withdrawal", " colspan=10 align=left")
+                        + td(_m4(obj.amount), " class=mspt") + "</tr>")
+        else:
+            t = obj
+            rows.append("<tr align=right>" + td(ticket) + td(t.open_time.strftime(MT4_T), " class=msdate nowrap")
+                        + td(t.direction) + td(f"{t.volume:.2f}", " class=mspt") + td(t.symbol.lower())
+                        + td(f"{t.open_price:.5f}") + td(f"{t.sl:.5f}" if t.sl else "0.00000") + td("0.00000")
+                        + td(t.close_time.strftime(MT4_T), " class=msdate nowrap") + td(f"{t.close_price:.5f}")
+                        + td(_m4(t.commission), " class=mspt") + td("0.00", " class=mspt")
+                        + td(_m4(t.swap), " class=mspt") + td(_m4(t.profit), " class=mspt") + "</tr>")
+    for i in range(cancelled_orders):  # pending orders that never filled: must be ignored
+        t = rep.trades[min(i * 7, len(rep.trades) - 1)] if rep.trades else None
+        when = (t.open_time if t else rep.report_time).strftime(MT4_T)
+        rows.append("<tr align=right>" + td(90000 + i) + td(when, " class=msdate nowrap") + td("buy limit")
+                    + td("0.10", " class=mspt") + td("eurusd") + td("1.05000") + td("0.00000") + td("0.00000")
+                    + td(when, " class=msdate nowrap") + td("1.10000") + td("cancelled", " colspan=4 align=right") + "</tr>")
+    closed_pl = sum(t.profit + t.commission + t.swap for t in rep.trades)
+    deposits = sum(c.amount for c in rep.cash)
+    balance = deposits + closed_pl
+    floating = sum(o.profit for o in rep.open_positions)
+    equity = rep.equity if rep.equity is not None else balance + floating
+
+    open_rows = []
+    for i, o in enumerate(rep.open_positions):
+        open_rows.append("<tr align=right>" + td(95000 + i) + td(o.open_time.strftime(MT4_T), " class=msdate nowrap")
+                         + td(o.direction) + td(f"{o.volume:.2f}", " class=mspt") + td(o.symbol.lower())
+                         + td(f"{o.open_price:.5f}") + td("0.00000") + td("0.00000") + td("&nbsp;")
+                         + td(f"{o.open_price:.5f}") + td("0.00", " class=mspt") + td("0.00", " class=mspt")
+                         + td("0.00", " class=mspt") + td(_m4(o.profit), " class=mspt") + "</tr>")
+    if not open_rows:
+        open_rows = ['<tr align=right><td colspan=14 align=center>No transactions</td></tr>']
+
+    head_cells = "".join(f"<td nowrap>{c}</td>" for c in MT4_COLS)
+    open_head = "".join(f"<td nowrap>{'&nbsp;' if c == 'Close Time' else c}</td>" for c in MT4_COLS)
+    details = ""
+    if detailed:
+        details = ("<tr align=left><td colspan=13><b>Details:</b></td></tr>"
+                   '<tr align=left><td colspan=13><img src="DetailedStatement.gif" width=820 height=200 border=0 alt="Graph"></td></tr>'
+                   f"<tr align=right><td colspan=3>Gross Profit:</td><td>{_m4(sum(t.profit for t in rep.trades if t.profit > 0))}</td>"
+                   f"<td colspan=3>Gross Loss:</td><td>{_m4(sum(t.profit for t in rep.trades if t.profit < 0))}</td>"
+                   f"<td colspan=3>Total Net Profit:</td><td colspan=3>{_m4(closed_pl)}</td></tr>"
+                   f"<tr align=right><td colspan=3>Total Trades:</td><td>{len(rep.trades)}</td><td colspan=10>&nbsp;</td></tr>")
+    html = f"""<html><head><title>{title}</title>
+<meta name="generator" content="MetaQuotes Software Corp.">
+<style type="text/css" media="screen">td {{ font: 8pt Tahoma,Arial; }}</style></head>
+<body topmargin=1 marginheight=1><div align=center>
+<div style="font: 20pt Times New Roman"><b>{company}</b></div><br>
+<table cellspacing=1 cellpadding=3 border=0>
+<tr align=left><td colspan=2><b>Account: {rep.account}</b></td><td colspan=5><b>Name: Test Trader</b></td>
+<td colspan=2><b>Currency: {rep.currency}</b></td><td colspan=2><b>Leverage: 1:100</b></td>
+<td colspan=3 align=right><b>{rep.report_time.strftime('%Y %B %d, %H:%M')}</b></td></tr>
+<tr align=left><td colspan=13><b>Closed Transactions:</b></td></tr>
+<tr align=center bgcolor="#C0C0C0">{head_cells}</tr>
+{''.join(rows)}
+<tr align=right><td colspan=10>&nbsp;</td><td class=mspt>0.00</td><td class=mspt>0.00</td><td class=mspt>0.00</td><td class=mspt>{_m4(closed_pl)}</td></tr>
+<tr align=right><td colspan=10><b>Closed Trade P/L:</b></td><td colspan=4 align=right class=mspt><b>{_m4(closed_pl)}</b></td></tr>
+<tr align=left><td colspan=13><b>Open Trades:</b></td></tr>
+<tr align=center bgcolor="#C0C0C0">{open_head}</tr>
+{''.join(open_rows)}
+<tr align=right><td colspan=13 align=right><b>{_m4(floating)}</b></td></tr>
+<tr align=left><td colspan=13><b>Working Orders:</b></td></tr>
+<tr align=right><td colspan=14 align=center>No transactions</td></tr>
+<tr align=left><td colspan=13><b>Summary:</b></td></tr>
+<tr align=right><td colspan=2><b>Deposit/Withdrawal:</b></td><td colspan=2 class=mspt><b>{_m4(deposits)}</b></td><td colspan=4><b>Credit Facility:</b></td><td class=mspt colspan=2><b>0.00</b></td><td colspan=4>&nbsp;</td></tr>
+<tr align=right><td colspan=2><b>Closed Trade P/L:</b></td><td colspan=2 class=mspt><b>{_m4(closed_pl)}</b></td><td colspan=4><b>Floating P/L:</b></td><td class=mspt colspan=2><b>{_m4(floating)}</b></td><td colspan=2><b>Margin:</b></td><td colspan=2 class=mspt><b>0.00</b></td></tr>
+<tr align=right><td colspan=2><b>Balance:</b></td><td colspan=2 class=mspt><b>{_m4(balance)}</b></td><td colspan=4><b>Equity:</b></td><td class=mspt colspan=2><b>{_m4(equity)}</b></td><td colspan=2><b>Free Margin:</b></td><td colspan=2 class=mspt><b>{_m4(equity)}</b></td></tr>
+{details}
+</table></div></body></html>"""
+    return html.encode("cp1252")
+
+
+def few_trades(n: int, start: datetime = datetime(2026, 10, 5, 9), days_between: int = 1,
+               win: bool = True, stops: bool = True, report_time: datetime | None = None) -> Report:
+    trades = [Trade("EURUSD", "buy", 0.5, start + timedelta(days=days_between * i), 1.1,
+                    start + timedelta(days=days_between * i, hours=2), 1.102 if win else 1.098,
+                    40.0 if win else -25.0, sl=1.09 if stops else None) for i in range(n)]
+    return Report(trades=trades, cash=[Cash(start - timedelta(days=1), 10_000.0)],
+                  report_time=report_time or (start + timedelta(days=days_between * n + 1)))

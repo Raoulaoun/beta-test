@@ -19,16 +19,20 @@ def test_score_raw_body():
                     headers={"content-type": "application/octet-stream"})
     assert r.status_code == 200
     body = r.json()
-    assert body["status"] == "scored" and body["score"] >= 75
+    assert body["status"] == "full" and body["score"] >= 75
     assert body["evaluation_date"] == "2026-11-10"
 
 
 def test_score_errors_have_codes():
-    r = client.post("/score", content=synth.MT4_HTML)
+    r = client.post("/score", content=b"hello")
     assert r.status_code == 422
-    assert r.json() == {"error": "mt4_file", "message": "This looks like an MT4 file. We only support MT5 for now.",
-                        "hint": "Export the report from MetaTrader 5 and upload it again."}
-    assert client.post("/score", content=b"hello").json()["error"] == "not_a_report"
+    assert r.json() == {"error": "not_a_report", "message": "We couldn't read this file. Upload the statement exported from MT4 or MT5. The guide below shows how."}
+    assert client.post("/score", content=synth.MT4_HTML).json()["error"] == "empty_report"
+
+
+def test_mt4_statement_scores_through_the_api():
+    r = client.post("/score?evaluation_date=2026-11-10", content=synth.to_mt4_html(synth.disciplined()))
+    assert r.status_code == 200 and r.json()["account"]["platform"] == "MT4" and r.json()["score"] >= 75
 
 
 def test_too_large():

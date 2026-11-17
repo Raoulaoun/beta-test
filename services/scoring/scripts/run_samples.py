@@ -26,21 +26,22 @@ def main(argv):
         print(f"No files in {folder}")
         return
     print(f"Evaluation date: {when}\n")
-    print("| File | Account | Broker | Type | Size | Months | Trades | Score | Band | "
+    print("| File | Platform | Account | Broker | Type | Size | Period | Months | Trades | Outcome | Score | Band | "
           "Risk | Disc. | Cons. | Risk-adj. | Depth | Red flags | Notes |")
-    print("|" + "---|" * 16)
+    print("|" + "---|" * 19)
     for p in files:
         try:
             r = evaluate(p.read_bytes(), when)
         except StatementError as exc:
-            print(f"| {p.name} | | | | | | | | error: `{exc.code}` | | | | | | | |")
+            print(f"| {p.name} | | | | | | | | | error: `{exc.code}` | | | | | | | | | |")
             continue
         a, h = r["account"], r["history"]
         pil = {x["key"]: f'{x["score"]:.0f}' for x in r["pillars"]} if r["pillars"] else {}
-        score = r["score"] if r["score"] is not None else f'— (back {r["come_back_date"]})'
+        score = r["score"] if r["score"] is not None else "—"
+        band = r["band"]["name"] if r["band"] else "—"
         flags = ", ".join(f["code"] for f in r["red_flags"]) or "—"
-        print(f'| {p.name} | {a["account_masked"]} | {a["broker"]} | {a["account_type"]} | {a["size_bucket"]} '
-              f'| {h["months"]:.1f} | {h["closed_trades"]} | {score} | {r["band"]["name"]} '
+        print(f'| {p.name} | {a.get("platform", "")} | {a["account_masked"]} | {a["broker"]} | {a["account_type"]} | {a["size_bucket"]} '
+              f'| {r["period"]["label"]} | {h["months"]:.1f} | {h["closed_trades"]} | {r["score_type"]} | {score} | {band} '
               f'| {pil.get("risk_control", "")} | {pil.get("discipline", "")} | {pil.get("consistency", "")} '
               f'| {pil.get("risk_adjusted", "")} | {pil.get("depth", "")} | {flags} | {", ".join(r["notes"]) or "—"} |')
 

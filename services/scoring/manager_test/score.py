@@ -86,7 +86,6 @@ BANDS = [
     (40, "building", "Building", "Promising, with clear gaps"),
     (0, "developing", "Developing", "Trading for yourself, not yet for others"),
 ]
-NOT_ENOUGH_HISTORY = ("not_enough_history", "Not enough history", "Come back on a set date")
 
 
 def metric_points(m: MetricDef, value: float | None) -> float:

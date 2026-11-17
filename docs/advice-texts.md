@@ -178,30 +178,6 @@ This account lost {value} from its peak at some point. Recovering from a drop th
 
 Almost none of your trades had a stop loss. Without one, a single trade can decide the fate of the account, and an investor can't know their worst case. The way out: no order goes in without a stop.
 
-## Red-flag panel lines
-
-Shown on the results screen, one row per flag. Capping flags state the cap; the cap applied is always the lowest one, never stacked.
-
-| Case | Line |
-| --- | --- |
-| None | No red flags found |
-| Martingale | Martingale detected. Score capped at 40. |
-| Grid | Grid trading detected. Score capped at 40. |
-| Blown account | Drawdown over 50% detected. Score capped at 30. |
-| No stop losses (no cap) | Almost no stop losses used. This lowers your risk control score. |
-| Losses held open (no cap) | Open trades in loss at the end of your statement. Your real risk may be higher than this score shows. |
-| Two or more flags, summary above the rows | {count} red flags found. Your score is capped at {lowest cap}. |
-| Two or more flags, none capping | {count} red flags found. |
-
-## Upload error messages
-
-Shown in the upload error card when the problem is not the file. File problems (MT4, not a report, empty, too large) use the design's messages; a service failure never uses them.
-
-| Case | Title |
-| --- | --- |
-| Scoring service down, timeout or server error (5xx) | Server error |
-| Rate limited (Phase 8) | Too many uploads |
-
 ## Headline insight templates
 
 One line on the results screen. It names the metric costing the most points; for 80+ scores, the strongest pillar instead.
@@ -287,3 +263,53 @@ Managers protect themselves with simple written rules:
 Write these down and keep them next to your screen for the next 90 days. Then take the Manager Test again and see what changed: {retest\_link}
 
 The Beta team
+
+## Upload errors and result notes
+
+Shown under the upload box or on the results screen. Plain, friendly, one action each.
+
+| Case | Message |
+| --- | --- |
+| MT4 file | (No longer an error: MT4 statements are supported.) |
+| Not a report | We couldn't read this file. Upload the statement exported from MT4 or MT5. The guide below shows how. |
+| Empty report | This statement has no closed trades. Choose All History, export again and upload the new file. |
+| File too large | This file is over 10 MB. Export only your account history and try again. |
+| Too many uploads | You've tested several files in a short time. Please try again in an hour. |
+| Server error | Something went wrong on our side. Please try again in a minute. |
+| Losses held open (result note) | Your statement ends with open trades in loss. Losses held open don't count until they're closed, so your real risk may be higher than this score shows. |
+
+## Red-flag panel lines (results screen)
+
+One row per flag found. With several flags, the score is capped once, at the lowest cap, and the summary line says so.
+
+| Case | Line |
+| --- | --- |
+| None | No red flags found |
+| Martingale | Martingale detected. Score capped at 40. |
+| Grid | Grid trading detected. Score capped at 40. |
+| Blown or near-blown account | Drawdown over 50% detected. Score capped at 30. |
+| No stop losses | Almost no stop losses used. This lowers your risk control score. |
+| Losses held open | Open trades in loss at the end of your statement. Your real risk may be higher than this score shows. |
+| Two or more flags (summary line above the rows) | {count} red flags found. Your score is capped at {lowest cap}. |
+| Two or more flags, none of them capping | {count} red flags found. |
+
+## Early score, starter read and MT4 copy
+
+| Where | Copy |
+| --- | --- |
+| Upload box, main line | Drop your MT4 or MT5 statement here |
+| Upload box, formats line | MT5: XLSX or HTML report · MT4: HTML statement · up to 10 MB |
+| Landing subline | Upload your MT4 or MT5 statement and get your Manager-Readiness score, judged the way an investor would judge you: risk and discipline first, returns last. |
+| Early score label | Early score |
+| Early score line | Early score, based on {trades} trades over {period}. Upload more history for your full score. |
+| Starter read heading | Your starter read |
+| Starter read line | You have {trades} closed trades so far. Here's what we can already see, and how to build a record investors trust. |
+| Short-period nudge | Your file only covers {period}. Did you choose All History? Export again for a more accurate score. |
+| Retest checkbox | Remind me to retest in 60 days. |
+
+**MT4 export steps (third tab of the guide)**
+
+1. Open the Terminal (Ctrl+T) and click the Account History tab.
+2. Right-click the list and choose All History, so every trade is included.
+3. Right-click again and choose Save as Detailed Report (or Save as Report), then save the file.
+4. Upload the saved file here.

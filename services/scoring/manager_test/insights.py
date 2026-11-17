@@ -80,9 +80,9 @@ def red_flag_texts(flags: list[dict]) -> list[dict]:
 PANEL_ROWS = [  # (code, row key in docs/advice-texts.md "Red-flag panel lines", cap)
     ("martingale", "Martingale", 40),
     ("grid", "Grid", 40),
-    ("blown_account", "Blown account", 30),
-    ("no_stops", "No stop losses (no cap)", None),
-    ("losses_held_open", "Losses held open (no cap)", None),
+    ("blown_account", "Blown or near-blown account", 30),
+    ("no_stops", "No stop losses", None),
+    ("losses_held_open", "Losses held open", None),
 ]
 
 
@@ -96,9 +96,9 @@ def red_flag_panel(flags: list[dict], notes: list[str]) -> dict:
     summary = None
     if len(rows) >= 2:
         if lowest is None:
-            summary = lines["Two or more flags, none capping"].replace("{count}", str(len(rows)))
+            summary = lines["Two or more flags, none of them capping"].replace("{count}", str(len(rows)))
         else:
-            summary = (lines["Two or more flags, summary above the rows"]
+            summary = (lines["Two or more flags (summary line above the rows)"]
                        .replace("{count}", str(len(rows))).replace("{lowest cap}", str(lowest)))
     return {"none": not rows, "none_text": lines["None"] if not rows else None,
             "summary": summary, "rows": rows, "cap_applied": lowest}

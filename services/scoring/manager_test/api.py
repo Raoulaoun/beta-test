@@ -22,7 +22,7 @@ app = FastAPI(title="Manager Test scoring", docs_url=None, redoc_url=None, opena
 
 def _error(exc: StatementError) -> JSONResponse:
     status = 413 if isinstance(exc, FileTooLarge) else 422
-    return JSONResponse(status_code=status, content={"error": exc.code, "message": exc.message, "hint": exc.hint})
+    return JSONResponse(status_code=status, content={"error": exc.code, "message": exc.message})
 
 
 @app.get("/health")

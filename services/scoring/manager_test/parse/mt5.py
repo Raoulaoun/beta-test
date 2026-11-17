@@ -6,7 +6,7 @@ The account number is masked here and the raw value never leaves this module.
 import re
 from datetime import datetime
 
-from ..errors import EmptyReport, Mt4Statement, NotAReport
+from ..errors import EmptyReport, NotAReport
 from ..model import BalanceEvent, OpenPosition, Position, Statement
 from .grid import Grid
 
@@ -202,9 +202,6 @@ def _events(rows: Grid) -> list[BalanceEvent]:
 def parse_grid(grid: Grid) -> Statement:
     header_rows, sections = _split_sections(grid)
     if "deals" not in sections or "positions" not in sections:
-        text = " ".join(_text(c) for row in grid[:200] for c in row).lower()
-        if "closed transactions" in text:
-            raise Mt4Statement()
         raise NotAReport("missing Positions or Deals section")
 
     stmt = Statement(**_parse_header(header_rows))

@@ -9,7 +9,7 @@ import io
 import re
 import zipfile
 
-from ..errors import Mt4Statement, NotAReport
+from ..errors import NotAReport
 
 Grid = list[list[object]]
 
@@ -81,19 +81,20 @@ def html_grid(text: str) -> Grid:
     return grid
 
 
-def looks_like_mt4(text: str) -> bool:
-    lowered = text.lower()
-    return "closed transactions" in lowered or (
-        "statement" in lowered and "open trades" in lowered and "deals" not in lowered
-    )
+def is_mt4(text: str) -> bool:
+    """MT4 statements (Statement and Detailed Statement) have a Closed Transactions section."""
+    return "closed transactions" in text.lower()
 
 
-def file_to_grid(data: bytes) -> Grid:
-    if _is_zip(data):
-        return xlsx_grid(data)
+def read_html(data: bytes) -> str:
     text = decode_text(data)
     if "<" not in text[:4000] or not re.search(r"<\s*(table|tr|html)", text, re.I):
         raise NotAReport("not html or xlsx")
-    if looks_like_mt4(text):
-        raise Mt4Statement()
-    return html_grid(text)
+    return text
+
+
+def file_to_grid(data: bytes) -> Grid:
+    """Grid for either platform's file (used by checks that read the report's own totals)."""
+    if _is_zip(data):
+        return xlsx_grid(data)
+    return html_grid(read_html(data))

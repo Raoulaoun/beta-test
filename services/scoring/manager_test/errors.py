@@ -1,35 +1,32 @@
-"""Statement errors. Each carries a stable code plus the approved copy from design/flow
-(a message and a hint line). The design wording is the approved wording.
+"""Statement errors. Each carries a stable code; the user-facing message comes from
+docs/advice-texts.md ("Upload errors and result notes"), word for word.
 """
 
 
 class StatementError(Exception):
     code = "not_a_report"
-    message = "This doesn't look like an MT5 statement."
-    hint = "Upload the XLSX or HTML report saved from the History tab in MetaTrader 5."
+    doc_case = "Not a report"
 
     def __init__(self, detail: str | None = None):
-        super().__init__(detail or self.message)
+        super().__init__(detail or self.code)
         self.detail = detail
+
+    @property
+    def message(self) -> str:
+        from . import texts
+        return texts.load()["messages"][self.doc_case]
 
 
 class FileTooLarge(StatementError):
     code = "file_too_large"
-    message = "This file is over 10 MB."
-    hint = "Save the report as XLSX, which is usually much smaller, and try again."
-
-
-class Mt4Statement(StatementError):
-    code = "mt4_file"
-    message = "This looks like an MT4 file. We only support MT5 for now."
-    hint = "Export the report from MetaTrader 5 and upload it again."
+    doc_case = "File too large"
 
 
 class NotAReport(StatementError):
     code = "not_a_report"
+    doc_case = "Not a report"
 
 
 class EmptyReport(StatementError):
     code = "empty_report"
-    message = "This report has no trades in it."
-    hint = "Make sure you chose All History before saving the report, then try again."
+    doc_case = "Empty report"

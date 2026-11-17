@@ -1,2 +1,2 @@
 # Bump on any change to parsing, metrics, thresholds, flags or bands.
-SCORING_VERSION = "1.1.0"  # 1.1.0: floating loss at statement end enters the equity index
+SCORING_VERSION = "1.2.0"  # 1.2.0: early score and starter read replace "not enough history"; MT4 statements

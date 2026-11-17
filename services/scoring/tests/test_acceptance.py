@@ -42,7 +42,7 @@ def codes(result):
 @pytest.mark.parametrize("fmt", FORMATS)
 def test_disciplined_trader_scores_75_or_more(fmt):
     r = run(synth.disciplined(), fmt)
-    assert r["status"] == "scored"
+    assert r["status"] == "full"
     assert r["score"] >= 75
     assert r["red_flags"] == []
     assert metric(r, "stop_usage")["value"] == 1.0
@@ -69,31 +69,17 @@ def test_blown_account_scores_30_or_less(fmt):
 
 
 @pytest.mark.parametrize("fmt", FORMATS)
-def test_two_month_account_gets_not_enough_history(fmt):
+def test_two_month_account_gets_an_early_score(fmt):
     rep = synth.short_history()
     r = run(rep, fmt)
-    assert r["status"] == "not_enough_history"
-    assert r["score"] is None and r["pillars"] is None
-    assert r["band"]["name"] == "Not enough history"
-    first = min(t.open_time for t in rep.trades).date()
-    assert first == date(2026, 9, 1)
-    assert r["come_back_date"] == "2026-12-01"  # first trade + 3 months; 64 trades is enough
-
-
-def test_come_back_date_when_too_few_trades():
-    # 4 months but only ~20 trades: projected from the recent trade rate.
-    start = datetime(2026, 6, 1, 10)
-    trades = [synth.Trade("EURUSD", "buy", 0.5, start + timedelta(days=7 * i), 1.1,
-                              start + timedelta(days=7 * i, hours=2), 1.102, 20.0, sl=1.09)
-              for i in range(20)]
-    rep = synth.Report(trades=trades, cash=[synth.Cash(start - timedelta(days=1), 10_000.0)])
-    r = run(rep)
-    assert r["status"] == "not_enough_history"
-    last = rep.trades[-1].close_time
-    recent = sum(1 for t in rep.trades if t.close_time > last - timedelta(days=30))
-    rate = recent / 30
-    expected = EVAL + timedelta(days=math.ceil(10 / rate))
-    assert r["come_back_date"] == expected.isoformat()
+    assert r["score_type"] == "early" and r["status"] == "early"
+    assert r["score"] is not None and r["score"] <= 69
+    assert r["band"]["name"] in {"Developing", "Building", "Emerging Manager"}
+    assert r["early"]["label"] == "Early score"
+    assert r["early"]["line"] == f"Early score, based on {len(rep.trades)} trades over 2 months. Upload more history for your full score."
+    assert r["progress"] == [{"key": "months", "current": 1, "target": 3}, {"key": "trades", "current": 30, "target": 30}]
+    assert r["retest_default"] is True
+    assert "come_back_date" not in r
 
 
 @pytest.mark.parametrize("fmt", FORMATS)
@@ -156,7 +142,7 @@ def test_a_deposit_alone_is_not_a_return():
 
 
 @pytest.mark.parametrize("data,code", [
-    (synth.MT4_HTML, "mt4_file"),
+    (synth.MT4_HTML, "empty_report"),  # an MT4 statement with no closed trades
     (synth.NOT_A_REPORT_TEXT, "not_a_report"),
     (synth.NOT_A_REPORT_PDF, "not_a_report"),
     (b"", "not_a_report"),
@@ -182,16 +168,11 @@ def test_empty_report(fmt):
         evaluate(FORMATS[fmt](rep), EVAL)
 
 
-def test_error_copy_matches_design():
-    import re
-    from pathlib import Path
-    from manager_test.errors import EmptyReport, FileTooLarge, Mt4Statement, NotAReport
-    flow = (Path(__file__).resolve().parents[3] / "design" / "flow" / "index.html").read_text(encoding="utf-8")
-    for key, cls in [("mt4", Mt4Statement), ("empty", EmptyReport), ("notstatement", NotAReport),
-                     ("toolarge", FileTooLarge)]:
-        line = re.search(rf"^\s*{key}: \[(['\"])(.+?)\1, '(.+?)'\],$", flow, re.M)
-        assert line, key
-        assert (cls.message, cls.hint) == (line.group(2), line.group(3)), key
+def test_error_messages_come_from_the_docs():
+    from manager_test.errors import EmptyReport, FileTooLarge, NotAReport
+    assert NotAReport().message == "We couldn't read this file. Upload the statement exported from MT4 or MT5. The guide below shows how."
+    assert EmptyReport().message == "This statement has no closed trades. Choose All History, export again and upload the new file."
+    assert FileTooLarge().message == "This file is over 10 MB. Export only your account history and try again."
 
 
 def test_file_over_10mb_rejected():
@@ -277,6 +258,11 @@ def test_losses_held_open_blocks_automatic_full_marks():
     assert held["notes"] == ["losses_held_open"]
     assert metric(held, "profit_factor")["score"] < 100
     assert metric(held, "hold_asymmetry")["score"] < 100
+
+
+def test_full_results_default_the_retest_box_off():
+    assert run(synth.disciplined())["retest_default"] is False
+    assert run(synth.disciplined())["score_type"] == "full"
 
 
 def test_evaluation_date_is_stored_and_drives_recency():
