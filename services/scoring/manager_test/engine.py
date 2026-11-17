@@ -160,7 +160,7 @@ def evaluate(data: bytes, evaluation_date: date | None = None) -> dict:
         "pillars": scored["pillars"],
         "red_flags": insights.red_flag_texts(found),
         "red_flag_panel": insights.red_flag_panel(found, result["notes"]),
-        "headline": insights.headline(scored["pillars"], score, ctx["losses_held_open"]),
+        "headline": insights.headline(scored["pillars"], score, ctx["losses_held_open"], early=score_type == "early"),
         "top_fixes": insights.top_fixes(scored["pillars"]),
         "starter": None,
         "early": None if score_type == "full" else {

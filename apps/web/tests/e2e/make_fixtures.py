@@ -25,8 +25,11 @@ files = {
     "blown.xlsx": synth.to_xlsx(synth.blown()),
     "short-history.xlsx": synth.to_xlsx(synth.short_history()),
     "losses-held-open.xlsx": synth.to_xlsx(winners_with_open_loss()),
-    "statement.htm": synth.MT4_HTML,                       # MT4 content, MT5-looking name: server catches it
-    "ReportHistory-MT4.htm": synth.MT4_HTML,               # MT4 in the name: browser catches it
+    "mt4-statement.htm": synth.to_mt4_html(synth.disciplined()),
+    "mt4-detailed.htm": synth.to_mt4_html(synth.martingale_gambler(), detailed=True),
+    "mt4-no-trades.htm": synth.MT4_HTML,                   # MT4 statement with no closed trades
+    "early-nudge.xlsx": synth.to_xlsx(synth.few_trades(20, start=datetime(2026, 10, 19, 9), report_time=datetime(2026, 11, 10, 12))),
+    "starter.xlsx": synth.to_xlsx(synth.Report(trades=synth.few_trades(3, win=False, stops=False).trades[:2] + synth.few_trades(1, start=datetime(2026, 10, 9, 9)).trades, cash=[synth.Cash(datetime(2026, 10, 4), 10_000.0)], report_time=datetime(2026, 10, 12, 12))),
     "notes.xlsx": synth.spreadsheet_without_sections(),    # server: not a report
     "photo.png": b"\x89PNG\r\n\x1a\n" + b"\x00" * 64,      # browser: wrong extension
     "empty.xlsx": b"",                                     # browser: empty file

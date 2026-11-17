@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { sx } from "../lib/sx.ts";
+import { COPY } from "../lib/view.ts";
 import { Spinner, Tick } from "./Chrome.tsx";
 
 // Lead form, built and validated exactly as in design/flow. Sending, storage and the
@@ -26,8 +27,8 @@ export function validate(v: Pick<FormState, "name" | "email" | "phone" | "manage
 const errCss = "font-size:13px;color:#A23B2E";
 const inputCss = "height:50px;padding:0 14px;border-radius:12px;background:#FFFFFF;font-size:16px;color:#1C2430";
 
-export function LeadForm({ comeBack, initial, showErrors }: { comeBack: string | null; initial?: Partial<FormState>; showErrors?: boolean }) {
-  const [s, setS] = useState<FormState>({ name: "", email: "", cc: "+961", phone: "", manage: "", consent: false, updates: false, remind: true, ...initial });
+export function LeadForm({ retestDefault, initial, showErrors }: { retestDefault: boolean; initial?: Partial<FormState>; showErrors?: boolean }) {
+  const [s, setS] = useState<FormState>({ name: "", email: "", cc: "+961", phone: "", manage: "", consent: false, updates: false, remind: retestDefault, ...initial });
   const [errors, setErrors] = useState<Errors>(() => (showErrors ? validate({ ...{ name: "", email: "", phone: "", manage: "", consent: false }, ...initial }) : {}));
   const [submitting] = useState(false);
 
@@ -51,7 +52,7 @@ export function LeadForm({ comeBack, initial, showErrors }: { comeBack: string |
 
   const chk = (on: boolean, label: string, toggle: () => void, isErr: boolean) => ({ on, label, toggle, isErr });
   const checks = [
-    ...(comeBack ? [chk(s.remind, `Remind me on ${comeBack} to take the test.`, () => set("remind", !s.remind), false)] : []),
+    chk(s.remind, COPY.retest, () => set("remind", !s.remind), false),
     chk(s.consent, "Beta may contact me about my report by email or WhatsApp.", () => set("consent", !s.consent), !!errors.consent),
     chk(s.updates, "Send me occasional updates from Beta.", () => set("updates", !s.updates), false),
   ];

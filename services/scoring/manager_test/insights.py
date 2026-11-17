@@ -33,7 +33,12 @@ def _usable(metric: dict) -> bool:
 CLOSED_TRADE_ONLY = {"max_drawdown", "worst_day", "avg_loss", "profit_factor", "hold_asymmetry"}
 
 
-def headline(pillars: list[dict], score: int, losses_held_open: bool = False) -> dict:
+# Early scores already say the record is short (the early-score line), so the headline
+# names the next-costliest metric instead of months of history or trade count.
+EARLY_HEADLINE_SKIP = {"months_history", "closed_trades"}
+
+
+def headline(pillars: list[dict], score: int, losses_held_open: bool = False, early: bool = False) -> dict:
     lines = texts.load()["headlines"]
     if score >= 80:
         order = {p.key: i for i, p in enumerate(PILLARS)}
@@ -46,7 +51,8 @@ def headline(pillars: list[dict], score: int, losses_held_open: bool = False) ->
             d = _DEFS[best["key"]]
             return {"kind": "strength", "metric": best["key"], "pillar": pillar["key"],
                     "text": _fill(lines[d.headline_name]["strength"], best["display"])}
-    worst = sorted([m for m in _all_metrics(pillars) if _usable(m)], key=lambda m: -m["points_lost"])[0]
+    worst = sorted([m for m in _all_metrics(pillars) if _usable(m)
+                    and not (early and m["key"] in EARLY_HEADLINE_SKIP)], key=lambda m: -m["points_lost"])[0]
     d = _DEFS[worst["key"]]
     return {"kind": "weakness", "metric": worst["key"], "pillar": worst["pillar"],
             "text": _fill(lines[d.headline_name]["weakness"], worst["display"])}

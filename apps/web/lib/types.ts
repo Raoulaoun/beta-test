@@ -12,25 +12,38 @@ export type RedFlagPanel = {
 
 export type Pillar = { key: string; name: string; weight: number; score: number };
 
+export type ScoreType = "full" | "early" | "starter";
+
+export type StarterMetric = {
+  key: string; name: string; display: string; score: number;
+  kind: "advice" | "strength"; text: string; actions?: string[];
+};
+
 export type ScoreResult = {
   scoring_version: string;
   evaluation_date: string;
-  status: "scored" | "not_enough_history";
+  score_type: ScoreType;
+  status: ScoreType;
   score: number | null;
-  band: { code: string; name: string; meaning: string };
-  account: { account_type: "live" | "demo"; size_bucket: string; broker: string | null };
+  band: { code: string; name: string; meaning: string } | null;
+  account: { account_type: "live" | "demo"; size_bucket: string; broker: string | null; platform?: "MT4" | "MT5" };
   history: { months: number; closed_trades: number };
   headline: { kind: string; metric: string; text: string } | null;
   pillars: Pillar[] | null;
-  red_flag_panel?: RedFlagPanel;
-  come_back_date: string | null;
+  red_flag_panel?: RedFlagPanel | null;
+  period: { start: string; end: string; days: number; label: string };
+  nudge: string | null;
+  progress: { key: "months" | "trades"; current: number; target: number }[] | null;
+  early: { label: string; line: string; cap: number } | null;
+  starter: { heading: string; line: string; metrics: StarterMetric[] } | null;
+  retest_default: boolean;
   notes: string[];
 };
 
 export type ScoreError = { error: string; message?: string; hint?: string };
 
-// Error screens: the design's file errors (design/flow: err = mt4 | empty | notstatement |
-// toolarge) plus two that never blame the file (docs/advice-texts.md, Upload error messages).
-export type FileErrKey = "mt4" | "empty" | "notstatement" | "toolarge";
+// Error screens: file problems, plus two that never blame the file. Copy for all of them:
+// docs/advice-texts.md, "Upload errors and result notes".
+export type FileErrKey = "empty" | "notstatement" | "toolarge";
 export type ServiceErrKey = "server" | "ratelimit";
 export type ErrKey = FileErrKey | ServiceErrKey;

@@ -4,7 +4,7 @@ import { sx } from "../lib/sx.ts";
 import type { ErrKey, ScoreResult } from "../lib/types.ts";
 import { errorScreen, precheck } from "../lib/view.ts";
 import { AppHeader, Footer } from "./Chrome.tsx";
-import { Landing } from "./Landing.tsx";
+import { Landing, type Tab } from "./Landing.tsx";
 import { Results } from "./Results.tsx";
 import { Analyzing, ErrorCard } from "./Status.tsx";
 import type { FormState } from "./LeadForm.tsx";
@@ -14,7 +14,7 @@ type Screen = "landing" | "analyzing" | "error" | "results";
 export type Initial = {
   screen?: Screen;
   err?: ErrKey;
-  tab?: "desktop" | "mobile";
+  tab?: Tab;
   step?: number;
   result?: ScoreResult;
   fileName?: string;
@@ -27,8 +27,8 @@ const SETTLE_MS = 700; // design/flow: pause after the last step before results
 
 export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
   const [screen, setScreen] = useState<Screen>(initial.screen ?? "landing");
-  const [err, setErr] = useState<ErrKey>(initial.err ?? "mt4");
-  const [tab, setTab] = useState<"desktop" | "mobile">(initial.tab ?? "desktop");
+  const [err, setErr] = useState<ErrKey>(initial.err ?? "notstatement");
+  const [tab, setTab] = useState<Tab>(initial.tab ?? "desktop");
   const [drag, setDrag] = useState(false);
   const [fileName, setFileName] = useState(initial.fileName ?? "ReportHistory.xlsx");
   const [step, setStep] = useState(initial.step ?? 0);
@@ -105,7 +105,7 @@ export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
       {screen !== "landing" && <AppHeader onHome={goHome} />}
       {screen === "analyzing" && <Analyzing fileName={fileName} step={step} />}
       {screen === "error" && <ErrorCard err={err} fileName={fileName} onFile={handleFile} onExport={goExport} />}
-      {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} />}
+      {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} />}
       <Footer />
     </div>
   );

@@ -105,3 +105,11 @@ def test_period_starts_at_the_first_deposit():
                                         (56, "1 month"), (95, "3 months"), (400, "13 months")])
 def test_period_labels(days, label):
     assert period_label(days) == label
+
+
+def test_early_headline_does_not_restate_the_short_record():
+    r = run(synth.short_history())
+    assert r["score_type"] == "early"
+    assert r["headline"]["metric"] not in {"months_history", "closed_trades"}
+    full = run(synth.few_trades(30, start=datetime(2026, 7, 1, 9), days_between=4))
+    assert full["score_type"] == "full"  # full scores keep the plain rule

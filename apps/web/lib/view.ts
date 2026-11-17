@@ -1,25 +1,36 @@
-import type { ErrKey, FileErrKey, Pillar, RedFlagPanel, ScoreResult } from "./types.ts";
+import type { ErrKey, Pillar, RedFlagPanel, ScoreResult } from "./types.ts";
 
-// File errors: copy from design/flow (renderVals), word for word.
-export const ERRORS: Record<FileErrKey, [string, string]> = {
-  mt4: ["This looks like an MT4 file. We only support MT5 for now.", "Export the report from MetaTrader 5 and upload it again."],
-  empty: ["This report has no trades in it.", "Make sure you chose All History before saving the report, then try again."],
-  notstatement: ["This doesn't look like an MT5 statement.", "Upload the XLSX or HTML report saved from the History tab in MetaTrader 5."],
-  toolarge: ["This file is over 10 MB.", "Save the report as XLSX, which is usually much smaller, and try again."],
-};
-
-// Service errors: docs/advice-texts.md, "Upload error messages", word for word. Title only
-// until body copy is supplied.
-export const SERVICE_ERRORS: Record<"server" | "ratelimit", [string, string | null]> = {
-  server: ["Server error", null],
-  ratelimit: ["Too many uploads", null],
+// docs/advice-texts.md, "Upload errors and result notes", word for word. The error card
+// shows the first sentence as its title and the rest below it.
+export const ERROR_LINES: Record<ErrKey, string> = {
+  notstatement: "We couldn't read this file. Upload the statement exported from MT4 or MT5. The guide below shows how.",
+  empty: "This statement has no closed trades. Choose All History, export again and upload the new file.",
+  toolarge: "This file is over 10 MB. Export only your account history and try again.",
+  ratelimit: "You've tested several files in a short time. Please try again in an hour.",
+  server: "Something went wrong on our side. Please try again in a minute.",
 };
 
 export function errorCopy(key: ErrKey): [string, string | null] {
-  return key === "server" || key === "ratelimit" ? SERVICE_ERRORS[key] : ERRORS[key];
+  const line = ERROR_LINES[key];
+  const i = line.indexOf(". ");
+  return i < 0 ? [line, null] : [line.slice(0, i + 1), line.slice(i + 2)];
 }
 
 export const isFileError = (key: ErrKey) => key !== "server" && key !== "ratelimit";
+
+// docs/advice-texts.md, "Early score, starter read and MT4 copy", word for word.
+export const COPY = {
+  dropMain: "Drop your MT4 or MT5 statement here",
+  dropFormats: "MT5: XLSX or HTML report · MT4: HTML statement · up to 10 MB",
+  landingSubline: "Upload your MT4 or MT5 statement and get your Manager-Readiness score, judged the way an investor would judge you: risk and discipline first, returns last.",
+  retest: "Remind me to retest in 60 days.",
+  mt4Steps: [
+    "Open the Terminal (Ctrl+T) and click the Account History tab.",
+    "Right-click the list and choose All History, so every trade is included.",
+    "Right-click again and choose Save as Detailed Report (or Save as Report), then save the file.",
+    "Upload the saved file here.",
+  ],
+};
 
 export const MAX_BYTES = 10 * 1024 * 1024;
 
@@ -28,7 +39,6 @@ export function precheck(file: { name: string; size: number }): ErrKey | null {
   const n = file.name || "statement";
   const ext = (n.split(".").pop() || "").toLowerCase();
   if (file.size > MAX_BYTES) return "toolarge";
-  if (/mt4|\.ex4/i.test(n)) return "mt4";
   if (!["xlsx", "html", "htm"].includes(ext)) return "notstatement";
   if (file.size === 0) return "empty";
   return null;
@@ -41,7 +51,6 @@ export function errorScreen(status: number | undefined, code: string | undefined
   if (status === 413 && code === "file_too_large") return "toolarge";
   if (status === 422) {
     switch (code) {
-      case "mt4_file": return "mt4";
       case "empty_report": return "empty";
       case "not_a_report": return "notstatement";
     }
@@ -64,14 +73,6 @@ export function chips(r: ScoreResult): string[] {
   ];
 }
 
-// "14 March 2027", from an ISO date, independent of the viewer's time zone.
-export function longDate(iso: string): string {
-  const [y, m, d] = iso.split("-").map(Number);
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August",
-    "September", "October", "November", "December"];
-  return `${d} ${months[m - 1]} ${y}`;
-}
-
 export const DIAL_C = 2 * Math.PI * 88;
 export function dash(score: number): string {
   return (DIAL_C * score / 100).toFixed(1) + " " + DIAL_C.toFixed(1);
@@ -85,14 +86,19 @@ export function pillarRows(pillars: Pillar[]): PillarRow[] {
   });
 }
 
-export type ShortProgress = { label: string; value: string; w: string };
-export function shortProgress(r: ScoreResult): ShortProgress[] {
-  const months = Math.min(Math.floor(r.history.months), 3);
-  const trades = Math.min(r.history.closed_trades, 30);
-  return [
-    { label: "Months of history", value: `${months} of 3`, w: Math.round((months / 3) * 100) + "%" },
-    { label: "Closed trades", value: `${trades} of 30`, w: Math.round((trades / 30) * 100) + "%" },
-  ];
+export type ProgressRow = { label: string; value: string; w: string };
+export function progressRows(r: ScoreResult): ProgressRow[] {
+  return (r.progress ?? []).map((p) => ({
+    label: p.key === "months" ? "Months of history" : "Closed trades",
+    value: `${p.current} of ${p.target}`,
+    w: Math.round((p.current / p.target) * 100) + "%",
+  }));
+}
+
+// The nudge, split so "Export again…" can link to the export guide.
+export function nudgeParts(text: string): [string, string] {
+  const i = text.indexOf("Export again");
+  return i < 0 ? [text, ""] : [text.slice(0, i), text.slice(i)];
 }
 
 export type PanelView = { kind: "none" } | {
@@ -104,7 +110,7 @@ export type PanelView = { kind: "none" } | {
 // The design's capping-panel sub-line, shown once, under the first capping row.
 export const CAP_NOTE = "Martingale, grid trading or a blown account caps your score, whatever the profit.";
 
-export function panelView(panel: RedFlagPanel | undefined): PanelView {
+export function panelView(panel: RedFlagPanel | null | undefined): PanelView {
   if (!panel || panel.none || panel.rows.length === 0) return { kind: "none" };
   let noted = false;
   return {

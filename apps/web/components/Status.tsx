@@ -45,7 +45,7 @@ export function ErrorCard({ err, fileName, onFile, onExport }: { err: ErrKey; fi
         {body && <p style={sx("margin:0;font-size:16px;line-height:1.6;color:#1C2430;text-wrap:pretty")}>{body}</p>}
         <div style={sx("display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin-top:6px;width:100%")}>
           <label style={sx("position:relative;display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 26px;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer")}>Upload another file<input type="file" accept=".xlsx,.html,.htm" onChange={(e) => { onFile(e.target.files?.[0]); e.target.value = ""; }} style={sx("position:absolute;width:1px;height:1px;opacity:0")} /></label>
-          {isFileError(err) && <a href="#export" onClick={onExport} style={sx("display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:600;color:#0E6B4F")}><span style={sx("border-bottom:1px solid rgba(14,107,79,0.4);padding-bottom:2px")}>See how to export from MT5</span></a>}
+          {isFileError(err) && <a href="#export" onClick={onExport} style={sx("display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:600;color:#0E6B4F")}><span style={sx("border-bottom:1px solid rgba(14,107,79,0.4);padding-bottom:2px")}>See how to export from MT4 or MT5</span></a>}
         </div>
       </div>
     </section>
