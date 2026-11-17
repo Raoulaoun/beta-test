@@ -5,6 +5,9 @@ import type { ScoreResult } from "../lib/types.ts";
 import { chips, dash, nudgeParts, starterChips, panelView, pillarRows, progressRows, CAP_NOTE, type PanelView } from "../lib/view.ts";
 import { DISCLAIMER, Tick } from "./Chrome.tsx";
 import { LeadForm, type FormState } from "./LeadForm.tsx";
+import { SavedBanner } from "./SavedBanner.tsx";
+import { useEffect, useRef } from "react";
+import { progress } from "../lib/client.ts";
 
 const chipCss = "display:inline-flex;align-items:center;min-height:32px;padding:6px 14px;border-radius:999px;background:rgba(245,246,244,0.08);border:1px solid rgba(245,246,244,0.16);font-size:13px;font-weight:600;color:#E6EAEE";
 
@@ -124,13 +127,23 @@ export function FlagPanel({ view }: { view: PanelView }) {
 }
 
 function Details({ r }: { r: ScoreResult }) {
+  const pillarsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = pillarsRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { progress(r.result_id, r.access_token, "pillars"); io.disconnect(); }
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [r.result_id, r.access_token]);
   return (
     <div className="mt-a-details" style={sx("display:flex;flex-direction:column;gap:16px;min-width:0")}>
       <div className="mt-pad" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:10px")}>
         <span style={sx("font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F")}>Key insight</span>
         <p data-testid="insight" style={sx("margin:0;font-family:var(--site-font-display);font-size:clamp(24px,2.8vw,32px);font-weight:700;letter-spacing:-0.03em;line-height:1.12;color:#0B1F3A;text-wrap:balance")}>{r.headline?.text}</p>
       </div>
-      <div className="mt-pad" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px")}>
+      <div ref={pillarsRef} className="mt-pad" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px")}>
         <span style={sx("font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684")}>Your five pillars</span>
         {pillarRows(r.pillars ?? []).map((p) => (
           <div key={p.name} data-testid="pillar" style={sx("display:flex;flex-direction:column;gap:8px")}>
@@ -144,7 +157,7 @@ function Details({ r }: { r: ScoreResult }) {
   );
 }
 
-export function Results({ r, initialForm, showFormErrors, onExport }: { r: ScoreResult; initialForm?: Partial<FormState>; showFormErrors?: boolean; onExport: (e: React.MouseEvent) => void }) {
+export function Results({ r, initialForm, showFormErrors, onExport, onSent }: { r: ScoreResult; initialForm?: Partial<FormState>; showFormErrors?: boolean; onExport: (e: React.MouseEvent) => void; onSent?: (email: string) => void }) {
   const starter = r.score_type === "starter";
   return (
     <section className="mt-wrap" style={sx("padding-top:clamp(16px,3vw,40px);padding-bottom:clamp(56px,8vw,104px)")}>
@@ -154,7 +167,10 @@ export function Results({ r, initialForm, showFormErrors, onExport }: { r: Score
           <div aria-hidden="true" style={sx("position:absolute;right:-30%;bottom:-40%;width:90%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(63,145,116,0.28),rgba(63,145,116,0))")}></div>
           {starter ? <StarterCard r={r} /> : <ScoreCard r={r} />}
         </div>
-        <LeadForm retestDefault={r.retest_default} initial={initialForm} showErrors={showFormErrors} />
+        {r.saved_to_account
+          ? <SavedBanner />
+          : <LeadForm retestDefault={r.retest_default} initial={initialForm} showErrors={showFormErrors}
+              resultId={r.result_id} token={r.access_token} onSent={onSent} />}
         {starter ? <StarterDetails r={r} /> : <Details r={r} />}
       </div>
       <p style={sx("margin:28px 0 0;max-width:80ch;font-size:13px;line-height:1.6;color:#6B7684")}>{DISCLAIMER}</p>

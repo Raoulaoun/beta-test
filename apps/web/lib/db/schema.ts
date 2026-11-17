@@ -44,6 +44,9 @@ export const results = pgTable("results", {
   id: uuid("id").primaryKey().defaultRandom(),
   accountId: uuid("account_id").references(() => accounts.id, { onDelete: "cascade" }), // null while anonymous
   accessTokenHash: text("access_token_hash").notNull(), // lets the uploading browser reopen its own result
+  // A lead sent with an email that already has an account, by someone not signed in as it:
+  // the result waits here until the owner signs in through their email link.
+  pendingAccountId: uuid("pending_account_id").references(() => accounts.id, { onDelete: "cascade" }),
   source: sourceEnum("source").notNull().default("upload"),
   connectedAccountId: uuid("connected_account_id"),     // version 2: the linked trading account
   accountFingerprint: text("account_fingerprint"),      // HMAC of number + server; groups a trading account

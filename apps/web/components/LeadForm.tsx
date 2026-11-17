@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
 import { sx } from "../lib/sx.ts";
-import { COPY } from "../lib/view.ts";
+import { useCallback } from "react";
+import { COPY, errorCopy } from "../lib/view.ts";
+import { progress } from "../lib/client.ts";
 import { Spinner, Tick } from "./Chrome.tsx";
+import { Turnstile } from "./Turnstile.tsx";
 
-// Lead form, built and validated exactly as in design/flow. Sending, storage and the
-// confirmation screen arrive in Phase 3; until then a valid form is not submitted.
+// Lead form, built and validated exactly as in design/flow, sent to /api/leads.
 
 export type FormState = { name: string; email: string; cc: string; phone: string; manage: string; consent: boolean; updates: boolean; remind: boolean };
 type Errors = Partial<Record<"name" | "email" | "phone" | "manage" | "consent", string>>;
@@ -27,10 +29,26 @@ export function validate(v: Pick<FormState, "name" | "email" | "phone" | "manage
 const errCss = "font-size:13px;color:#A23B2E";
 const inputCss = "height:50px;padding:0 14px;border-radius:12px;background:#FFFFFF;font-size:16px;color:#1C2430";
 
-export function LeadForm({ retestDefault, initial, showErrors }: { retestDefault: boolean; initial?: Partial<FormState>; showErrors?: boolean }) {
+const MESSAGES: Record<keyof Errors, string> = {
+  name: "Please enter your full name", email: "Please enter a valid email",
+  phone: "Please enter a valid WhatsApp number", manage: "Please choose an option",
+  consent: "Please tick this box so we can send your report",
+};
+
+type Props = {
+  retestDefault: boolean; initial?: Partial<FormState>; showErrors?: boolean;
+  resultId?: string; token?: string; onSent?: (email: string) => void;
+};
+
+export function LeadForm({ retestDefault, initial, showErrors, resultId, token, onSent }: Props) {
   const [s, setS] = useState<FormState>({ name: "", email: "", cc: "+961", phone: "", manage: "", consent: false, updates: false, remind: retestDefault, ...initial });
   const [errors, setErrors] = useState<Errors>(() => (showErrors ? validate({ ...{ name: "", email: "", phone: "", manage: "", consent: false }, ...initial }) : {}));
-  const [submitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [turnstile, setTurnstile] = useState<string>("");
+  const onToken = useCallback((t: string) => setTurnstile(t), []);
+  const [touched, setTouched] = useState(false);
+  const touch = () => { if (!touched) { setTouched(true); progress(resultId, token, "lead_form"); } };
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => {
     setS((p) => ({ ...p, [k]: v }));
@@ -38,16 +56,40 @@ export function LeadForm({ retestDefault, initial, showErrors }: { retestDefault
   };
   const border = (k: keyof Errors) => (errors[k] ? "#A23B2E" : "#DDE2E7");
 
-  const submit = (ev: React.FormEvent) => {
+  const focusFirst = (e: Errors) => {
+    const first = (["name", "email", "phone"] as const).find((k) => e[k]);
+    if (first) document.getElementById("mt-" + first)?.focus();
+  };
+
+  const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     if (submitting) return;
     const e = validate(s);
     setErrors(e);
-    if (Object.keys(e).length) {
-      const first = (["name", "email", "phone"] as const).find((k) => e[k]);
-      if (first) document.getElementById("mt-" + first)?.focus();
+    setFailed(false);
+    if (Object.keys(e).length) return focusFirst(e);
+    if (!resultId || !token) return setFailed(true);
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ result_id: resultId, token, name: s.name, email: s.email, cc: s.cc, phone: s.phone,
+          manage: s.manage, consent: s.consent, updates: s.updates, remind: s.remind, turnstile }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (res.ok) return onSent?.(body.sent_to || s.email.trim());
+      if (res.status === 422 && Array.isArray(body.fields)) {
+        const server: Errors = {};
+        for (const f of body.fields as (keyof Errors)[]) if (f in MESSAGES) server[f] = MESSAGES[f];
+        setErrors(server);
+        return focusFirst(server);
+      }
+      setFailed(true);
+    } catch {
+      setFailed(true);
+    } finally {
+      setSubmitting(false);
     }
-    // Phase 3: send the lead, then show the confirmation screen.
   };
 
   const chk = (on: boolean, label: string, toggle: () => void, isErr: boolean) => ({ on, label, toggle, isErr });
@@ -58,7 +100,7 @@ export function LeadForm({ retestDefault, initial, showErrors }: { retestDefault
   ];
 
   return (
-    <form id="report" onSubmit={submit} noValidate className="mt-a-form mt-pad" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px;min-width:0;scroll-margin-top:16px")}>
+    <form id="report" onSubmit={submit} onFocus={touch} noValidate data-testid="lead-form" className="mt-a-form mt-pad" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px;min-width:0;scroll-margin-top:16px")}>
       <div style={sx("display:flex;flex-direction:column;gap:6px")}>
         <h2 style={sx("font-family:var(--site-font-display);font-size:clamp(22px,2.4vw,28px);font-weight:700;letter-spacing:-0.025em;line-height:1.12;color:#0B1F3A;margin:0;text-wrap:balance")}>Get your full report and improvement plan</h2>
         <p style={sx("margin:0;font-size:15px;color:#6B7684")}>Free PDF, sent to your email in a minute.</p>
@@ -111,6 +153,8 @@ export function LeadForm({ retestDefault, initial, showErrors }: { retestDefault
         {errors.consent && <span role="alert" style={sx("font-size:13px;color:#A23B2E;padding-left:34px")}>{errors.consent}</span>}
       </div>
 
+      <Turnstile onToken={onToken} />
+      {failed && <span role="alert" data-testid="lead-failed" style={sx(errCss)}>{errorCopy("server").join(" ")}</span>}
       <button type="submit" disabled={submitting} aria-busy={submitting} style={{ ...sx("height:56px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px"), opacity: submitting ? 0.8 : 1 }}>
         {submitting && <Spinner css="width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,0.35);border-top-color:#FFFFFF;display:inline-block" />}
         Send my full report

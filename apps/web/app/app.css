@@ -2,3 +2,4 @@
 .mt-hover-light:hover { color: #F5F6F4 !important; }
 .mt-hover-mint:hover { color: #9FDCBE !important; }
 html { scroll-behavior: auto; }
+.mt-hover-border:hover { border-color: #0B1F3A !important; }

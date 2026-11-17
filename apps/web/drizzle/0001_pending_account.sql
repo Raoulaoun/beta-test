@@ -1,0 +1,2 @@
+ALTER TABLE "results" ADD COLUMN "pending_account_id" uuid;--> statement-breakpoint
+ALTER TABLE "results" ADD CONSTRAINT "results_pending_account_id_accounts_id_fk" FOREIGN KEY ("pending_account_id") REFERENCES "public"."accounts"("id") ON DELETE cascade ON UPDATE no action;

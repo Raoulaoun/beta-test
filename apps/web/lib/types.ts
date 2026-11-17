@@ -38,6 +38,10 @@ export type ScoreResult = {
   starter: { heading: string; line: string; metrics: StarterMetric[] } | null;
   retest_default: boolean;
   notes: string[];
+  // Added by the web app's /api/score
+  result_id?: string;
+  access_token?: string;
+  saved_to_account?: boolean;
 };
 
 export type ScoreError = { error: string; message?: string; hint?: string };

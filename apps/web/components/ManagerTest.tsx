@@ -8,8 +8,12 @@ import { Landing, type Tab } from "./Landing.tsx";
 import { Results } from "./Results.tsx";
 import { Analyzing, ErrorCard } from "./Status.tsx";
 import type { FormState } from "./LeadForm.tsx";
+import { Sent } from "./Sent.tsx";
+import { ExitPrompt } from "./ExitPrompt.tsx";
+import type { Links } from "../lib/server/settings.ts";
+import { captureAttribution, exitPromptAllowed, forgetSaved, loadSaved, progress, saveForLater, sendEvent } from "../lib/client.ts";
 
-type Screen = "landing" | "analyzing" | "error" | "results";
+type Screen = "landing" | "analyzing" | "error" | "results" | "sent";
 
 export type Initial = {
   screen?: Screen;
@@ -20,12 +24,15 @@ export type Initial = {
   fileName?: string;
   form?: Partial<FormState>;
   formErrors?: boolean;
+  sentTo?: string;
+  exitOpen?: boolean;
+  preview?: boolean; // design preview: no saved result, no events
 };
 
 const STEP_MS = 1000;  // design/flow: one step per second
 const SETTLE_MS = 700; // design/flow: pause after the last step before results
 
-export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
+export default function ManagerTest({ initial = {}, links }: { initial?: Initial; links: Links }) {
   const [screen, setScreen] = useState<Screen>(initial.screen ?? "landing");
   const [err, setErr] = useState<ErrKey>(initial.err ?? "notstatement");
   const [tab, setTab] = useState<Tab>(initial.tab ?? "desktop");
@@ -33,6 +40,9 @@ export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
   const [fileName, setFileName] = useState(initial.fileName ?? "ReportHistory.xlsx");
   const [step, setStep] = useState(initial.step ?? 0);
   const [result, setResult] = useState<ScoreResult | null>(initial.result ?? null);
+  const [sentTo, setSentTo] = useState(initial.sentTo ?? "");
+  const [exitOpen, setExitOpen] = useState(!!initial.exitOpen);
+  const attribution = useRef("");
 
   const run = useRef(0);
   const timers = useRef<{ iv?: ReturnType<typeof setInterval>; t?: ReturnType<typeof setTimeout> }>({});
@@ -40,6 +50,37 @@ export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
 
   const stopTimers = () => { clearInterval(timers.current.iv); clearTimeout(timers.current.t); };
   useEffect(() => stopTimers, []);
+
+  // Attribution, landing visit, and a saved result the browser can reopen (30 days).
+  useEffect(() => {
+    if (initial.preview) return;
+    attribution.current = captureAttribution();
+    if (initial.screen && initial.screen !== "landing") return;
+    const saved = loadSaved();
+    if (!saved) { sendEvent("visit", attribution.current); return; }
+    fetch(`/api/results/${saved.id}?token=${encodeURIComponent(saved.token)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((r) => {
+        if (!r || r.converted) { forgetSaved(); sendEvent("visit", attribution.current); return; }
+        setResult({ ...r, access_token: saved.token });
+        setScreen("results");
+      })
+      .catch(() => sendEvent("visit", attribution.current));
+  }, []);
+
+  // Exit prompt: once per browser session, when the pointer leaves through the top of the
+  // results page (desktop), as in design/flow.
+  useEffect(() => {
+    if (screen !== "results" || !result || result.saved_to_account) return;
+    const onLeave = (e: MouseEvent) => {
+      if (e.clientY > 0 || e.relatedTarget) return;
+      if (!exitPromptAllowed()) return;
+      setExitOpen(true);
+      progress(result.result_id, result.access_token, "exit_prompt");
+    };
+    document.addEventListener("mouseout", onLeave);
+    return () => document.removeEventListener("mouseout", onLeave);
+  }, [screen, result]);
 
   const finishIfReady = (id: number) => {
     const p = pending.current;
@@ -65,6 +106,7 @@ export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
     window.scrollTo(0, 0);
     const bad = precheck(f);
     if (bad) return showError(id, bad);
+    sendEvent("upload_started", attribution.current);
 
     pending.current = { animDone: false, result: null };
     setStep(0);
@@ -80,15 +122,33 @@ export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
     }, STEP_MS);
 
     try {
-      const res = await fetch("/api/score", { method: "POST", body: f, headers: { "content-type": "application/octet-stream" } });
+      const qs = attribution.current ? `?${attribution.current}` : "";
+      const res = await fetch(`/api/score${qs}`, { method: "POST", body: f, headers: { "content-type": "application/octet-stream" } });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) return showError(id, errorScreen(res.status, json?.error));
       pending.current.result = json as ScoreResult;
+      if (json.result_id && json.access_token && !json.saved_to_account) saveForLater(json.result_id, json.access_token);
       finishIfReady(id);
     } catch {
       showError(id, errorScreen(undefined, undefined));
     }
   }, []);
+
+  const onSent = (email: string) => {
+    forgetSaved();
+    setSentTo(email);
+    setExitOpen(false);
+    setScreen("sent");
+    window.scrollTo(0, 0);
+  };
+  const toForm = () => {
+    setExitOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById("report");
+      if (el) window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 16);
+      document.getElementById("mt-name")?.focus({ preventScroll: true });
+    }, 50);
+  };
 
   const goHome = (e: React.MouseEvent) => { e.preventDefault(); run.current++; stopTimers(); setScreen("landing"); window.scrollTo(0, 0); };
   const goExport = (e: React.MouseEvent) => {
@@ -105,8 +165,10 @@ export default function ManagerTest({ initial = {} }: { initial?: Initial }) {
       {screen !== "landing" && <AppHeader onHome={goHome} />}
       {screen === "analyzing" && <Analyzing fileName={fileName} step={step} />}
       {screen === "error" && <ErrorCard err={err} fileName={fileName} onFile={handleFile} onExport={goExport} />}
-      {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} />}
+      {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} onSent={onSent} />}
+      {screen === "sent" && <Sent sentTo={sentTo} links={links} />}
       <Footer />
+      {exitOpen && <ExitPrompt onClose={() => setExitOpen(false)} onToForm={toForm} />}
     </div>
   );
 }
