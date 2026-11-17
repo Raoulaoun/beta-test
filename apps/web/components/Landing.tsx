@@ -83,7 +83,7 @@ export function Landing({ tab, setTab, drag, setDrag, onFile }: Props) {
                 <span style={sx("font-size:14px;color:#6B7684")}>{COPY.dropFormats}</span>
                 <span style={sx("margin-top:6px;display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 30px;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase")}>Choose file</span>
               </label>
-              <p style={sx("display:flex;align-items:flex-start;gap:10px;margin:0;font-size:13px;line-height:1.5;color:rgba(245,246,244,0.78)")}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9FDCBE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={sx("flex-shrink:0;margin-top:1px")}><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>We don&apos;t store your statement. It&apos;s analyzed in memory and deleted right away.</p>
+              <p style={sx("display:flex;align-items:flex-start;gap:10px;margin:0;font-size:13px;line-height:1.5;color:rgba(245,246,244,0.78)")}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9FDCBE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={sx("flex-shrink:0;margin-top:1px")}><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>We never store your statement or your account number.</p>
             </div>
           </div>
         </div>

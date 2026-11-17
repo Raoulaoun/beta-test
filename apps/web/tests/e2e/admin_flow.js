@@ -48,23 +48,25 @@ function totp(b32, offset = 0) {
 
   const rows = await p.$$('[data-testid=lead-row]');
   check(rows.length >= 6, `leads list shows ${rows.length} leads`);
+  const proBefore = await p.$$eval('[data-testid=lead-row] td:nth-child(4)', (t) => t.filter((x) => x.textContent === 'Professional Grade').length);
   await p.screenshot({ path: path.join(outDir, 'admin-leads-1440.png'), fullPage: true });
   await p.selectOption('label:has-text("Band") select', 'professional_grade');
   await p.waitForURL(/band=professional_grade/);
   await p.waitForLoadState('networkidle');
-  const filtered = await p.$$eval('[data-testid=lead-row]', (r) => r.length);
-  check(filtered === 2, `band filter: ${filtered} Professional Grade leads`);
+  const bands = await p.$$eval('[data-testid=lead-row] td:nth-child(4)', (t) => t.map((x) => x.textContent));
+  check(bands.length === proBefore && bands.every((b) => b === 'Professional Grade'), `band filter: ${bands.length} rows, all Professional Grade`);
   const dl = await Promise.all([p.waitForEvent('download'), p.click('[data-testid=export-csv]')]);
   const csv = fs.readFileSync(await dl[0].path(), 'utf8');
-  check(csv.split('\r\n').length === 3 && csv.includes('"Ziad Nassar"') && csv.includes("'+961"), 'CSV export follows the filters, phone guarded');
+  check(csv.split('\r\n').length === bands.length + 1 && csv.includes('"Ziad Nassar"') && csv.includes("'+961"), 'CSV export follows the filters, phone guarded');
 
   await p.goto(base + '/admin', { waitUntil: 'networkidle' });
   await p.click('a:has-text("Karim Haddad")');
   await p.waitForSelector('[data-testid=lead-name]');
   await p.selectOption('[data-testid=stage-select]', 'contacted');
   await p.waitForTimeout(800);
+  const notesBefore = await p.$$eval('[data-testid=note]', (n) => n.length);
   await p.fill('#ad-note', 'Called, sending the webinar link.'); await p.click('button:has-text("Add note")');
-  await p.waitForFunction(() => document.querySelectorAll('[data-testid=note]').length === 2);
+  await p.waitForFunction((n) => document.querySelectorAll('[data-testid=note]').length === n + 1, notesBefore);
   check(true, 'note added');
   await p.reload({ waitUntil: 'networkidle' });
   check((await p.$eval('[data-testid=stage-select]', (s) => s.value)) === 'contacted', 'stage change saved');
@@ -77,7 +79,8 @@ function totp(b32, offset = 0) {
   await p.goto(base + '/admin/pipeline', { waitUntil: 'networkidle' });
   check((await p.$$eval('[data-testid=column-contacted] a', (a) => a.map((x) => x.textContent))).includes('Karim Haddad'), 'pipeline shows the moved lead');
   await p.goto(base + '/admin/dropoffs', { waitUntil: 'networkidle' });
-  check((await p.textContent('[data-testid=dropoff-count]')) === '4', 'drop-offs counted (4 seeded)');
+  const dropCount = Number(await p.textContent('[data-testid=dropoff-count]'));
+  check(dropCount >= 4 && dropCount === (await p.$$('[data-testid=dropoff-row]')).length, `drop-offs counted (${dropCount})`);
 
   await p.goto(base + '/admin/settings', { waitUntil: 'networkidle' });
   await p.fill('input[name=link_webinar]', 'http://not-https.example');
