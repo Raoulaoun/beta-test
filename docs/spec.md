@@ -178,7 +178,8 @@ The PDF uses Beta's brand system. Every page carries "The Manager Test by Beta" 
 
 - Two sizes: story (1080×1920) and post (1080×1080)
 - Shows: first name (optional, toggle), score, band, five mini pillar bars, "The Manager Test by Beta", the tool's web address
-- Never shows: money amounts, return %, balance, broker, account number
+- Never shows: money amounts, return %, balance, broker, account number, coach lines (score, band and pillars only)
+- A money-amount check runs as a safety net on every shareable surface
 - Generated on the fly as an image. The trader downloads it; nothing is posted for them.
 
 ## Lead capture and CRM
@@ -345,6 +346,7 @@ Build the scoring engine first and make it pass the synthetic tests before any s
 - [ ] MT4 file, empty report and non-report file each give a clear error
 - [ ] No raw statement or account number is found anywhere in the database or logs
 - [ ] Share card shows no money amounts or returns
+- [ ] Share card shows no coach lines; the money-amount check passes on every shareable surface
 - [ ] A 60+ lead appears in the next daily digest with a working WhatsApp link
 
 ## Launch and campaigns

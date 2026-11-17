@@ -58,6 +58,7 @@ class Finding:
     pf_without: float | None = None
     values: dict[str, str] = field(default_factory=dict)
     data: dict = field(default_factory=dict)
+    copy_key: str | None = None        # coach-table row when an area has variants
 
 
 # ---------- helpers ----------
@@ -197,10 +198,14 @@ def _after_big_win(positions, sizes, total_gl) -> list[Finding]:
     ws = [sizes[j] for j in sorted(window) if not math.isnan(sizes[j])]
     change = float(np.mean(ws)) if ws else 1.0
     giveback = given_back / won if won else 0.0
-    if change >= BIG_WIN_SIZE_UP or giveback >= BIG_WIN_GIVEBACK:
+    sized_up, gave_back = change >= BIG_WIN_SIZE_UP, giveback >= BIG_WIN_GIVEBACK
+    if sized_up or gave_back:
+        # Three approved variants: both, size-up only, give-back only.
+        variant = "both" if sized_up and gave_back else ("size-up only" if sized_up else "give-back only")
         return [Finding("After a big win", "costing", None, len(window), impact=given_back / total_gl if total_gl else 0.0,
                         share=giveback, values={"change": f"{change:.1f}×", "share": pct0(giveback)},
-                        data={"change": change, "giveback": giveback, "big_wins": len(big)})]
+                        data={"change": change, "giveback": giveback, "big_wins": len(big), "variant": variant},
+                        copy_key=None if variant == "both" else f"After a big win: {variant}")]
     return [Finding("After a big win", "working", None, len(window), impact=0.0, data={"change": change, "giveback": giveback})]
 
 
@@ -242,7 +247,7 @@ def _fatigue(positions, total_gl) -> list[Finding]:
         net = sum(p.net for p in tail)
         if net < 0:
             return [Finding("Fatigue", "costing", None, len(tail), impact=-net / total_gl if total_gl else 0.0,
-                            values={"n": str(n), "n_minus_1": str(n - 1)}, data={"n": n})]
+                            values={"n_ordinal": ordinal(n), "n_minus_1": str(n - 1)}, data={"n": n})]
     return [Finding("Fatigue", "working", None, len(base), impact=0.0)]
 
 
@@ -289,8 +294,6 @@ def _size_consistency(positions, stmt, total_gl) -> list[Finding]:
 # ---------- assembly ----------
 
 def _fill(template: str, values: dict[str, str]) -> str:
-    if "{n}th" in template and "n" in values:
-        template = template.replace("{n}th", ordinal(int(values["n"])))
     for k, v in values.items():
         template = template.replace("{" + k + "}", v)
     return template
@@ -327,7 +330,7 @@ def coach(stmt: Statement) -> dict:
                      key=lambda f: (f.share is None or f.area in ("Exits",), -(f.impact or 0), area_rank[f.area], f.segment or ""))
 
     def view(f: Finding, rank: int) -> dict:
-        c = copy[f.area]
+        c = copy[f.copy_key or f.area]
         out = {
             "area": f.area, "polarity": f.polarity, "segment": f.segment, "trades": f.trades,
             "share": None if f.share is None else round(f.share, 4),

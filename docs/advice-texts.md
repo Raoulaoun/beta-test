@@ -316,7 +316,7 @@ One row per flag found. With several flags, the score is capped once, at the low
 
 ## Coach insights (for approval)
 
-Each finding is one line plus one action. {segment}, {share}, {pf\_without} and the other fields come from the analysis. A segment needs at least 10 trades.
+Each finding is one line plus one action. "After a big win" has three variants: size-up ≥1.3× and give-back ≥50% (main row), size-up only, give-back only. {segment}, {share}, {pf\_without} and the other fields come from the analysis. A segment needs at least 10 trades.
 
 | Area | Working for you | Costing you | Action when costing |
 | --- | --- | --- | --- |
@@ -327,6 +327,8 @@ Each finding is one line plus one action. {segment}, {share}, {pf\_without} and 
 | Direction | Your {segment} trades are where your skill shows. | Your {segment} trades lose money overall. | Review your last 10 {segment} trades: what did they have in common? |
 | After a loss | You stay steady after losses. Your results don't change. | After {streak} losses in a row, your win rate drops to {winrate}. | Stop for the session after {streak} losses in a row. |
 | After a big win | You stay disciplined after big wins. | After a big win, you trade {change} bigger and give back {share} of it. | Keep the same size for the 5 trades after any big win. |
+| After a big win: size-up only | You stay disciplined after big wins. | After a big win, you trade {change} bigger on the next trades. | Keep the same size for the 5 trades after any big win. |
+| After a big win: give-back only | You stay disciplined after big wins. | After a big win, you give back {share} of it in the next 5 trades. | Keep the same size for the 5 trades after any big win. |
 | Exits | You let winners reach your targets. | You close {share} of winners before your own target. | Leave your take profit in place, or move your stop to breakeven instead of closing early. |
-| Fatigue | Your quality holds up through the day. | From your {n}th trade of the day, you lose money. | Set a limit of {n\_minus\_1} trades per day. |
+| Fatigue | Your quality holds up through the day. | From your {n\_ordinal} trade of the day, you lose money. | Set a limit of {n\_minus\_1} trades per day. |
 | Size consistency | Your risk per trade is consistent. | Your risk per trade swings from {min} to {max}. | Fix one risk percentage per trade and size every position from it. |

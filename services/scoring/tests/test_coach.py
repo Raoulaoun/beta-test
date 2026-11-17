@@ -178,8 +178,66 @@ def test_size_consistency_costing_from_stop_distance():
 
 
 def test_ordinal():
-    assert [C.ordinal(n) for n in (1, 2, 3, 4, 11, 12, 13, 21, 22, 23)] == \
-        ["1st", "2nd", "3rd", "4th", "11th", "12th", "13th", "21st", "22nd", "23rd"]
+    assert [C.ordinal(n) for n in (1, 2, 3, 4, 11, 12, 13, 21, 22, 23, 111, 112)] == \
+        ["1st", "2nd", "3rd", "4th", "11th", "12th", "13th", "21st", "22nd", "23rd", "111th", "112th"]
+
+
+@pytest.mark.parametrize("n,word", [(11, "11th"), (12, "12th"), (13, "13th"), (21, "21st"), (22, "22nd")])
+def test_fatigue_copy_uses_the_generated_ordinal(n, word):
+    ps, i = [], 0
+    for d in range(12):
+        day = START + timedelta(days=d)
+        for k in range(1, n + 1):  # profitable until the nth trade of the day, losing from it
+            ps.append(pos(i, day + timedelta(minutes=20 * k), 100.0 if k < n else -60.0))
+            i += 1
+    [f] = find(C.coach(stmt(ps)), "Fatigue", "costing")
+    assert f["text"] == f"From your {word} trade of the day, you lose money."
+    assert f["action"] == f"Set a limit of {n - 1} trades per day."
+
+
+def big_win_record(size_up: bool, give_back: bool):
+    """Steady 40-unit wins with a 300-unit win every 16 trades; the 5 trades after each big
+    win are bigger (volume ×2) and/or lose (a give-back above 50%)."""
+    ps, i, t, after = [], 0, START, 0
+    for _ in range(12):
+        for k in range(16):
+            big = k == 0
+            if after:
+                vol, net = (2.0 if size_up else 1.0), (-70.0 if give_back else 40.0)
+                after -= 1
+            else:
+                vol, net = 1.0, (300.0 if big else (40.0 if k % 3 else -20.0))
+            ps.append(pos(i, t, net * vol, volume=vol))
+            if big:
+                after = 5
+            i += 1
+            t += timedelta(hours=6)
+    return stmt(ps, deposit=100_000.0)
+
+
+def test_big_win_both_variant():
+    [f] = find(C.coach(big_win_record(True, True)), "After a big win", "costing")
+    assert f["data"]["variant"] == "both"
+    assert f["text"] == f"After a big win, you trade {f['data']['change']:.1f}× bigger and give back {round(f['share'] * 100)}% of it."
+
+
+def test_big_win_size_up_only_variant():
+    [f] = find(C.coach(big_win_record(True, False)), "After a big win", "costing")
+    assert f["data"]["variant"] == "size-up only"
+    assert f["text"] == f"After a big win, you trade {f['data']['change']:.1f}× bigger on the next trades."
+    assert f["action"] == "Keep the same size for the 5 trades after any big win."
+
+
+def test_big_win_give_back_only_variant():
+    [f] = find(C.coach(big_win_record(False, True)), "After a big win", "costing")
+    assert f["data"]["variant"] == "give-back only"
+    assert f["text"] == f"After a big win, you give back {round(f['share'] * 100)}% of it in the next 5 trades."
+
+
+def test_big_win_neither_is_working():
+    r = C.coach(big_win_record(False, False))
+    assert not find(r, "After a big win", "costing")
+    assert find(r, "After a big win", "working")[0]["text"] == "You stay disciplined after big wins."
 
 
 # ---------- assembly ----------
@@ -214,9 +272,11 @@ def test_every_text_comes_from_the_approved_table():
     for f in r["findings"]:
         assert f["area"] in COPY
         assert "{" not in f["text"] and (f["action"] is None or "{" not in f["action"])
-        template = COPY[f["area"]][f["polarity"]]
-        fixed = [part for part in template.replace("{n}th", "{n}").split("{") ]
-        assert fixed[0].split("}")[-1] in f["text"]
+        variant = f["data"].get("variant")
+        key = f["area"] if variant in (None, "both") else f"{f['area']}: {variant}"
+        template = COPY[key][f["polarity"]]
+        for part in template.split("{"):
+            assert part.split("}")[-1] in f["text"]
 
 
 def test_aggregates_only_and_deterministic():
@@ -242,6 +302,6 @@ def test_engine_attaches_coach_and_starter_has_none():
     assert starter["score_type"] == "starter" and starter["coach"] is None
 
 
-@pytest.mark.parametrize("area", C.AREAS)
+@pytest.mark.parametrize("area", C.AREAS + ["After a big win: size-up only", "After a big win: give-back only"])
 def test_every_area_has_copy(area):
     assert set(COPY[area]) == {"working", "costing", "action"}
