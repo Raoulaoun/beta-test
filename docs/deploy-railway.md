@@ -1,11 +1,17 @@
 # Deploying to Railway
 
-Two services in one Railway project, both built from this repo with their own Dockerfile:
+Two services in one Railway project, both built from this repo with their own Dockerfile.
+The Dockerfile is chosen with the `RAILWAY_DOCKERFILE_PATH` variable: without it, Railway uses
+its automatic builder (Railpack), finds no app at the repo root and fails.
 
-| Service | What it is | Public domain | Config file |
+| Service | What it is | Public domain | Dockerfile |
 | --- | --- | --- | --- |
-| `web` | Next.js site and `/api/score` upload route | Yes | `/apps/web/railway.json` |
-| `scoring` | Python scoring service (FastAPI) | **No**, private network only | `/services/scoring/railway.json` |
+| `web` | Next.js site and `/api/score` upload route | Yes | `apps/web/Dockerfile` |
+| `scoring` | Python scoring service (FastAPI) | **No**, private network only | `services/scoring/Dockerfile` |
+
+`apps/web/railway.json` and `services/scoring/railway.json` hold the same build, health-check
+and watch-path settings as config-as-code. On the first deploy, setting them as the Railway
+Config File didn't take effect, so the steps below set everything in the UI instead.
 
 The browser only ever talks to `web`. `web` forwards each upload to `scoring` over Railway's
 private network, and `scoring` is never reachable from the internet.
@@ -24,15 +30,16 @@ Postgres is not needed yet (Phase 3).
    - **Source** → **Branch**: `phase-2-upload`.
    - **Source** → **Root Directory**: leave **empty**. Both services build from the repo root,
      because `scoring` needs `docs/advice-texts.md` at runtime.
-   - **Config-as-code** → **Railway Config File**: `/services/scoring/railway.json`
-     (absolute path, starting with `/`). This sets the Dockerfile, the `/health` check and the
-     watch paths.
+   - **Deploy** → **Healthcheck Path**: `/health`.
+   - **Source** → **Watch Paths**: `services/scoring/**` and `docs/advice-texts.md` (one per
+     line), so only changes to this service trigger a rebuild.
    - **Networking**: do **not** click "Generate Domain". Leave Public Networking empty.
      Private Networking is on by default and shows `scoring.railway.internal`.
 4. Open **Variables** → **New Variable**:
 
    | Name | Value |
    | --- | --- |
+   | `RAILWAY_DOCKERFILE_PATH` | `services/scoring/Dockerfile` |
    | `PORT` | `8000` |
 
 5. Click **Deploy** (or **Apply changes**, then deploy).
@@ -48,11 +55,13 @@ Postgres is not needed yet (Phase 3).
    - **Service name**: `web`.
    - **Source** → **Branch**: `phase-2-upload`.
    - **Source** → **Root Directory**: leave **empty**.
-   - **Config-as-code** → **Railway Config File**: `/apps/web/railway.json`.
+   - **Deploy** → **Healthcheck Path**: `/api/health`.
+   - **Source** → **Watch Paths**: `apps/web/**`.
 3. Open **Variables** → **New Variable** for each:
 
    | Name | Value | Notes |
    | --- | --- | --- |
+   | `RAILWAY_DOCKERFILE_PATH` | `apps/web/Dockerfile` | Builds with the Dockerfile. |
    | `PORT` | `3000` | The port Next.js listens on. |
    | `SCORING_URL` | `http://${{scoring.RAILWAY_PRIVATE_DOMAIN}}:${{scoring.PORT}}` | Type it exactly like this. Railway fills in `scoring.railway.internal` and `8000`. Must be `http`, not `https`: the private network has no TLS. |
 
@@ -86,7 +95,9 @@ Replace `https://web-xxxx.up.railway.app` with your generated domain.
 
 | Service | Variable | Value | Where it comes from |
 | --- | --- | --- | --- |
+| `scoring` | `RAILWAY_DOCKERFILE_PATH` | `services/scoring/Dockerfile` | Set by you. Makes Railway build with the Dockerfile. |
 | `scoring` | `PORT` | `8000` | Set by you. Fixed, so `web` can address it on the private network. |
+| `web` | `RAILWAY_DOCKERFILE_PATH` | `apps/web/Dockerfile` | Set by you. Makes Railway build with the Dockerfile. |
 | `web` | `PORT` | `3000` | Set by you. Must match the port given to Generate Domain. |
 | `web` | `SCORING_URL` | `http://${{scoring.RAILWAY_PRIVATE_DOMAIN}}:${{scoring.PORT}}` | Railway reference variables, resolved by Railway. |
 | `web` | `SITE_ENV` | unset, or `production` | Unset on every test/staging deploy. Set to `production` **only** on the live site at launch; it makes the site indexable. Changing it triggers a rebuild, which is needed (it is read at build time). |
@@ -102,8 +113,8 @@ No secrets are needed in Phase 2.
 
 ## How redeploys work
 
-- Each service redeploys on pushes to `phase-2-upload` that touch its own files (the
-  config's watch paths):
+- Each service redeploys on pushes to `phase-2-upload` that touch its own files (the Watch
+  Paths set above; without them, every push rebuilds both):
   - `web`: `apps/web/**`
   - `scoring`: `services/scoring/**` and `docs/advice-texts.md`
 - A push that only changes, say, `design/` or `docs/evidence/` rebuilds nothing.
@@ -129,8 +140,9 @@ through.
 
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
+| Build log lists supported languages ("Php, Golang, Java…"), then `railpack process exited with an error` | Railway used Railpack instead of the Dockerfile | Add `RAILWAY_DOCKERFILE_PATH` on that service (values above) and redeploy. |
 | Every upload shows "Server error" | `web` can't reach `scoring` | Check `SCORING_URL` on `web` is exactly the value above, `scoring` is named `scoring`, and `scoring`'s deploy log says `http://[::]:8000`. |
 | `scoring` log shows `http://0.0.0.0:8000` | IPv6 not available in that container | Rare on Railway. The service then only listens on IPv4. If the private network needs IPv6 there, ask Railway support to enable it for the environment. |
-| `scoring` deploy fails its health check with `advice_texts_unreadable` | The image can't read `docs/advice-texts.md` | Check Root Directory is empty (repo root) and the config file is `/services/scoring/railway.json`. |
+| `scoring` deploy fails its health check with `advice_texts_unreadable` | The image can't read `docs/advice-texts.md` | Check Root Directory is empty (repo root) and `RAILWAY_DOCKERFILE_PATH` is `services/scoring/Dockerfile`. |
 | Build can't find `apps/web/package.json` or `services/scoring/requirements.txt` | Root Directory was set to the service folder | Clear Root Directory. Builds run from the repo root. |
 | Pages are indexable on a test deploy | `SITE_ENV` is `production` there | Remove it and redeploy. |
