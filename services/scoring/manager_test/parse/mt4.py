@@ -139,7 +139,8 @@ def parse_mt4(text: str) -> Statement:
                      open_price=_num(r.get("price")) or 0.0, stop_loss=sl if sl else None,
                      close_time=t_close, close_price=_num(r.get("price_2")) or 0.0,
                      commission=commission, swap=_num(r.get("swap")) or 0.0,
-                     profit=_num(r.get("profit")) or 0.0)
+                     profit=_num(r.get("profit")) or 0.0,
+                     take_profit=_num(r.get("t/p")) or None)
         positions.append(p)
         if p.net:
             events.append(BalanceEvent(time=t_close, amount=p.net, is_cash_flow=False))

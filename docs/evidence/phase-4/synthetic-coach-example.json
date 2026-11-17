@@ -1,0 +1,85 @@
+{
+  "findings": [
+    {
+      "area": "After a loss",
+      "polarity": "working",
+      "segment": null,
+      "trades": 94,
+      "rank": 1,
+      "text": "You stay steady after losses. Your results don't change.",
+      "action": null
+    },
+    {
+      "area": "Fatigue",
+      "polarity": "costing",
+      "segment": null,
+      "trades": 120,
+      "rank": 1,
+      "text": "From your 3rd trade of the day, you lose money.",
+      "action": "Set a limit of 2 trades per day."
+    },
+    {
+      "area": "Day of week",
+      "polarity": "costing",
+      "segment": "Monday",
+      "trades": 48,
+      "rank": 2,
+      "text": "Monday is your most expensive day: 46% of your losses.",
+      "action": "Cut size by half on Monday until the pattern changes."
+    },
+    {
+      "area": "Session",
+      "polarity": "costing",
+      "segment": "London/New York overlap",
+      "trades": 60,
+      "rank": 3,
+      "text": "The London/New York overlap session cost you 42% of your losses. Without it, your profit factor would be 0.80.",
+      "action": "Trade only the sessions where your record is positive for the next month, then compare."
+    },
+    {
+      "area": "Hour of day",
+      "polarity": "costing",
+      "segment": "15:00–18:00 broker server time (close to Beirut time)",
+      "trades": 60,
+      "rank": 4,
+      "text": "Trades opened between 15:00–18:00 broker server time (close to Beirut time) lost money overall.",
+      "action": "Block those hours in your plan and review after 30 trades."
+    },
+    {
+      "area": "Direction",
+      "polarity": "costing",
+      "segment": "long",
+      "trades": 160,
+      "rank": 5,
+      "text": "Your long trades lose money overall.",
+      "action": "Review your last 10 long trades: what did they have in common?"
+    },
+    {
+      "area": "Instrument",
+      "polarity": "costing",
+      "segment": "GBPJPY",
+      "trades": 60,
+      "rank": 6,
+      "text": "GBPJPY produced 35% of your losses. Without it, your profit factor would be 0.71.",
+      "action": "Pause GBPJPY or trade it at half size until you understand why it costs you."
+    },
+    {
+      "area": "After a big win",
+      "polarity": "costing",
+      "segment": null,
+      "trades": 202,
+      "rank": 7,
+      "text": "After a big win, you trade 1.1× bigger and give back 89% of it.",
+      "action": "Keep the same size for the 5 trades after any big win."
+    },
+    {
+      "area": "Size consistency",
+      "polarity": "costing",
+      "segment": null,
+      "trades": 240,
+      "rank": 8,
+      "text": "Your risk per trade swings from 0.5% to 2.4%.",
+      "action": "Fix one risk percentage per trade and size every position from it."
+    }
+  ]
+}

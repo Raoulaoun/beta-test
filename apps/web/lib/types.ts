@@ -14,6 +14,15 @@ export type Pillar = { key: string; name: string; weight: number; score: number 
 
 export type ScoreType = "full" | "early" | "starter";
 
+// Coach insight (scoring service, manager_test/coach.py). Segment aggregates only.
+export type CoachFinding = {
+  area: string; polarity: "working" | "costing"; segment: string | null; trades: number;
+  share: number | null; pf_without: number | null; impact: number; rank: number;
+  text: string; action: string | null; data: Record<string, unknown>;
+};
+// What the browser gets: the free top "working" and top "costing" finding only.
+export type CoachTop = { top: { working: CoachFinding | null; costing: CoachFinding | null } };
+
 export type StarterMetric = {
   key: string; name: string; display: string; score: number;
   kind: "advice" | "strength"; text: string; actions?: string[];
@@ -38,6 +47,7 @@ export type ScoreResult = {
   starter: { heading: string; line: string; metrics: StarterMetric[] } | null;
   retest_default: boolean;
   notes: string[];
+  coach?: CoachTop | null;
   // Added by the web app's /api/score
   result_id?: string;
   access_token?: string;

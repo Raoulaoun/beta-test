@@ -1,6 +1,6 @@
 import { and, eq, isNull, lt } from "drizzle-orm";
 import { db, schema as s } from "../db/index.ts";
-import type { ScoreResult } from "../types.ts";
+import type { CoachFinding, ScoreResult } from "../types.ts";
 import { newToken, sameHash, sha256 } from "./crypto.ts";
 import type { Attribution } from "./attribution.ts";
 
@@ -9,17 +9,24 @@ export const DROPOFF_RETENTION_DAYS = 90; // anonymous results without a lead ar
 const LEFT_AT_ORDER = ["score", "pillars", "lead_form", "exit_prompt"] as const;
 export type LeftAt = (typeof LEFT_AT_ORDER)[number];
 
-type EngineResult = ScoreResult & {
+type EngineResult = Omit<ScoreResult, "coach"> & {
+  coach?: { findings?: CoachFinding[]; top: { working: CoachFinding | null; costing: CoachFinding | null } } | null;
   account: ScoreResult["account"] & { account_masked?: string | null; fingerprint?: string | null };
   top_fixes?: { metric: string }[];
   uncapped_score?: number;
 };
 
+// What the browser may see of the coach: the free top 1 + 1 (the full set is for the
+// PDF and the dashboard, stored in result_insights).
+export function freeCoach(r: EngineResult): ScoreResult["coach"] {
+  return r.coach ? { top: r.coach.top } : null;
+}
+
 // What is kept of a result: everything shown, minus the masked account number and the
 // fingerprint (which lives in its own column). Never the statement, never trades.
 export function storedPayload(r: EngineResult): ScoreResult {
   const { account_masked: _m, fingerprint: _f, ...account } = r.account;
-  return { ...r, account } as ScoreResult;
+  return { ...r, account, coach: freeCoach(r) } as ScoreResult;
 }
 
 function metricValues(r: EngineResult): Record<string, number | null> {
@@ -61,6 +68,14 @@ export async function saveResult(r: EngineResult, ctx: Attribution & { device: s
     leftAt: "score",
     convertedAt: ctx.accountId ? new Date() : null,
   }).returning({ id: s.results.id });
+  const findings = r.coach?.findings ?? [];
+  if (findings.length) {
+    await db().insert(s.resultInsights).values(findings.map((f) => ({
+      resultId: row.id, area: f.area, segment: f.segment, polarity: f.polarity, trades: f.trades,
+      share: f.share === null ? null : String(f.share), pfWithout: f.pf_without === null ? null : String(f.pf_without),
+      data: { text: f.text, action: f.action, impact: f.impact, ...f.data }, rank: f.rank,
+    })));
+  }
   return { id: row.id, accessToken };
 }
 

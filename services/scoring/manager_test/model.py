@@ -18,6 +18,7 @@ class Position:
     commission: float
     swap: float
     profit: float
+    take_profit: float | None = None
 
     @property
     def net(self) -> float:

@@ -73,3 +73,29 @@ test("anonymous results without a lead are deleted after 90 days; leads and rece
   const [{ n }] = await db().select({ n: sql<number>`count(*)::int` }).from(s.funnelEvents);
   assert.equal(n, 1, "funnel counts are kept");
 });
+
+test("coach: every finding is stored as an aggregate; the payload keeps only the free top 1 + 1", async () => {
+  const f = (area: string, polarity: "working" | "costing", rank: number, segment: string | null) => ({
+    area, polarity, segment, trades: 24, share: polarity === "costing" ? 0.35 : 0.4, pf_without: polarity === "costing" ? 1.6 : null,
+    impact: 0.35, rank, text: `${area} ${polarity}`, action: polarity === "costing" ? "Do less of it." : null, data: { net: -120.5 },
+  });
+  const findings = [f("Day of week", "costing", 1, "Monday"), f("Instrument", "costing", 2, "XAUUSD"),
+    f("Session", "working", 1, "London"), f("Direction", "working", 2, "long")];
+  const r = { ...engineResult(), coach: { findings, top: { working: findings[2], costing: findings[0] } } };
+  const { id } = await saveResult(r, ctx);
+  const rows = await db().select().from(s.resultInsights).where(eq(s.resultInsights.resultId, id));
+  assert.equal(rows.length, 4, "all qualifying findings stored");
+  const mon = rows.find((x) => x.segment === "Monday")!;
+  assert.equal(mon.polarity, "costing"); assert.equal(mon.rank, 1); assert.equal(Number(mon.share), 0.35); assert.equal(Number(mon.pfWithout), 1.6);
+  assert.deepEqual(Object.keys(mon.data as object).sort(), ["action", "impact", "net", "text"]);
+  const [row] = await db().select().from(s.results).where(eq(s.results.id, id));
+  const coach = (row.payload as { coach: Record<string, unknown> }).coach;
+  assert.deepEqual(Object.keys(coach), ["top"], "payload holds the free top only");
+  await db().delete(s.results).where(eq(s.results.id, id));
+  assert.equal((await db().select().from(s.resultInsights).where(eq(s.resultInsights.resultId, id))).length, 0, "insights go with the result");
+});
+
+test("starter read (no coach) stores no insights", async () => {
+  const { id } = await saveResult({ ...engineResult(), coach: null }, ctx);
+  assert.equal((await db().select().from(s.resultInsights).where(eq(s.resultInsights.resultId, id))).length, 0);
+});

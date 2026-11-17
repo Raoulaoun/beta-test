@@ -142,6 +142,7 @@ def _positions(rows: Grid) -> list[Position]:
         if open_t is None or close_t is None or direction not in TRADE_TYPES:
             continue
         sl = _num(r.get("s/l"))
+        tp = _num(r.get("t/p"))
         out.append(Position(
             position_id=_text(r.get("position")),
             symbol=_text(r.get("symbol")),
@@ -155,6 +156,7 @@ def _positions(rows: Grid) -> list[Position]:
             commission=_num(r.get("commission")) or 0.0,
             swap=_num(r.get("swap")) or 0.0,
             profit=_num(r.get("profit")) or 0.0,
+            take_profit=tp if tp else None,
         ))
     out.sort(key=lambda p: (p.open_time, p.close_time, p.position_id))
     return out

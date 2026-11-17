@@ -26,6 +26,7 @@ def load(path: str | None = None) -> dict:
     red_flags: dict[str, str] = {}
     headlines: dict[str, dict] = {}
     tables: dict[str, dict[str, str]] = {}  # every 2-column table, by section heading
+    coach: dict[str, dict[str, str]] = {}
 
     section = ""
     current: str | None = None
@@ -45,6 +46,11 @@ def load(path: str | None = None) -> dict:
                 advice[current] = {"diagnosis": "", "actions": []}
             else:
                 red_flags[current] = ""
+            continue
+        if section.startswith("coach insights") and line.startswith("|"):
+            cells = [_clean(c) for c in line.strip("|").split("|")]
+            if len(cells) == 4 and cells[0] != "Area" and not set(cells[0]) <= {"-", " "}:
+                coach[cells[0]] = {"working": cells[1], "costing": cells[2], "action": cells[3]}
             continue
         if line.startswith("|") and not section.startswith("headline"):
             cells = [_clean(c) for c in line.strip("|").split("|")]
@@ -71,4 +77,4 @@ def load(path: str | None = None) -> dict:
 
     return {"advice": advice, "red_flags": red_flags, "headlines": headlines,
             "panel": table("red-flag panel"), "messages": table("upload errors"),
-            "copy": table("early score")}
+            "copy": table("early score"), "coach": coach}

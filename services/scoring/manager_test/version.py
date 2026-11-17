@@ -1,2 +1,2 @@
-# Bump on any change to parsing, metrics, thresholds, flags or bands.
-SCORING_VERSION = "1.2.0"  # 1.2.0: early score and starter read replace "not enough history"; MT4 statements
+# Bump on any change to parsing, metrics, thresholds, flags, bands or coach insights.
+SCORING_VERSION = "1.3.0"  # 1.3.0: coach insights

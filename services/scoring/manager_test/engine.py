@@ -13,6 +13,7 @@ import math
 from datetime import date, datetime, timezone
 
 from . import flags as flag_rules
+from . import coach as coach_mod
 from . import insights, metrics, texts
 from .parse import parse_statement
 from .score import BANDS, METRICS, band_for, display, metric_points, round_half_up, score_metrics
@@ -143,7 +144,7 @@ def evaluate_statement(stmt, evaluation_date: date | None = None) -> dict:
     if score_type == "starter":
         result.update({
             "score": None, "band": None, "pillars": None, "red_flags": [], "red_flag_panel": None,
-            "headline": None, "top_fixes": [], "early": None,
+            "headline": None, "top_fixes": [], "early": None, "coach": None,
             "starter": {
                 "heading": copy["Starter read heading"],
                 "line": copy["Starter read line"].replace("{trades}", str(trades)),
@@ -171,6 +172,7 @@ def evaluate_statement(stmt, evaluation_date: date | None = None) -> dict:
         "headline": insights.headline(scored["pillars"], score, ctx["losses_held_open"], early=score_type == "early"),
         "top_fixes": insights.top_fixes(scored["pillars"]),
         "starter": None,
+        "coach": coach_mod.coach(stmt),
         "early": None if score_type == "full" else {
             "label": copy["Early score label"],
             "line": (copy["Early score line"].replace("{trades}", str(trades)).replace("{period}", label)),

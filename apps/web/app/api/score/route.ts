@@ -2,7 +2,7 @@
 // The statement is held in memory only, passed on as the raw body, and dropped. Only the
 // result is saved (no statement, no account number). Nothing about the body is logged.
 import { attributionFrom, deviceFrom } from "../../../lib/server/attribution.ts";
-import { recordEvent, saveResult } from "../../../lib/server/results.ts";
+import { freeCoach, recordEvent, saveResult } from "../../../lib/server/results.ts";
 import { sessionAccount } from "../../../lib/server/session.ts";
 
 export const runtime = "nodejs";
@@ -61,7 +61,7 @@ export async function POST(req: Request): Promise<Response> {
     const saved = await saveResult(result, { ...attribution, device, accountId: account?.id ?? null });
     await recordEvent("score_shown", { campaign: attribution.campaign, resultId: saved.id, device });
     const { account_masked: _m, fingerprint: _f, ...acct } = result.account;
-    return json({ ...result, account: acct, result_id: saved.id, access_token: saved.accessToken, saved_to_account: !!account });
+    return json({ ...result, account: acct, coach: freeCoach(result), result_id: saved.id, access_token: saved.accessToken, saved_to_account: !!account });
   } catch {
     // The score exists but couldn't be saved: the lead form would have nothing to attach to.
     return json({ error: "storage_unavailable" }, 503);
