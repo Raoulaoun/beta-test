@@ -78,5 +78,9 @@ scoring takes a parsed statement, whatever produced it.
 - Email: Resend (transactional, scheduled sequences, daily digest).
 - Protection: Cloudflare Turnstile on the form; 10 uploads per IP per hour.
 - Analytics: Meta Pixel and GA4 events `upload_started`, `score_shown`, `lead_submitted`,
-  `card_downloaded`, `calculator_used`.
+  `card_downloaded`, `calculator_used`, `form_opened` (with its `source`: `results_button`,
+  `exit_prompt`, `coach_more`, `signed_out_banner`; also stored in `funnel_events`).
+- Lead form: every button that leads to it opens it in a modal (centered on desktop, a
+  full-height bottom sheet on phones). The inline form beside the score stays; both share
+  one state.
 - Deploy: Railway, two services plus Postgres, on managertest.betaapp.me.

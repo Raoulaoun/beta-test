@@ -110,8 +110,20 @@ export async function recordProgress(id: string, token: string, step: LeftAt) {
 }
 
 export async function recordEvent(kind: (typeof s.funnelKindEnum.enumValues)[number],
-  e: { campaign?: string | null; resultId?: string | null; device?: string | null } = {}) {
-  await db().insert(s.funnelEvents).values({ kind, campaign: e.campaign ?? null, resultId: e.resultId ?? null, device: e.device ?? null });
+  e: { campaign?: string | null; resultId?: string | null; device?: string | null; source?: string | null } = {}) {
+  await db().insert(s.funnelEvents).values({ kind, campaign: e.campaign ?? null, resultId: e.resultId ?? null, device: e.device ?? null, source: e.source ?? null });
+}
+
+// Which button opened the lead form. Tied to the result (token checked) so each entry can
+// be compared with lead_submitted for the same result.
+export const FORM_SOURCES = ["results_button", "exit_prompt", "coach_more", "signed_out_banner"] as const;
+export type FormSource = (typeof FORM_SOURCES)[number];
+
+export async function recordFormOpened(id: string, token: string, source: FormSource) {
+  const row = await owned(id, token);
+  if (!row) return false;
+  await recordEvent("form_opened", { campaign: row.campaign, resultId: row.id, device: row.device, source });
+  return true;
 }
 
 // Anonymous results with no lead after 90 days are deleted; funnel counts stay.

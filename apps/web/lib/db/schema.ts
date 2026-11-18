@@ -21,6 +21,7 @@ export const scoreTypeEnum = pgEnum("score_type", ["full", "early", "starter"]);
 export const goalKindEnum = pgEnum("goal_kind", ["pillar", "band"]);
 export const funnelKindEnum = pgEnum("funnel_kind", [
   "visit", "upload_started", "score_shown", "lead_submitted", "exit_prompt_shown", "exit_prompt_converted",
+  "form_opened",
 ]);
 
 export const accounts = pgTable("accounts", {
@@ -185,6 +186,9 @@ export const funnelEvents = pgTable("funnel_events", {
   campaign: text("campaign"),
   resultId: uuid("result_id"),
   device: text("device"),
+  // form_opened: which button opened the lead form (results_button, exit_prompt, coach_more,
+  // signed_out_banner). Joined to lead_submitted on result_id to compare entries.
+  source: text("source"),
   createdAt: created(),
 }, (t) => [index("funnel_events_idx").on(t.kind, t.createdAt)]);
 

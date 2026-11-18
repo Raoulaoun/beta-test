@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { eq, sql } from "drizzle-orm";
 import { resetDb } from "./helpers.ts";
 import { closeDb, db, schema as s } from "../../lib/db/index.ts";
-import { deleteStaleDropoffs, recordProgress, reopenResult, saveResult } from "../../lib/server/results.ts";
+import { deleteStaleDropoffs, recordFormOpened, recordProgress, reopenResult, saveResult } from "../../lib/server/results.ts";
 import { DESIGN_FIXTURES } from "../../lib/fixtures.ts";
 
 beforeEach(resetDb);
@@ -98,4 +98,14 @@ test("coach: every finding is stored as an aggregate; the payload keeps only the
 test("starter read (no coach) stores no insights", async () => {
   const { id } = await saveResult({ ...engineResult(), coach: null }, ctx);
   assert.equal((await db().select().from(s.resultInsights).where(eq(s.resultInsights.resultId, id))).length, 0);
+});
+
+test("form_opened: logged with its source against the result, only with the right token", async () => {
+  const { id, accessToken } = await saveResult(engineResult(), ctx);
+  assert.equal(await recordFormOpened(id, "wrong-token", "exit_prompt"), false);
+  assert.equal(await recordFormOpened(id, accessToken, "exit_prompt"), true);
+  assert.equal(await recordFormOpened(id, accessToken, "results_button"), true);
+  const rows = await db().select().from(s.funnelEvents).where(eq(s.funnelEvents.kind, "form_opened"));
+  assert.deepEqual(rows.map((r) => r.source).sort(), ["exit_prompt", "results_button"]);
+  assert.ok(rows.every((r) => r.resultId === id && r.campaign === "ig-2347" && r.device === "iPhone"));
 });

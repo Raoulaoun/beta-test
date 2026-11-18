@@ -5,13 +5,13 @@ import type { ErrKey, ScoreResult } from "../lib/types.ts";
 import { errorScreen, precheck } from "../lib/view.ts";
 import { AppHeader, Footer } from "./Chrome.tsx";
 import { Landing, type Tab } from "./Landing.tsx";
-import { Results } from "./Results.tsx";
+import { Results, type FormOpen } from "./Results.tsx";
 import { Analyzing, ErrorCard } from "./Status.tsx";
 import type { FormState } from "./LeadForm.tsx";
 import { Sent } from "./Sent.tsx";
 import { ExitPrompt } from "./ExitPrompt.tsx";
 import type { Links } from "../lib/server/settings.ts";
-import { captureAttribution, exitPromptAllowed, forgetSaved, loadSaved, progress, saveForLater, sendEvent } from "../lib/client.ts";
+import { captureAttribution, exitPromptAllowed, formOpened, forgetSaved, loadSaved, progress, saveForLater, sendEvent, type FormSource } from "../lib/client.ts";
 
 type Screen = "landing" | "analyzing" | "error" | "results" | "sent";
 
@@ -26,6 +26,7 @@ export type Initial = {
   formErrors?: boolean;
   sentTo?: string;
   exitOpen?: boolean;
+  formOpen?: FormSource; // design preview: the lead form already open in the modal
   preview?: boolean; // design preview: no saved result, no events
 };
 
@@ -42,6 +43,8 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
   const [result, setResult] = useState<ScoreResult | null>(initial.result ?? null);
   const [sentTo, setSentTo] = useState(initial.sentTo ?? "");
   const [exitOpen, setExitOpen] = useState(!!initial.exitOpen);
+  const [formOpen, setFormOpen] = useState<FormOpen>(initial.formOpen ? { returnTo: null } : null);
+  const beforeExit = useRef<HTMLElement | null>(null);
   const attribution = useRef("");
 
   const run = useRef(0);
@@ -75,6 +78,7 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
     const onLeave = (e: MouseEvent) => {
       if (e.clientY > 0 || e.relatedTarget) return;
       if (!exitPromptAllowed()) return;
+      beforeExit.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setExitOpen(true);
       progress(result.result_id, result.access_token, "exit_prompt");
     };
@@ -138,16 +142,19 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
     forgetSaved();
     setSentTo(email);
     setExitOpen(false);
+    setFormOpen(null);
     setScreen("sent");
     window.scrollTo(0, 0);
   };
+  // Every button that leads to the lead form opens it in the modal, and says which one it
+  // was (form_opened). returnTo: where focus goes back when the modal closes.
+  const openForm = (source: FormSource, returnTo: HTMLElement | null) => {
+    setFormOpen({ returnTo });
+    if (!initial.preview) formOpened(result?.result_id, result?.access_token, source);
+  };
   const toForm = () => {
     setExitOpen(false);
-    setTimeout(() => {
-      const el = document.getElementById("report");
-      if (el) window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 16);
-      document.getElementById("mt-name")?.focus({ preventScroll: true });
-    }, 50);
+    openForm("exit_prompt", beforeExit.current);
   };
 
   const goHome = (e: React.MouseEvent) => { e.preventDefault(); run.current++; stopTimers(); setScreen("landing"); window.scrollTo(0, 0); };
@@ -165,7 +172,8 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
       {screen !== "landing" && <AppHeader onHome={goHome} />}
       {screen === "analyzing" && <Analyzing fileName={fileName} step={step} />}
       {screen === "error" && <ErrorCard err={err} fileName={fileName} onFile={handleFile} onExport={goExport} />}
-      {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} onSent={onSent} />}
+      {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} onSent={onSent}
+        formOpen={formOpen} onCloseForm={() => setFormOpen(null)} />}
       {screen === "sent" && <Sent sentTo={sentTo} links={links} />}
       <Footer />
       {exitOpen && <ExitPrompt onClose={() => setExitOpen(false)} onToForm={toForm} />}

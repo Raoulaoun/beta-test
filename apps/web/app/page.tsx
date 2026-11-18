@@ -24,6 +24,7 @@ function previewState(q: Record<string, string | undefined>): Initial {
       ...p,
       screen: "results",
       exitOpen: q.exit === "1",
+      ...(q.modal === "1" ? { formOpen: "results_button" as const } : {}),
       result: q.signedin === "1" ? { ...r, saved_to_account: true } : r,
       ...(q.form === "errors" ? { form: { name: "", email: "karim@", phone: "3 12" }, formErrors: true } : {}),
     };

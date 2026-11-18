@@ -1,0 +1,24 @@
+ok   desktop: the inline form stays beside the score
+ok   opener focused before the exit prompt
+ok   dialog has aria-modal="true"
+ok   dialog is titled by its heading ("Get your full report and improvement plan")
+ok   focus moves to the first field
+ok   name typed inline shows in the modal
+ok   choice made inline shows in the modal
+ok   the exit prompt gives way to the form
+ok   Tab and Shift+Tab stay inside the dialog (33 presses)
+ok   one Turnstile widget, inside the modal ([true])
+ok   Esc closes the modal
+ok   email typed in the modal kept in the inline form
+ok   focus returns to where it was before
+ok   after closing, Turnstile is back in the inline form
+ok   form_opened logged once with source exit_prompt ([{"source":"exit_prompt"}])
+ok   the lead carries the modal's Turnstile token (token-w2)
+ok   sent from the modal: confirmation screen, modal gone
+ok   a click inside the dialog keeps it open
+ok   outside click closes, data kept
+ok   X closes the modal
+ok   full-height bottom sheet ({"top":12,"bottom":844,"height":832,"w":390})
+ok   phone: focus moves to the sheet, the keyboard does not pop up on open
+ok   with the keyboard up, the sheet fits above it and the field is visible ({"fieldTop":235.4375,"fieldBottom":285.4375,"sheetBottom":508,"vh":508,"focused":"mt-m-phone"})
+ok   phone: X closes the sheet, email kept in the inline form

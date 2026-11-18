@@ -4,7 +4,8 @@ import { sx } from "../lib/sx.ts";
 import type { ScoreResult } from "../lib/types.ts";
 import { chips, dash, nudgeParts, starterChips, panelView, pillarRows, progressRows, CAP_NOTE, type PanelView } from "../lib/view.ts";
 import { DISCLAIMER, Tick } from "./Chrome.tsx";
-import { LeadForm, type FormState } from "./LeadForm.tsx";
+import { LeadForm, useLeadForm, type FormState } from "./LeadForm.tsx";
+import { FormModal } from "./FormModal.tsx";
 import { SavedBanner } from "./SavedBanner.tsx";
 import { useEffect, useRef } from "react";
 import { progress } from "../lib/client.ts";
@@ -157,8 +158,20 @@ function Details({ r }: { r: ScoreResult }) {
   );
 }
 
-export function Results({ r, initialForm, showFormErrors, onExport, onSent }: { r: ScoreResult; initialForm?: Partial<FormState>; showFormErrors?: boolean; onExport: (e: React.MouseEvent) => void; onSent?: (email: string) => void }) {
+export type FormOpen = { returnTo: HTMLElement | null } | null;
+
+type ResultsProps = {
+  r: ScoreResult; initialForm?: Partial<FormState>; showFormErrors?: boolean;
+  onExport: (e: React.MouseEvent) => void; onSent?: (email: string) => void;
+  formOpen?: FormOpen; onCloseForm?: () => void;
+};
+
+export function Results({ r, initialForm, showFormErrors, onExport, onSent, formOpen = null, onCloseForm }: ResultsProps) {
   const starter = r.score_type === "starter";
+  // One form state for the inline form and the modal.
+  const form = useLeadForm({ retestDefault: r.retest_default, initial: initialForm, showErrors: showFormErrors,
+    resultId: r.result_id, token: r.access_token, onSent });
+  const modal = !!formOpen && !r.saved_to_account;
   return (
     <section className="mt-wrap" style={sx("padding-top:clamp(16px,3vw,40px);padding-bottom:clamp(56px,8vw,104px)")}>
       {r.nudge && <Nudge text={r.nudge} onExport={onExport} />}
@@ -169,11 +182,15 @@ export function Results({ r, initialForm, showFormErrors, onExport, onSent }: { 
         </div>
         {r.saved_to_account
           ? <SavedBanner />
-          : <LeadForm retestDefault={r.retest_default} initial={initialForm} showErrors={showFormErrors}
-              resultId={r.result_id} token={r.access_token} onSent={onSent} />}
+          : <LeadForm form={form} idp="mt-" variant="inline" turnstile={!modal} />}
         {starter ? <StarterDetails r={r} /> : <Details r={r} />}
       </div>
       <p style={sx("margin:28px 0 0;max-width:80ch;font-size:13px;line-height:1.6;color:#6B7684")}>{DISCLAIMER}</p>
+      {modal && (
+        <FormModal titleId="mt-m-title" firstFieldId="mt-m-name" returnTo={formOpen!.returnTo} onClose={() => onCloseForm?.()}>
+          <LeadForm form={form} idp="mt-m-" variant="modal" turnstile />
+        </FormModal>
+      )}
     </section>
   );
 }

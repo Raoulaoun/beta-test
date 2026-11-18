@@ -9,7 +9,9 @@ export const metadata: Metadata = {
   robots: isProductionSite() ? undefined : { index: false, follow: false },
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1 };
+// resizes-content: on Android the layout shrinks with the keyboard, so the form sheet's
+// fields stay above it (iOS is handled in FormModal through the visual viewport).
+export const viewport: Viewport = { width: "device-width", initialScale: 1, interactiveWidget: "resizes-content" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

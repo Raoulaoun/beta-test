@@ -1,6 +1,7 @@
 // Lead flow in a real browser against the live stack and database:
 // attribution → upload → saved result reopens after reload → progress → exit prompt →
-// lead form (client errors, then success) → confirmation. Usage: node lead_flow.js <base> <fixture> <outDir>
+// lead form (client errors, then success) → confirmation. At 1440 the exit prompt opens
+// the form in the modal and the lead is sent from there; at 390 from the inline form. Usage: node lead_flow.js <base> <fixture> <outDir>
 const { chromium } = require('playwright');
 const path = require('path');
 const [base, file, outDir] = process.argv.slice(2);
@@ -32,26 +33,31 @@ const check = (ok, msg) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${msg}`); if (
       check(shown, `@${width} exit prompt shows when leaving through the top`);
       await p.screenshot({ path: path.join(outDir, `exit-prompt-${width}.png`) });
       if (shown) await p.click('[data-testid="exit-prompt"] button:has-text("Send my full report")');
+      await p.waitForSelector('[data-testid="form-modal"]', { timeout: 3000 }).catch(() => null);
+      check(await p.isVisible('[data-testid="form-modal"]'), `@${width} exit prompt opens the form in the modal`);
     }
+    const inModal = width === 1440;
+    const scope = inModal ? '[data-testid="form-modal"] ' : '[data-testid="lead-form"] ';
+    const id = inModal ? '#mt-m-' : '#mt-';
 
-    await p.click('button:has-text("Send my full report")');
-    const errs = await p.$$eval('[data-testid="lead-form"] [role=alert]', (els) => els.map((e) => e.textContent));
+    await p.click(scope + 'button:has-text("Send my full report")');
+    const errs = await p.$$eval(scope + '[role=alert]', (els) => els.map((e) => e.textContent));
     check(errs.includes('Please enter your full name') && errs.includes('Please tick this box so we can send your report'), `@${width} client validation as designed`);
 
-    await p.fill('#mt-name', 'Test Lead');
-    await p.fill('#mt-email', `lead-${width}@example.com`);
-    await p.fill('#mt-phone', '3 12');
-    await p.click('button[role=radio]:has-text("Yes, formally")');
-    await p.click('label:has-text("Beta may contact me")');
-    await p.click('button:has-text("Send my full report")');
+    await p.fill(id + 'name', 'Test Lead');
+    await p.fill(id + 'email', `lead-${width}@example.com`);
+    await p.fill(id + 'phone', '3 12');
+    await p.click(scope + 'button[role=radio]:has-text("Yes, formally")');
+    await p.click(scope + 'label:has-text("Beta may contact me")');
+    await p.click(scope + 'button:has-text("Send my full report")');
     check(await p.isVisible('text=Please enter a valid WhatsApp number'), `@${width} short phone refused`);
-    await p.fill('#mt-phone', '20 7946 000');
-    await p.selectOption('select[aria-label="Country code"]', '+44');
-    await p.click('button:has-text("Send my full report")');
+    await p.fill(id + 'phone', '20 7946 000');
+    await p.selectOption(scope + 'select[aria-label="Country code"]', '+44');
+    await p.click(scope + 'button:has-text("Send my full report")');
     await p.waitForSelector('text=Please enter a valid WhatsApp number', { timeout: 5000 }).catch(() => null);
     check(await p.isVisible('text=Please enter a valid WhatsApp number'), `@${width} server refuses a landline (mobile check)`);
-    await p.fill('#mt-phone', '7911 123456');
-    await p.click('button:has-text("Send my full report")');
+    await p.fill(id + 'phone', '7911 123456');
+    await p.click(scope + 'button:has-text("Send my full report")');
     await p.waitForSelector('[data-testid="sent"]', { timeout: 10000 });
     check((await p.textContent('[data-testid="sent"] strong')) === `lead-${width}@example.com`, `@${width} confirmation shows the email`);
     check(await p.evaluate(() => localStorage.getItem('mt_saved') === null), `@${width} saved result cleared after the lead`);

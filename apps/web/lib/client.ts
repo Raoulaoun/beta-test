@@ -28,6 +28,14 @@ export function sendEvent(kind: "visit" | "upload_started", attribution: string)
   safe(() => navigator.sendBeacon?.("/api/events", new Blob([JSON.stringify({ kind, attribution })], { type: "application/json" })), false);
 }
 
+export type FormSource = "results_button" | "exit_prompt" | "coach_more" | "signed_out_banner";
+
+// Lead form opened in the modal, and from which button.
+export function formOpened(id: string | undefined, token: string | undefined, source: FormSource): void {
+  if (!id || !token) return;
+  safe(() => navigator.sendBeacon?.("/api/events", new Blob([JSON.stringify({ kind: "form_opened", source, result_id: id, token })], { type: "application/json" })), false);
+}
+
 export type Saved = { id: string; token: string; at: number };
 export function saveForLater(id: string, token: string): void {
   safe(() => localStorage.setItem(SAVED_KEY, JSON.stringify({ id, token, at: Date.now() })), undefined);
