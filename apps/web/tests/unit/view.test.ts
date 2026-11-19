@@ -61,6 +61,8 @@ test("chips match the design and switch to Demo account", () => {
   assert.equal(chips(demo)[0], "Demo account");
   const twoWeeks = { ...r, history: { months: 0.46, closed_trades: 10 }, period: { ...r.period, days: 14, label: "2 weeks" } };
   assert.equal(chips(twoWeeks)[1], "2 weeks", "a short export shows weeks, never 0 months");
+  const many = { ...r, history: { months: 0.03, closed_trades: 9711 } };
+  assert.equal(chips(many)[2], "9,711 trades", "thousand separators");
 });
 
 test("starter reads drop the months chip", () => {

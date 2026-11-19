@@ -147,7 +147,7 @@ def evaluate_statement(stmt, evaluation_date: date | None = None) -> dict:
             "headline": None, "top_fixes": [], "early": None, "coach": None,
             "starter": {
                 "heading": copy["Starter read heading"],
-                "line": copy["Starter read line"].replace("{trades}", str(trades)),
+                "line": copy["Starter read line"].replace("{trades}", f"{trades:,}"),
                 "metrics": _starter_metrics(m["values"]),
             },
         })
@@ -175,7 +175,7 @@ def evaluate_statement(stmt, evaluation_date: date | None = None) -> dict:
         "coach": coach_mod.coach(stmt),
         "early": None if score_type == "full" else {
             "label": copy["Early score label"],
-            "line": (copy["Early score line"].replace("{trades}", str(trades)).replace("{period}", label)),
+            "line": (copy["Early score line"].replace("{trades}", f"{trades:,}").replace("{period}", label)),
             "cap": EARLY_CAP,
         },
     })

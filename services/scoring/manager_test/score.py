@@ -118,10 +118,22 @@ def band_for(score: int) -> tuple[str, str, str]:
     return BANDS[-1][1:]
 
 
+# Month-based metrics need this much history; below it they are "not enough data yet":
+# left out of their pillar (the pillar's other metrics are reweighted), never shown as copy.
+MONTH_METRICS = {"profitable_months", "best_month_share"}
+MONTHS_FOR_MONTH_METRICS = 3.0
+
+
 def score_metrics(values: dict, is_demo: bool) -> dict:
     metrics = []
+    short = values.get("months_history", math.inf) < MONTHS_FOR_MONTH_METRICS
     for m in METRICS:
         v = values[m.key]
+        if short and m.key in MONTH_METRICS:
+            metrics.append({"key": m.key, "pillar": m.pillar, "share": m.share, "value": None,
+                            "value_is_unbounded": False, "display": None, "insufficient": True,
+                            "full_marks_at": m.full, "zero_at": m.zero, "score": None, "points_lost": 0.0})
+            continue
         pts = metric_points(m, v)
         metrics.append({
             "key": m.key,
@@ -130,6 +142,7 @@ def score_metrics(values: dict, is_demo: bool) -> dict:
             "value": None if v is None else (None if math.isinf(v) else round(v, 6)),
             "value_is_unbounded": v is not None and math.isinf(v),
             "display": display(m, v),
+            "insufficient": False,
             "full_marks_at": m.full,
             "zero_at": m.zero,
             "score": round(pts, 2),
@@ -140,7 +153,12 @@ def score_metrics(values: dict, is_demo: bool) -> dict:
     pillars, raw = [], 0.0
     for p in PILLARS:
         ms = [x for x in metrics if x["pillar"] == p.key]
-        s = sum(x["share"] * x["score"] for x in ms)
+        used = [x for x in ms if not x["insufficient"]]
+        total = sum(x["share"] for x in used)
+        s = sum(x["share"] * x["score"] for x in used) / total if total else 0.0
+        if 0 < total < 1:  # reweighted pillar: each remaining metric carries more of it
+            for x in used:
+                x["points_lost"] = round(x["points_lost"] / total, 4)
         if p.key == "depth" and is_demo:
             s *= DEMO_DEPTH_FACTOR
         raw += p.weight * s

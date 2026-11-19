@@ -62,7 +62,8 @@ export function roundHalfUp(x: number): number {
   return Math.floor(x + 0.5);
 }
 
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+// Thousand separators: "9,711 trades".
+const plural = (n: number, one: string, many: string) => `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`;
 
 // The period chip uses the engine's label: days under 2 weeks, weeks under 8, then
 // months ("2 weeks", not "0 months").
