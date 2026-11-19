@@ -36,6 +36,9 @@ export const accounts = pgTable("accounts", {
   source: jsonb("source").$type<{ utm?: Record<string, string>; landing?: string }>(),
   introducedBy: text("introduced_by"),
   retestReminderAt: ts("retest_reminder_at"),
+  // Settings (email choices). Updates from Beta is consentMarketing.
+  retestReminders: boolean("retest_reminders").notNull().default(false),
+  monthlyCheckup: boolean("monthly_checkup").notNull().default(true),
   lastSignInAt: ts("last_sign_in_at"),
   createdAt: created(),
   updatedAt: ts("updated_at").notNull().defaultNow(),
@@ -107,8 +110,19 @@ export const goals = pgTable("goals", {
   baselineResultId: uuid("baseline_result_id").references(() => results.id, { onDelete: "set null" }),
   active: boolean("active").notNull().default(true),
   achievedAt: ts("achieved_at"),
+  achievedResultId: uuid("achieved_result_id").references(() => results.id, { onDelete: "set null" }),
   createdAt: created(),
 }, (t) => [uniqueIndex("goals_one_active_idx").on(t.accountId).where(sql`${t.active}`)]);
+
+// A browser that has signed in to (or created) an account: lets the results screen offer
+// "Send me a sign-in link" without the browser keeping the email. Only the token's hash.
+export const knownDevices = pgTable("known_devices", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  accountId: uuid("account_id").notNull().references(() => accounts.id, { onDelete: "cascade" }),
+  tokenHash: text("token_hash").notNull(),
+  expiresAt: ts("expires_at").notNull(),
+  createdAt: created(),
+}, (t) => [uniqueIndex("known_devices_token_key").on(t.tokenHash)]);
 
 export const crm = pgTable("crm", {
   accountId: uuid("account_id").primaryKey().references(() => accounts.id, { onDelete: "cascade" }),

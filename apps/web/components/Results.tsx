@@ -7,7 +7,8 @@ import { DISCLAIMER, Tick } from "./Chrome.tsx";
 import { LeadForm, useLeadForm, type FormState } from "./LeadForm.tsx";
 import { FormModal } from "./FormModal.tsx";
 import { SavedBanner } from "./SavedBanner.tsx";
-import { useEffect, useRef } from "react";
+import { SignedOutBanner } from "./SignedOutBanner.tsx";
+import { useEffect, useRef, useState } from "react";
 import { progress } from "../lib/client.ts";
 
 const chipCss = "display:inline-flex;align-items:center;min-height:32px;padding:6px 14px;border-radius:999px;background:rgba(245,246,244,0.08);border:1px solid rgba(245,246,244,0.16);font-size:13px;font-weight:600;color:#E6EAEE";
@@ -160,13 +161,39 @@ function Details({ r }: { r: ScoreResult }) {
 
 export type FormOpen = { returnTo: HTMLElement | null } | null;
 
+// Primary button style from design/flow ("Send my full report").
+const ctaCss = "height:56px;width:100%;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer";
+export const FULL_REPORT_CTA = "Get my full report";
+
+// Phones: a sticky bar with the same button, shown only while neither the button under the
+// score nor the inline form is on screen.
+function StickyCta({ watch, onOpen }: { watch: string[]; onOpen: (el: HTMLElement) => void }) {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const els = watch.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    const seen = new Map<Element, boolean>();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => seen.set(e.target, e.isIntersecting));
+      setShow(els.length > 0 && els.every((el) => seen.get(el) === false));
+    }, { rootMargin: "-96px 0px 0px 0px" }); // a sliver at the top edge does not count as on screen
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [watch.join("|")]);
+  return (
+    <div className="mt-sticky-cta" data-testid="sticky-cta" data-show={show} aria-hidden={!show}>
+      <button type="button" tabIndex={show ? 0 : -1} onClick={(e) => onOpen(e.currentTarget)} style={sx(ctaCss)}>{FULL_REPORT_CTA}</button>
+    </div>
+  );
+}
+
 type ResultsProps = {
   r: ScoreResult; initialForm?: Partial<FormState>; showFormErrors?: boolean;
   onExport: (e: React.MouseEvent) => void; onSent?: (email: string) => void;
-  formOpen?: FormOpen; onCloseForm?: () => void;
+  formOpen?: FormOpen; onCloseForm?: () => void; onOpenForm?: (el: HTMLElement) => void;
 };
 
-export function Results({ r, initialForm, showFormErrors, onExport, onSent, formOpen = null, onCloseForm }: ResultsProps) {
+export function Results({ r, initialForm, showFormErrors, onExport, onSent, formOpen = null, onCloseForm, onOpenForm }: ResultsProps) {
   const starter = r.score_type === "starter";
   // One form state for the inline form and the modal.
   const form = useLeadForm({ retestDefault: r.retest_default, initial: initialForm, showErrors: showFormErrors,
@@ -174,11 +201,17 @@ export function Results({ r, initialForm, showFormErrors, onExport, onSent, form
   const modal = !!formOpen && !r.saved_to_account;
   return (
     <section className="mt-wrap" style={sx("padding-top:clamp(16px,3vw,40px);padding-bottom:clamp(56px,8vw,104px)")}>
+      {r.known_account && !r.saved_to_account && <SignedOutBanner resultId={r.result_id} token={r.access_token} />}
       {r.nudge && <Nudge text={r.nudge} onExport={onExport} />}
       <div className="mt-res">
-        <div className="mt-a-score" style={sx("position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(168deg,#0B1F3A 0%,#0D2C3F 40%,#0E4A44 82%,#0E6B4F 122%);color:#F5F6F4")}>
-          <div aria-hidden="true" style={sx("position:absolute;right:-30%;bottom:-40%;width:90%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(63,145,116,0.28),rgba(63,145,116,0))")}></div>
-          {starter ? <StarterCard r={r} /> : <ScoreCard r={r} />}
+        <div className="mt-a-score" style={sx("display:flex;flex-direction:column;gap:16px;min-width:0")}>
+          <div style={sx("position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(168deg,#0B1F3A 0%,#0D2C3F 40%,#0E4A44 82%,#0E6B4F 122%);color:#F5F6F4")}>
+            <div aria-hidden="true" style={sx("position:absolute;right:-30%;bottom:-40%;width:90%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(63,145,116,0.28),rgba(63,145,116,0))")}></div>
+            {starter ? <StarterCard r={r} /> : <ScoreCard r={r} />}
+          </div>
+          {!r.saved_to_account && (
+            <button id="mt-full-report" type="button" data-testid="full-report-cta" onClick={(e) => onOpenForm?.(e.currentTarget)} style={sx(ctaCss)}>{FULL_REPORT_CTA}</button>
+          )}
         </div>
         {r.saved_to_account
           ? <SavedBanner />
@@ -186,6 +219,7 @@ export function Results({ r, initialForm, showFormErrors, onExport, onSent, form
         {starter ? <StarterDetails r={r} /> : <Details r={r} />}
       </div>
       <p style={sx("margin:28px 0 0;max-width:80ch;font-size:13px;line-height:1.6;color:#6B7684")}>{DISCLAIMER}</p>
+      {!r.saved_to_account && <StickyCta watch={["mt-full-report", "report"]} onOpen={(el) => onOpenForm?.(el)} />}
       {modal && (
         <FormModal titleId="mt-m-title" firstFieldId="mt-m-name" returnTo={formOpen!.returnTo} onClose={() => onCloseForm?.()}>
           <LeadForm form={form} idp="mt-m-" variant="modal" turnstile />

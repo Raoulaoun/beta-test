@@ -18,3 +18,11 @@ html { scroll-behavior: auto; }
   .mt-modal form { padding-top:24px; }
 }
 @media (prefers-reduced-motion:reduce) { .mt-modal { animation:none; } }
+
+/* "Get my full report" sticky bar on phones (hidden from 900px, where the form sits beside
+   the score). Shown only while the button under the score and the inline form are off screen. */
+.mt-sticky-cta { position:fixed; left:0; right:0; bottom:0; z-index:40; padding:12px 20px calc(12px + env(safe-area-inset-bottom)); background:#FFFFFF; border-top:1px solid #DDE2E7; box-shadow:0 -12px 32px -20px rgba(11,31,58,0.35); transform:translateY(110%); transition:transform 0.2s ease; }
+.mt-sticky-cta[data-show="true"] { transform:none; }
+@media (min-width:900px) { .mt-sticky-cta { display:none; } }
+@media (prefers-reduced-motion:reduce) { .mt-sticky-cta { transition:none; } }
+@media (max-width:899.98px) { [data-screen]:has(.mt-sticky-cta) { padding-bottom:calc(80px + env(safe-area-inset-bottom)); } }

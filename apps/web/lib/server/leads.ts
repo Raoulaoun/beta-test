@@ -65,6 +65,7 @@ export async function submitLead(v: LeadInput, signedInAccountId: string | null)
       name: v.name.trim(), phone, country, managingForOthers: MANAGE[v.manage],
       consentContact: true, consentMarketing: !!v.updates,
       retestReminderAt: v.remind ? new Date(now.getTime() + RETEST_DAYS * 86_400_000) : null,
+      retestReminders: !!v.remind,
       updatedAt: now,
     };
     if (!existing) {

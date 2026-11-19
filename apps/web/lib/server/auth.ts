@@ -7,6 +7,8 @@ import { newToken, sha256 } from "./crypto.ts";
 import { normaliseEmail } from "./leads.ts";
 import { sendMail } from "./mailer.ts";
 import { createSession } from "./session.ts";
+import { knownAccount } from "./known.ts";
+import { ownedResult } from "./results.ts";
 
 export const LINK_MINUTES = 15;
 export const LINK_REQUESTS_PER_HOUR = 5;
@@ -64,6 +66,20 @@ export async function verifySignIn(token: string): Promise<VerifyOutcome> {
     .where(eq(s.results.pendingAccountId, row.accountId));
   await db().update(s.accounts).set({ lastSignInAt: now }).where(eq(s.accounts.id, row.accountId));
   return { ok: true, sessionToken: await createSession(row.accountId), accountId: row.accountId };
+}
+
+// "Send me a sign-in link" on the results screen of a known device: the link goes to the
+// known account's email, and this browser's current result is held for that account, so it
+// joins the history when the link is used.
+export async function requestKnownSignIn(cookieHeader: string | null, resultId: string, resultToken: string)
+  : Promise<RequestOutcome | "unknown"> {
+  const account = await knownAccount(cookieHeader);
+  if (!account) return "unknown";
+  const result = await ownedResult(resultId, resultToken);
+  if (result && !result.accountId) {
+    await db().update(s.results).set({ pendingAccountId: account.id }).where(eq(s.results.id, result.id));
+  }
+  return requestSignIn(account.email);
 }
 
 export async function deleteAccount(accountId: string): Promise<void> {

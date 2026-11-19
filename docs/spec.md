@@ -319,6 +319,7 @@ It appears on the results screen, on every PDF page and on the calculator pages.
 - [ ] **Blocker:** real export screenshots (desktop + mobile) replace the tutorial placeholders. No video clip in v1.
 - [ ] Counsel review of coach-insight wording (instrument, session and direction named only to describe the trader's own past results)
 - [ ] Copy for the sign-in email (placeholder in the code until supplied)
+- [ ] Copy for the "sign-in link sent" state of the signed-out banner (placeholder: "Sign-in link sent. Check your email.")
 
 ## Build order and acceptance tests
 

@@ -2,6 +2,7 @@
 // security scanners open links (GET) and would otherwise use up the single-use token.
 import { verifySignIn } from "../../../lib/server/auth.ts";
 import { SESSION_DAYS, sessionCookie } from "../../../lib/server/session.ts";
+import { knownCookie, rememberDevice } from "../../../lib/server/known.ts";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,8 @@ export async function POST(req: Request): Promise<Response> {
     headers.set("location", "/?signin=expired");
     return new Response(null, { status: 303, headers });
   }
-  headers.set("set-cookie", sessionCookie(out.sessionToken, SESSION_DAYS * 86_400));
+  headers.append("set-cookie", sessionCookie(out.sessionToken, SESSION_DAYS * 86_400));
+  headers.append("set-cookie", knownCookie(await rememberDevice(out.accountId)));
   headers.set("location", "/?signedin=1");
   return new Response(null, { status: 303, headers });
 }

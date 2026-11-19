@@ -1,0 +1,23 @@
+ok   desktop: "Get my full report" under the score card
+ok   directly under the score card
+ok   desktop: no sticky bar
+ok   the button opens the form modal
+ok   focus returns to the button
+ok   form_opened logged with source results_button
+ok   phone: button under the score card
+ok   sticky bar hidden while the button is on screen
+ok   sticky bar hidden while the inline form is on screen
+ok   sticky bar shows once the button and the form are off screen
+ok   at the bottom, the bar does not cover the footer
+ok   the sticky bar opens the form sheet
+ok   form_opened logged with source results_button
+ok   @1440 unknown browser: no banner
+ok   @1440 account created: known-device cookie, httpOnly, no email in it
+ok   @1440 same browser, signed out: the banner, word for word
+ok   @1440 sign-in link sent to the account's email
+ok   @1440 after signing in, this result is in the account's history
+ok   @390 unknown browser: no banner
+ok   @390 account created: known-device cookie, httpOnly, no email in it
+ok   @390 same browser, signed out: the banner, word for word
+ok   @390 sign-in link sent to the account's email
+ok   @390 after signing in, this result is in the account's history

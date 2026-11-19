@@ -48,6 +48,7 @@ export type ScoreResult = {
   retest_default: boolean;
   notes: string[];
   coach?: CoachTop | null;
+  known_account?: boolean; // signed out on a browser that has an account: offer a sign-in link
   // Added by the web app's /api/score
   result_id?: string;
   access_token?: string;

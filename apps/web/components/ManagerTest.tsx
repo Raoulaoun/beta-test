@@ -74,7 +74,7 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
   // Exit prompt: once per browser session, when the pointer leaves through the top of the
   // results page (desktop), as in design/flow.
   useEffect(() => {
-    if (screen !== "results" || !result || result.saved_to_account) return;
+    if (screen !== "results" || !result || result.saved_to_account || formOpen) return;
     const onLeave = (e: MouseEvent) => {
       if (e.clientY > 0 || e.relatedTarget) return;
       if (!exitPromptAllowed()) return;
@@ -84,7 +84,7 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
     };
     document.addEventListener("mouseout", onLeave);
     return () => document.removeEventListener("mouseout", onLeave);
-  }, [screen, result]);
+  }, [screen, result, formOpen]);
 
   const finishIfReady = (id: number) => {
     const p = pending.current;
@@ -173,7 +173,7 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
       {screen === "analyzing" && <Analyzing fileName={fileName} step={step} />}
       {screen === "error" && <ErrorCard err={err} fileName={fileName} onFile={handleFile} onExport={goExport} />}
       {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} onSent={onSent}
-        formOpen={formOpen} onCloseForm={() => setFormOpen(null)} />}
+        formOpen={formOpen} onCloseForm={() => setFormOpen(null)} onOpenForm={(el) => openForm("results_button", el)} />}
       {screen === "sent" && <Sent sentTo={sentTo} links={links} />}
       <Footer />
       {exitOpen && <ExitPrompt onClose={() => setExitOpen(false)} onToForm={toForm} />}
