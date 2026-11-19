@@ -1,5 +1,6 @@
 "use client";
 import { sx } from "../lib/sx.ts";
+import { AccountAvatar } from "./AccountAvatar.tsx";
 import { ImageSlot } from "./ImageSlot.tsx";
 import { COPY } from "../lib/view.ts";
 
@@ -60,7 +61,10 @@ export function Landing({ tab, setTab, drag, setDrag, onFile }: Props) {
             <span style={sx("width:1px;height:20px;background:rgba(245,246,244,0.24)")}></span>
             <span style={sx("font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5;white-space:nowrap")}>The Manager Test</span>
           </div>
-          <a href="#how" className="mt-hover-light" style={sx("display:inline-flex;align-items:center;min-height:44px;font-size:13px;font-weight:600;color:#C3CBD5;white-space:nowrap")}>How it works</a>
+          <div style={sx("display:flex;align-items:center;gap:16px")}>
+            <a href="#how" className="mt-hover-light" style={sx("display:inline-flex;align-items:center;min-height:44px;font-size:13px;font-weight:600;color:#C3CBD5;white-space:nowrap")}>How it works</a>
+            <AccountAvatar />
+          </div>
         </header>
         <div className="mt-wrap" style={sx("position:relative;padding-top:clamp(20px,5vw,64px);padding-bottom:clamp(28px,7vw,96px)")}>
           <div className="mt-hero">

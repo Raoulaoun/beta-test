@@ -24,11 +24,11 @@ export async function POST(req: Request): Promise<Response> {
   const out = await verifySignIn(token).catch(() => ({ ok: false as const }));
   const headers = new Headers({ "cache-control": "no-store" });
   if (!out.ok) {
-    headers.set("location", "/?signin=expired");
+    headers.set("location", "/signin?expired=1");
     return new Response(null, { status: 303, headers });
   }
   headers.append("set-cookie", sessionCookie(out.sessionToken, SESSION_DAYS * 86_400));
   headers.append("set-cookie", knownCookie(await rememberDevice(out.accountId)));
-  headers.set("location", "/?signedin=1");
+  headers.set("location", "/dashboard");
   return new Response(null, { status: 303, headers });
 }

@@ -128,7 +128,40 @@ export function FlagPanel({ view }: { view: PanelView }) {
   );
 }
 
-function Details({ r }: { r: ScoreResult }) {
+// Coach notes on the results screen: the free top "working" and top "costing" line, in
+// design/account's coach-note cards. The full 3 + 3 are in the report and the dashboard.
+export const COACH_MORE = "More coach notes in your full report";
+function CoachNotes({ r, onMore }: { r: ScoreResult; onMore?: (el: HTMLElement) => void }) {
+  const top = r.coach?.top;
+  if (!top || (!top.working && !top.costing)) return null;
+  return (
+    <div className="mt-pad" data-testid="coach-free" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px")}>
+      <span style={sx("font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684")}>Your coach notes</span>
+      <div className="ac-two">
+        {top.working && (
+          <div style={sx("display:flex;flex-direction:column;gap:10px")}>
+            <span style={sx("display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1.5px solid #0E6B4F;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F")}>Working for you</span>
+            <div style={sx("display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:16px;background:#E7F1ED")}>
+              <span style={sx("font-size:15px;line-height:1.5;font-weight:500;color:#0B1F3A")}>{top.working.text}</span>
+            </div>
+          </div>
+        )}
+        {top.costing && (
+          <div style={sx("display:flex;flex-direction:column;gap:10px")}>
+            <span style={sx("display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1.5px solid #A9781F;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7A5A16")}>Costing you</span>
+            <div style={sx("display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:16px;background:#F5EBD6")}>
+              <span style={sx("font-size:15px;line-height:1.5;font-weight:500;color:#3D2C0B")}>{top.costing.text}</span>
+              {top.costing.action && <span style={sx("padding-top:8px;border-top:1px solid rgba(122,90,22,0.2);font-size:14px;line-height:1.5;font-weight:700;color:#3D2C0B")}>{top.costing.action}</span>}
+            </div>
+          </div>
+        )}
+      </div>
+      {onMore && <button type="button" data-testid="coach-more" onClick={(e) => onMore(e.currentTarget)} style={sx("align-self:flex-start;min-height:44px;border:none;background:transparent;padding:0;font-size:14px;font-weight:700;color:#0E6B4F;cursor:pointer")}>{COACH_MORE}</button>}
+    </div>
+  );
+}
+
+function Details({ r, onMore }: { r: ScoreResult; onMore?: (el: HTMLElement) => void }) {
   const pillarsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = pillarsRef.current;
@@ -154,6 +187,7 @@ function Details({ r }: { r: ScoreResult }) {
           </div>
         ))}
       </div>
+      <CoachNotes r={r} onMore={onMore} />
       <FlagPanel view={panelView(r.red_flag_panel)} />
     </div>
   );
@@ -190,7 +224,7 @@ function StickyCta({ watch, onOpen }: { watch: string[]; onOpen: (el: HTMLElemen
 type ResultsProps = {
   r: ScoreResult; initialForm?: Partial<FormState>; showFormErrors?: boolean;
   onExport: (e: React.MouseEvent) => void; onSent?: (email: string) => void;
-  formOpen?: FormOpen; onCloseForm?: () => void; onOpenForm?: (el: HTMLElement) => void;
+  formOpen?: FormOpen; onCloseForm?: () => void; onOpenForm?: (el: HTMLElement, source?: "results_button" | "coach_more") => void;
 };
 
 export function Results({ r, initialForm, showFormErrors, onExport, onSent, formOpen = null, onCloseForm, onOpenForm }: ResultsProps) {
@@ -216,7 +250,7 @@ export function Results({ r, initialForm, showFormErrors, onExport, onSent, form
         {r.saved_to_account
           ? <SavedBanner />
           : <LeadForm form={form} idp="mt-" variant="inline" turnstile={!modal} />}
-        {starter ? <StarterDetails r={r} /> : <Details r={r} />}
+        {starter ? <StarterDetails r={r} /> : <Details r={r} onMore={r.saved_to_account ? undefined : (el) => onOpenForm?.(el, "coach_more")} />}
       </div>
       <p style={sx("margin:28px 0 0;max-width:80ch;font-size:13px;line-height:1.6;color:#6B7684")}>{DISCLAIMER}</p>
       {!r.saved_to_account && <StickyCta watch={["mt-full-report", "report"]} onOpen={(el) => onOpenForm?.(el)} />}

@@ -1,4 +1,5 @@
 import { sx } from "../lib/sx.ts";
+import { AccountAvatar } from "./AccountAvatar.tsx";
 
 export const DISCLAIMER =
   "The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.";
@@ -12,6 +13,7 @@ export function AppHeader({ onHome }: { onHome: (e: React.MouseEvent) => void })
         <span style={sx("width:1px;height:20px;background:#DDE2E7")}></span>
         <span style={sx("font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684;white-space:nowrap")}>The Manager Test</span>
       </a>
+      <AccountAvatar />
     </header>
   );
 }

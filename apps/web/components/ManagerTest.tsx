@@ -173,7 +173,7 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
       {screen === "analyzing" && <Analyzing fileName={fileName} step={step} />}
       {screen === "error" && <ErrorCard err={err} fileName={fileName} onFile={handleFile} onExport={goExport} />}
       {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} onSent={onSent}
-        formOpen={formOpen} onCloseForm={() => setFormOpen(null)} onOpenForm={(el) => openForm("results_button", el)} />}
+        formOpen={formOpen} onCloseForm={() => setFormOpen(null)} onOpenForm={(el, source) => openForm(source ?? "results_button", el)} />}
       {screen === "sent" && <Sent sentTo={sentTo} links={links} />}
       <Footer />
       {exitOpen && <ExitPrompt onClose={() => setExitOpen(false)} onToForm={toForm} />}
