@@ -34,6 +34,10 @@ Then open, for example, `http://127.0.0.1:8765/flow/index.html?screen=results&fl
 | `emails/report-email/` | none | Report delivery email |
 | `emails/digest-email/` | none | Daily digest email (admin) |
 | `share-card/component.html` | `format` = `story`, `post`; `name` | Share card source. Rendered inside `flow/` on the `sent` screen; it does not run on its own |
+| `account/` | `view` = `signin`, `check`, `expired`, `dashboard`, `first`, `firstfull`, `settings` | Signed-in area: sign-in (request, check your email, link expired), dashboard, settings |
+| | `accounts=one`, `acctmenu=1` | Dashboard with one trading account, or with the account switcher open |
+| | `goal` = `auto` (default), `active`, `change` (+ `kind` = `pillar`, `band`), `reached` | Goal card states |
+| | `confirm=1` | Settings with the delete-account confirmation (the "deleted" state follows "Yes, delete everything") |
 
 ## Board frames
 
@@ -78,3 +82,12 @@ Then open, for example, `http://127.0.0.1:8765/flow/index.html?screen=results&fl
 The extraction tools are in `tools/design/`: `unbundle.py` unpacks a bundled page,
 `standalone.py` turns an unpacked page into a runnable folder, and `shoot.js` with
 `frames.json` renders the screenshots.
+
+## Account screens (`screenshots/account/`)
+
+Added from the "Manager Test account" Claude Design page. Each state at 390 and 1440, named
+`<state>-<width>.png`: signin, check, expired, dashboard, dashboard-one-account,
+dashboard-account-menu, dashboard-first, dashboard-first-full, goal-active,
+goal-change-pillar, goal-change-band, goal-reached, settings, settings-delete-confirm,
+settings-deleted. Full-page captures: fixed elements (the phone upload button) show where
+the viewport ended, not where they sit on the page.

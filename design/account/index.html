@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html><head><script>window.__resources = {"https://unpkg.com/react@18.3.1/umd/react.production.min.js":"assets/23f837cf-1df1-4d41-a3e3-b3da33ad3236.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"assets/c2025a20-ee72-4d4f-b6a8-79ef1ddce0ec.js"};</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="assets/d3d9735f-99ce-4b64-8d43-887baa4a8813.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>:root {
+  /* ---- Primary: navy (base + 2 tints) ---- */
+  --color-navy-base: #0B1F3A;      /* primary brand navy, dark surfaces, headings */
+  --color-navy-surface: #13294A;   /* tint 1 — elevated dark panels, hover on dark */
+  --color-navy-border: #2C466B;    /* tint 2 — borders/dividers on dark surfaces */
+  --color-navy-wash: #EDF0F5;      /* faint navy wash for selected rows on light bg */
+
+  /* ---- Accent: beta green (base + 1 tint) ---- */
+  --color-green-base: #0E6B4F;     /* accent, primary CTA, positive P&L */
+  --color-green-tint: #3F9174;     /* lighter tint — positive icon/text on light bg */
+  --color-green-surface: #E3F1EB;  /* positive state background wash */
+  --color-green-press: #0A5A42;    /* pressed/hover state, darker than base */
+
+  /* ---- Neutrals ---- */
+  --color-bg: #FAFAF8;             /* warm off-white app background */
+  --color-surface: #FFFFFF;        /* card/panel surface */
+  --color-slate-900: #1C2430;      /* primary text */
+  --color-slate-700: #4C5A6E;      /* secondary text */
+  --color-slate-500: #7C8AA0;      /* tertiary text, placeholders, icons */
+  --color-slate-300: #D6DBE3;      /* default borders */
+  --color-slate-200: #E7E9EC;      /* subtle dividers */
+  --color-slate-100: #F1F1EE;      /* subtle surface alt, close to bg */
+
+  /* ---- Semantic ---- */
+  --color-red-base: #A23B2E;       /* muted institutional red — negative P&L, breach */
+  --color-red-surface: #F5E4E1;
+  --color-amber-base: #A9781F;     /* muted amber/gold — warnings, 90% risk line */
+  --color-amber-surface: #F5EBD6;
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-700);
+  --text-tertiary: var(--color-slate-500);
+  --text-on-dark: #F5F6F4;
+  --text-on-dark-secondary: rgba(245, 246, 244, 0.64);
+  --text-on-dark-tertiary: rgba(245, 246, 244, 0.4);
+
+  --surface-page: var(--color-bg);
+  --surface-card: var(--color-surface);
+  --surface-alt: var(--color-slate-100);
+  --surface-dark: var(--color-navy-base);
+  --surface-dark-elevated: var(--color-navy-surface);
+  --surface-selected: var(--color-navy-wash);
+
+  --border-default: var(--color-slate-300);
+  --border-subtle: var(--color-slate-200);
+  --border-dark: var(--color-navy-border);
+
+  --accent-primary: var(--color-green-base);
+  --accent-primary-hover: var(--color-green-press);
+  --accent-primary-tint: var(--color-green-tint);
+
+  --positive: var(--color-green-base);
+  --positive-tint: var(--color-green-tint);
+  --positive-surface: var(--color-green-surface);
+
+  --negative: var(--color-red-base);
+  --negative-surface: var(--color-red-surface);
+
+  --warning: var(--color-amber-base);
+  --warning-surface: var(--color-amber-surface);
+
+  --focus-ring: rgba(14, 107, 79, 0.22);
+}
+
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/542632ab-3e8e-42a8-ace4-2282e161d163.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/6dc8fb45-0bcd-4b38-8265-92e784eaf265.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/063791b8-103b-488d-ab75-e0141eaba215.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/35e1fa7c-fcfe-4cf1-b45e-5768f02adcbd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/495c4cd4-d75c-4e49-8ea5-32c3991a8e54.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/ebd5b602-658f-4e08-9633-2398875670a2.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/2d7bbaca-e8a5-4114-a24b-ca018e6f16ab.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/542632ab-3e8e-42a8-ace4-2282e161d163.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/6dc8fb45-0bcd-4b38-8265-92e784eaf265.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/063791b8-103b-488d-ab75-e0141eaba215.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/35e1fa7c-fcfe-4cf1-b45e-5768f02adcbd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/495c4cd4-d75c-4e49-8ea5-32c3991a8e54.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/ebd5b602-658f-4e08-9633-2398875670a2.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/2d7bbaca-e8a5-4114-a24b-ca018e6f16ab.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/542632ab-3e8e-42a8-ace4-2282e161d163.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/6dc8fb45-0bcd-4b38-8265-92e784eaf265.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/063791b8-103b-488d-ab75-e0141eaba215.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/35e1fa7c-fcfe-4cf1-b45e-5768f02adcbd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/495c4cd4-d75c-4e49-8ea5-32c3991a8e54.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/ebd5b602-658f-4e08-9633-2398875670a2.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/2d7bbaca-e8a5-4114-a24b-ca018e6f16ab.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/542632ab-3e8e-42a8-ace4-2282e161d163.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/6dc8fb45-0bcd-4b38-8265-92e784eaf265.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/063791b8-103b-488d-ab75-e0141eaba215.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/35e1fa7c-fcfe-4cf1-b45e-5768f02adcbd.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/495c4cd4-d75c-4e49-8ea5-32c3991a8e54.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/ebd5b602-658f-4e08-9633-2398875670a2.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/2d7bbaca-e8a5-4114-a24b-ca018e6f16ab.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/a20c78ef-2a5c-4496-9a4a-ec382cdd4f07.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/ca43833d-24be-41c8-8635-856a6978b1fb.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/22128a7c-22d7-4cd0-a739-3afc6fdcc177.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/20e3da06-7bee-4757-8441-f02ba11470ca.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/f07d8fcf-6a2b-4390-a6a3-e173d161a203.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/6271c5a7-af9b-4700-9457-fbb2058a9535.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("assets/a0c2c811-6936-4b44-b3a0-5206e596f6b7.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/a20c78ef-2a5c-4496-9a4a-ec382cdd4f07.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/ca43833d-24be-41c8-8635-856a6978b1fb.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/22128a7c-22d7-4cd0-a739-3afc6fdcc177.woff2") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/20e3da06-7bee-4757-8441-f02ba11470ca.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/f07d8fcf-6a2b-4390-a6a3-e173d161a203.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/6271c5a7-af9b-4700-9457-fbb2058a9535.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/a0c2c811-6936-4b44-b3a0-5206e596f6b7.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+:root {
+  --font-sans: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  /* Used only for very large display numerals/titles where slightly tighter
+     tracking reads more institutional; falls back to Inter everywhere else. */
+  --font-sans-tight: 'Inter Tight', var(--font-sans);
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Type scale (UI copy, headings) ---- */
+  --font-size-display: 40px;
+  --line-height-display: 1.1;
+
+  --font-size-h1: 32px;
+  --line-height-h1: 1.2;
+
+  --font-size-h2: 24px;
+  --line-height-h2: 1.3;
+
+  --font-size-h3: 18px;
+  --line-height-h3: 1.4;
+
+  --font-size-body-lg: 16px;
+  --line-height-body-lg: 1.55;
+
+  --font-size-body: 14px;
+  --line-height-body: 1.5;
+
+  --font-size-body-sm: 13px;
+  --line-height-body-sm: 1.45;
+
+  --font-size-caption: 12px;
+  --line-height-caption: 1.4;
+  --tracking-caption: 0.01em;
+
+  --font-size-micro: 11px;
+  --line-height-micro: 1.3;
+  --tracking-micro: 0.06em;
+
+  /* ---- Numeric scale — tabular figures mandatory ---- */
+  --font-size-stat-xl: 48px;
+  --line-height-stat-xl: 1.05;
+
+  --font-size-stat-lg: 32px;
+  --line-height-stat-lg: 1.1;
+
+  --font-size-num-table: 14px;
+  --line-height-num-table: 1.4;
+
+  --font-size-num-sm: 13px;
+  --line-height-num-sm: 1.3;
+}
+
+.tabular-nums,
+.ds-numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'cv05' 1;
+  font-family: var(--font-sans);
+}
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+}
+
+:root {
+  /* Restrained, precise corners — never the rounded-pill card look of retail fintech */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+}
+
+:root {
+  /* Shadows are near-invisible; hairline borders carry most surface separation.
+     Reserve --shadow-elevated for true overlays (menus, modals, popovers). */
+  --shadow-card: 0 1px 2px rgba(11, 31, 58, 0.04);
+  --shadow-elevated: 0 8px 24px rgba(11, 31, 58, 0.10), 0 2px 6px rgba(11, 31, 58, 0.06);
+  --shadow-focus: 0 0 0 3px var(--focus-ring);
+}
+
+/* Beta public website layer — extends the core tokens. Every site page and site component reads from here. */
+:root {
+  /* ---- Colour ---- */
+  --site-navy: var(--color-navy-base, #0B1F3A);
+  --site-green: var(--accent-primary, #0E6B4F);
+  --site-green-tint: var(--accent-primary-tint, #3F9174);
+  --site-green-wash: var(--color-green-surface, #E3F1EB);
+  --site-green-line: rgba(14,107,79,0.28);
+  --site-mint: #9FDCBE;
+  --site-page: var(--surface-page, #FAFAF8);
+  --site-card: var(--surface-card, #FFFFFF);
+  --site-alt: var(--surface-alt, #F1F1EE);
+  --site-ink: var(--text-primary);
+  --site-ink-2: var(--text-secondary);
+  --site-ink-3: var(--text-tertiary);
+  --site-border: var(--border-default);
+  --site-border-subtle: var(--border-subtle);
+
+  /* on-dark ink + surfaces */
+  --site-on-dark: #F5F6F4;
+  --site-on-dark-strong: rgba(245,246,244,0.92);
+  --site-on-dark-nav: rgba(245,246,244,0.86);
+  --site-on-dark-body: rgba(245,246,244,0.82);
+  --site-on-dark-muted: rgba(245,246,244,0.72);
+  --site-on-dark-faint: rgba(245,246,244,0.55);
+  --site-on-dark-label: rgba(245,246,244,0.5);
+  --site-on-dark-line: rgba(245,246,244,0.12);
+  --site-on-dark-line-2: rgba(245,246,244,0.14);
+  --site-on-dark-ghost: rgba(245,246,244,0.28);
+  --site-on-dark-ghost-hover: rgba(245,246,244,0.6);
+  --site-on-dark-fill: rgba(245,246,244,0.09);
+  --site-on-dark-fill-2: rgba(245,246,244,0.07);
+  --site-on-dark-fill-hover: rgba(245,246,244,0.11);
+  --site-on-dark-underline: rgba(245,246,244,0.35);
+  --site-menu-scrim: rgba(11,31,58,0.6);
+
+  /* ---- Gradients (atmosphere only — never read as "up") ---- */
+  --site-grad-hero: linear-gradient(168deg, #0B1F3A 0%, #0D2C3F 38%, #0E4A44 74%, #0E6B4F 118%);
+  --site-grad-panel: linear-gradient(150deg, #0E6B4F 0%, #0E4A44 52%, #0B1F3A 100%);
+  --site-grad-band: linear-gradient(162deg, #0E6B4F 0%, #0E4A44 46%, #0B1F3A 100%);
+  --site-glow-hero: radial-gradient(closest-side, rgba(63,145,116,0.30), rgba(63,145,116,0));
+  --site-glow-band: radial-gradient(closest-side, rgba(127,204,167,0.18), rgba(127,204,167,0));
+
+  /* ---- Type ---- */
+  --site-font-display: var(--font-sans-tight);
+  --site-font-body: var(--font-sans);
+  --site-font-label: var(--font-sans); /* mono slot: swap here when labels move to monospace */
+
+  --site-fs-hero: clamp(56px,8.6vw,124px);
+  --site-fs-h2: clamp(38px,5.6vw,80px);
+  --site-fs-h2-split: clamp(38px,5vw,72px);
+  --site-fs-h3: clamp(36px,4.6vw,64px);
+  --site-fs-card-title: clamp(26px,2.6vw,36px);
+  --site-fs-lead: clamp(17px,1.7vw,21px);
+  --site-fs-intro: clamp(16px,1.6vw,19px);
+  --site-fs-body: 17px;
+  --site-fs-small: 15px;
+  --site-fs-nav: 13px;
+  --site-fs-label: 12px;
+  --site-fs-micro: 11px;
+
+  --site-track-hero: -0.045em;
+  --site-track-display: -0.04em;
+  --site-track-nav: 0.06em;
+  --site-track-label: 0.08em;
+  --site-track-micro: 0.12em;
+  --site-lh-hero: 0.92;
+  --site-lh-display: 0.98;
+  --site-lh-body: 1.6;
+
+  /* ---- Space + layout ---- */
+  --site-max: 1280px;
+  --site-gutter: 40px;
+  --site-inset: 12px;
+  --site-section-y: clamp(88px,11vw,150px);
+  --site-section-y-tight: clamp(64px,8vw,110px);
+  --site-hero-top: clamp(56px,9vw,120px);
+  --site-hero-bottom: clamp(56px,8vw,110px);
+  --site-band-y: clamp(72px,9vw,130px);
+  --site-nav-h: 92px;
+  --site-btn-h: 46px;
+  --site-btn-h-lg: 54px;
+  --site-eyebrow-h: 38px;
+
+  /* ---- Radii ---- */
+  --site-r-panel: 28px;
+  --site-r-card-lg: 24px;
+  --site-r-card: 20px;
+  --site-r-tab: 14px;
+  --site-r-pill: 999px;
+
+  /* ---- Shadows ---- */
+  --site-shadow-float: 0 30px 60px -24px rgba(11,31,58,0.55);
+  --site-shadow-lift: 0 24px 48px -22px rgba(0,0,0,0.5);
+
+  /* ---- Motion ---- */
+  --site-dur-fast: 150ms;
+  --site-dur-base: 240ms;
+  --site-dur-slow: 400ms;
+  --site-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (max-width: 600px) {
+  :root { --site-gutter: 20px; }
+}
+
+/* ---- Layout utilities (media queries can't be inline) ---- */
+.site-grid-hero  { display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; }
+.site-grid-split { display:grid; grid-template-columns:1fr 1fr; }
+.site-grid-about { display:grid; grid-template-columns:1fr 1fr; gap:clamp(36px,6vw,96px); align-items:center; }
+.site-grid-aud   { display:grid; grid-template-columns:0.9fr 1fr 1fr; gap:24px; align-items:start; }
+.site-grid-2     { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.site-desk { display:block; }
+.site-mob  { display:none; }
+.site-nav-desk { display:flex; }
+.site-nav-mob  { display:none; }
+@media (max-width: 1000px) {
+  .site-grid-hero, .site-grid-split, .site-grid-about, .site-grid-aud { grid-template-columns:1fr; }
+  .site-desk { display:none; }
+  .site-mob  { display:flex; }
+  .site-nav-desk { display:none; }
+  .site-nav-mob  { display:flex; }
+}
+@media (max-width: 600px) {
+  .site-grid-2 { grid-template-columns:1fr; }
+  .site-wrap-mob { white-space:normal !important; }
+}
+.site-scroll-x { display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; }
+.site-scroll-x::-webkit-scrollbar { display:none; }
+
+</style>
+<style>
+  html, body { margin:0; padding:0; background:#FAFAF8; }
+  * { box-sizing:border-box; }
+  a { color:#0E6B4F; text-decoration:none; }
+  a:hover { color:#0B1F3A; }
+  button, input, select { font-family:inherit; }
+  input:focus, select:focus { outline:none; box-shadow:0 0 0 3px rgba(14,107,79,0.22); border-color:#0E6B4F !important; }
+  button:focus-visible, a:focus-visible { outline:2px solid #0E6B4F; outline-offset:2px; }
+  .ac-wrap { max-width:1200px; margin:0 auto; padding:0 20px; width:100%; }
+  .ac-dash { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; }
+  .ac-two { display:grid; grid-template-columns:minmax(0,1fr); gap:16px; }
+  .ac-pad { padding:22px; }
+  .ac-dsk { display:none; }
+  .ac-mobbar { position:sticky; bottom:0; z-index:5; padding:12px 20px calc(12px + env(safe-area-inset-bottom)); background:rgba(250,250,248,0.94); backdrop-filter:blur(8px); border-top:1px solid #DDE2E7; }
+  @media (min-width:900px) {
+    .ac-wrap { padding:0 40px; }
+    .ac-dash { grid-template-columns:minmax(0,1.15fr) minmax(0,0.85fr); gap:24px; }
+    .ac-span { grid-column:1 / -1; }
+    .ac-two { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; }
+    .ac-pad { padding:32px; }
+    .ac-dsk { display:inline-flex; }
+    .ac-mobbar { display:none; }
+  }
+</style>
+</helmet>
+
+<div style="font-family:var(--site-font-body);color:#1C2430;background:#FAFAF8;min-height:100vh;display:flex;flex-direction:column" data-screen-label="Manager Test account">
+
+  <header class="ac-wrap" style="height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #DDE2E7">
+    <a href="./Manager Test.dc.html" style="display:flex;align-items:center;gap:12px;min-width:0">
+      <img src="assets/750a7c4a-2463-453b-85d1-4dcd040594e5.png" alt="Beta" style="height:24px;width:auto;display:block">
+      <span style="font-family:var(--site-font-display);font-size:22px;font-weight:700;letter-spacing:-0.035em;line-height:1;color:#0B1F3A">beta</span>
+      <span class="ac-dsk" style="width:1px;height:20px;background:#DDE2E7"></span>
+      <span class="ac-dsk" style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684;white-space:nowrap">The Manager Test</span>
+    </a>
+    <sc-if value="{{ signedIn }}" hint-placeholder-val="{{ true }}">
+      <nav aria-label="Account" style="display:flex;align-items:center;gap:4px">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="2">
+          <button type="button" sc-camel-on-click="{{ n.onClick }}" aria-current="{{ n.current }}" style="min-height:44px;padding:0 14px;border:none;border-radius:999px;background:{{ n.bg }};color:#0B1F3A;font-size:14px;font-weight:600;cursor:pointer">{{ n.label }}</button>
+        </sc-for>
+        <span aria-hidden="true" style="width:36px;height:36px;margin-left:6px;border-radius:50%;background:#0B1F3A;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">KH</span>
+      </nav>
+    </sc-if>
+  </header>
+
+  <main style="flex:1">
+
+    <!-- SIGN IN / CHECK / EXPIRED -->
+    <sc-if value="{{ isAuth }}" hint-placeholder-val="{{ false }}">
+      <section class="ac-wrap" style="padding-top:clamp(40px,9vw,112px);padding-bottom:clamp(56px,9vw,120px);display:flex;justify-content:center">
+        <div class="ac-pad" style="width:100%;max-width:480px;background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px">
+          <span style="width:56px;height:56px;border-radius:18px;background:{{ authIconBg }};color:{{ authIconFg }};display:flex;align-items:center;justify-content:center">
+            <sc-if value="{{ isExpired }}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></sc-if>
+            <sc-if value="{{ notExpired }}" hint-placeholder-val="{{ true }}"><svg width="26" height="26" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></sc-if>
+          </span>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <h1 style="margin:0;font-family:var(--site-font-display);font-size:clamp(28px,3vw,34px);font-weight:700;letter-spacing:-0.035em;line-height:1.08;color:#0B1F3A">{{ authTitle }}</h1>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#4C5A6E;text-wrap:pretty">{{ authBody }}</p>
+          </div>
+          <sc-if value="{{ showEmailForm }}" hint-placeholder-val="{{ true }}">
+            <form sc-camel-on-submit="{{ sendLink }}" novalidate="{{ true }}" style="display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <label for="ac-email" style="font-size:14px;font-weight:600;color:#0B1F3A">Email</label>
+                <input id="ac-email" type="email" autocomplete="email" inputmode="email" value="{{ email }}" sc-camel-on-input="{{ setEmail }}" aria-invalid="{{ emailInv }}" style="height:52px;padding:0 14px;border-radius:12px;border:1px solid {{ emailBorder }};background:#FFFFFF;font-size:16px;color:#1C2430">
+                <sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size:13px;color:#A23B2E">{{ emailErr }}</span></sc-if>
+              </div>
+              <button type="submit" style="height:56px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">{{ authCta }}</button>
+              <span style="font-size:13px;line-height:1.5;color:#6B7684">No password needed. We'll email you a link that signs you in.</span>
+            </form>
+          </sc-if>
+          <sc-if value="{{ isCheck }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:12px;padding-top:4px">
+              <div style="padding:14px 16px;border-radius:14px;background:#E7F1ED;font-size:15px;line-height:1.5;color:#0B1F3A">Sent to <strong>{{ email }}</strong>. The link works once, for 15 minutes.</div>
+              <button type="button" sc-camel-on-click="{{ resend }}" style="height:52px;border-radius:999px;border:1px solid #0B1F3A;background:#FFFFFF;color:#0B1F3A;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">{{ resendLabel }}</button>
+              <button type="button" sc-camel-on-click="{{ goSignin }}" style="align-self:flex-start;min-height:44px;border:none;background:transparent;padding:0;font-size:15px;font-weight:600;color:#0E6B4F;cursor:pointer">Use a different email</button>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- DASHBOARD -->
+    <sc-if value="{{ isDash }}" hint-placeholder-val="{{ false }}">
+      <section class="ac-wrap" style="padding-top:clamp(24px,4vw,48px);padding-bottom:clamp(40px,6vw,80px);display:flex;flex-direction:column;gap:clamp(20px,3vw,32px)">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Your dashboard</span>
+            <h1 style="margin:0;font-family:var(--site-font-display);font-size:clamp(30px,3.6vw,44px);font-weight:700;letter-spacing:-0.04em;line-height:1.04;color:#0B1F3A">Welcome back, Karim</h1>
+            <sc-if value="{{ multiAcct }}" hint-placeholder-val="{{ true }}">
+              <div style="position:relative;margin-top:6px;align-self:flex-start">
+                <button type="button" sc-camel-on-click="{{ toggleAcct }}" aria-haspopup="listbox" aria-expanded="{{ acctOpenStr }}" style="display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 14px 0 16px;border-radius:999px;border:1px solid #DDE2E7;background:#FFFFFF;color:#0B1F3A;font-size:14px;font-weight:600;cursor:pointer"><span style="width:8px;height:8px;border-radius:50%;background:#0E6B4F"></span>{{ acct.broker }} <span style="letter-spacing:0.06em;color:#4C5A6E">{{ acct.mask }}</span><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+                <sc-if value="{{ acctOpen }}" hint-placeholder-val="{{ false }}">
+                  <div role="listbox" aria-label="Trading accounts" style="position:absolute;top:calc(100% + 8px);left:0;z-index:10;min-width:300px;padding:8px;border-radius:16px;background:#FFFFFF;border:1px solid #DDE2E7;box-shadow:0 18px 40px rgba(11,31,58,0.14);display:flex;flex-direction:column;gap:2px">
+                    <sc-for list="{{ acctList }}" as="a" hint-placeholder-count="2">
+                      <button type="button" role="option" aria-selected="{{ a.sel }}" sc-camel-on-click="{{ a.pick }}" style="display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;min-height:56px;padding:8px 12px;border:none;border-radius:12px;background:{{ a.bg }};text-align:left;cursor:pointer">
+                        <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700;color:#0B1F3A">{{ a.broker }} <span style="font-weight:600;letter-spacing:0.06em;color:#4C5A6E">{{ a.mask }}</span></span><span style="font-size:12px;color:#6B7684">{{ a.meta }}</span></span>
+                        <span style="font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A">{{ a.score }}</span>
+                      </button>
+                    </sc-for>
+                    <button type="button" sc-camel-on-click="{{ upload }}" style="display:flex;align-items:center;gap:8px;min-height:48px;padding:0 12px;margin-top:4px;border:none;border-top:1px solid #EEF0F2;border-radius:0 0 10px 10px;background:transparent;color:#0E6B4F;font-size:14px;font-weight:600;cursor:pointer;text-align:left">+ Add another account</button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+            <sc-if value="{{ oneAcct }}" hint-placeholder-val="{{ false }}">
+              <span style="margin-top:6px;align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:36px;padding:0 14px;border-radius:999px;background:#F3F4F2;color:#0B1F3A;font-size:14px;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:#0E6B4F"></span>{{ acct.broker }} <span style="letter-spacing:0.06em;color:#4C5A6E">{{ acct.mask }}</span></span>
+            </sc-if>
+          </div>
+          <button type="button" sc-camel-on-click="{{ upload }}" class="ac-dsk" style="align-items:center;gap:10px;height:56px;padding:0 28px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>Upload a new statement</button>
+        </div>
+
+        <sc-if value="{{ isFirstFull }}" hint-placeholder-val="{{ false }}">
+          <div role="status" class="ac-pad" style="display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:20px 24px;border-radius:24px;background:#E7F1ED;border:1px solid rgba(14,107,79,0.2)">
+            <span style="width:64px;height:64px;border-radius:50%;background:#FFFFFF;border:2px solid #0E6B4F;color:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Your first full score</span>
+              <span style="font-family:var(--site-font-display);font-size:clamp(22px,2.4vw,28px);font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:#0B1F3A">Your record is now deep enough for a full score.</span>
+              <span style="font-size:15px;line-height:1.55;color:#1C2430;max-width:70ch">You now have more than 3 months and 30 trades, so all five pillars count in full. Your early scores stay in your history, marked as early.</span>
+            </div>
+          </div>
+        </sc-if>
+        <div class="ac-dash">
+          <!-- latest -->
+          <div style="position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(168deg,#0B1F3A 0%,#0D2C3F 40%,#0E4A44 82%,#0E6B4F 122%);color:#F5F6F4">
+            <div aria-hidden="true" style="position:absolute;right:-30%;bottom:-40%;width:90%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(63,145,116,0.28),rgba(63,145,116,0))"></div>
+            <div class="ac-pad" style="position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:24px 32px">
+              <div style="position:relative;width:156px;height:156px;flex-shrink:0">
+                <svg sc-camel-view-box="0 0 200 200" style="width:100%;height:100%;transform:rotate(-90deg)"><circle cx="100" cy="100" r="88" fill="none" stroke="rgba(245,246,244,0.14)" stroke-width="12"></circle><circle cx="100" cy="100" r="88" fill="none" stroke="#9FDCBE" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ dash }}"></circle></svg>
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-family:var(--site-font-display);font-size:60px;font-weight:700;letter-spacing:-0.05em;line-height:0.9">{{ latest.score }}</span><span style="font-size:12px;font-weight:600;color:#C3CBD5;margin-top:4px">out of 100</span></div>
+              </div>
+              <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#C3CBD5">Latest result</span>
+                <span style="font-family:var(--site-font-display);font-size:28px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;color:#9FDCBE">{{ latest.band }}</span>
+                <span style="font-size:14px;line-height:1.5;color:rgba(245,246,244,0.85)">{{ latest.date }} · {{ latest.meta }}</span>
+                <sc-if value="{{ latest.delta }}" hint-placeholder-val="{{ true }}"><span style="align-self:flex-start;display:inline-flex;align-items:center;min-height:28px;padding:4px 12px;border-radius:999px;background:rgba(159,220,190,0.14);border:1px solid rgba(159,220,190,0.3);font-size:13px;font-weight:700;color:#9FDCBE">{{ latest.delta }}</span></sc-if>
+                <a href="./Manager Test Report PDF.dc.html" style="margin-top:6px;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border-radius:999px;border:1px solid rgba(245,246,244,0.4);color:#F5F6F4;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase" style-hover="background:rgba(245,246,244,0.08);color:#FFFFFF"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path></svg>Download report</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- goal -->
+          <div class="ac-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:14px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Your goal</span>
+            <sc-if value="{{ gActive }}" hint-placeholder-val="{{ true }}">
+              <sc-if value="{{ gAuto }}" hint-placeholder-val="{{ true }}"><span style="align-self:flex-start;display:inline-flex;align-items:center;min-height:26px;padding:3px 10px;border-radius:999px;background:#E6ECF5;font-size:12px;font-weight:700;color:#0B1F3A">Set automatically</span></sc-if>
+              <span style="font-family:var(--site-font-display);font-size:clamp(24px,2.4vw,30px);font-weight:700;letter-spacing:-0.03em;line-height:1.1;color:#0B1F3A">{{ goal.title }}</span>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ goal.pct }}" aria-label="Goal progress" style="height:10px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ goal.w }};background:#0E6B4F;border-radius:999px"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;color:#4C5A6E"><span>{{ goal.fromLabel }}</span><span style="font-weight:700;color:#0B1F3A">{{ goal.nowLabel }}</span><span>{{ goal.toLabel }}</span></div>
+              </div>
+              <p style="margin:0;font-size:14px;line-height:1.5;color:#1C2430">{{ goal.note }}</p>
+              <button type="button" sc-camel-on-click="{{ openChange }}" style="align-self:flex-start;min-height:44px;border:none;background:transparent;padding:0;font-size:14px;font-weight:700;color:#0E6B4F;cursor:pointer">Change goal</button>
+            </sc-if>
+            <sc-if value="{{ gChange }}" hint-placeholder-val="{{ false }}">
+              <div role="radiogroup" aria-label="Goal type" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <sc-for list="{{ kinds }}" as="k" hint-placeholder-count="2">
+                  <button type="button" role="radio" aria-checked="{{ k.on }}" sc-camel-on-click="{{ k.pick }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:72px;padding:12px 14px;border-radius:14px;border:1.5px solid {{ k.border }};background:{{ k.bg }};text-align:left;cursor:pointer"><span style="font-size:14px;font-weight:700;color:#0B1F3A">{{ k.label }}</span><span style="font-size:12px;line-height:1.4;color:#4C5A6E">{{ k.help }}</span></button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ dPillar }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:10px">
+                  <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#0B1F3A">Pillar<sc-raw-select value="{{ draftPillar }}" sc-camel-on-change="{{ setDraftPillar }}" style="height:46px;padding:0 10px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:15px;color:#0B1F3A"><sc-for list="{{ pillarOpts }}" as="o" hint-placeholder-count="5"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></sc-raw-select></label>
+                  <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#0B1F3A">Target<sc-raw-select value="{{ draftTarget }}" sc-camel-on-change="{{ setDraftTarget }}" style="height:46px;padding:0 10px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:15px;color:#0B1F3A"><sc-for list="{{ targetOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o }}">{{ o }}</option></sc-for></sc-raw-select></label>
+                </div>
+              </sc-if>
+              <sc-if value="{{ dBand }}" hint-placeholder-val="{{ false }}">
+                <label style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#0B1F3A">Band to reach<sc-raw-select value="{{ draftBand }}" sc-camel-on-change="{{ setDraftBand }}" style="height:46px;padding:0 10px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:15px;color:#0B1F3A"><sc-for list="{{ bandOpts }}" as="o" hint-placeholder-count="1"><option value="{{ o }}">{{ o }}</option></sc-for></sc-raw-select></label>
+              </sc-if>
+              <div style="display:flex;gap:10px">
+                <button type="button" sc-camel-on-click="{{ saveGoal }}" style="height:46px;padding:0 22px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.04em;cursor:pointer">Save goal</button>
+                <button type="button" sc-camel-on-click="{{ cancelChange }}" style="height:46px;padding:0 18px;border-radius:999px;border:1px solid #DDE2E7;background:#FFFFFF;color:#0B1F3A;font-size:13px;font-weight:700;cursor:pointer">Cancel</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ gReached }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:14px">
+                <span style="width:48px;height:48px;flex-shrink:0;border-radius:50%;background:#E7F1ED;color:#0E6B4F;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+                <span style="font-family:var(--site-font-display);font-size:clamp(22px,2.2vw,26px);font-weight:700;letter-spacing:-0.025em;line-height:1.15;color:#0B1F3A">Goal reached: Discipline 70</span>
+              </div>
+              <p style="margin:0;font-size:15px;line-height:1.5;color:#1C2430">Up from 47 when you set it in May. Your size after a loss is now flat, and it shows.</p>
+              <div style="display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:16px;background:#FAFAF8;border:1px solid #DDE2E7">
+                <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Suggested next goal</span>
+                <span style="font-size:16px;font-weight:700;color:#0B1F3A">Track record depth from 62 to 70</span>
+                <div style="display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center">
+                  <button type="button" sc-camel-on-click="{{ takeNext }}" style="height:44px;padding:0 20px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.04em;cursor:pointer">Set as my next goal</button>
+                  <button type="button" sc-camel-on-click="{{ openChange }}" style="min-height:44px;border:none;background:transparent;padding:0;font-size:14px;font-weight:700;color:#0E6B4F;cursor:pointer">Choose a different goal</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- history -->
+          <div class="ac-span ac-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Score history</span><span style="font-size:13px;color:#6B7684">{{ histHint }}</span></div>
+            <sc-if value="{{ hasHistory }}" hint-placeholder-val="{{ true }}">
+              <div style="display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px">
+                <div style="position:relative;height:220px;font-size:11px;color:#6B7684"><span style="position:absolute;top:0;transform:translateY(-50%)">80</span><span style="position:absolute;top:50%;transform:translateY(-50%)">60</span><span style="position:absolute;bottom:0;transform:translateY(50%)">40</span></div>
+                <div style="position:relative;height:220px">
+                  <div style="position:absolute;inset:0;border-top:1px dashed #DDE2E7;border-bottom:1px solid #DDE2E7"></div>
+                  <div style="position:absolute;left:0;right:0;top:50%;border-top:1px dashed #DDE2E7"></div>
+                  <svg sc-camel-view-box="0 0 100 100" sc-camel-preserve-aspect-ratio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><polyline points="{{ linePtsEarly }}" fill="none" stroke="#7C8AA0" stroke-width="2" stroke-dasharray="5 6" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"></polyline><polyline points="{{ linePts }}" fill="none" stroke="#0E6B4F" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"></polyline></svg>
+                  <sc-for list="{{ points }}" as="p" hint-placeholder-count="4">
+                    <button type="button" sc-camel-on-click="{{ p.select }}" sc-camel-on-mouse-enter="{{ p.select }}" sc-camel-on-focus="{{ p.select }}" aria-pressed="{{ p.on }}" aria-label="{{ p.aria }}" style="position:absolute;left:{{ p.x }};top:{{ p.y }};transform:translate(-50%,-50%);width:44px;height:44px;border:none;background:transparent;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center">
+                      <span style="width:{{ p.size }};height:{{ p.size }};border-radius:50%;background:{{ p.fill }};border:2.5px solid {{ p.stroke }};box-shadow:0 0 0 {{ p.ring }} {{ p.ringCol }}"></span>
+                    </button>
+                    <span style="position:absolute;left:{{ p.x }};top:{{ p.labelY }};transform:translate(-50%,-100%);font-family:var(--site-font-display);font-size:16px;font-weight:700;color:{{ p.labelCol }};pointer-events:none">{{ p.score }}</span>
+                    <sc-if value="{{ p.early }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;left:{{ p.x }};top:{{ p.earlyY }};transform:translateX(-50%);padding:1px 7px;border-radius:999px;background:#F3F4F2;font-size:11px;font-weight:700;letter-spacing:0.04em;color:#4C5A6E;pointer-events:none">Early</span></sc-if>
+                  </sc-for>
+                </div>
+                <span></span>
+                <div style="position:relative;height:20px;font-size:12px;color:#6B7684"><sc-for list="{{ points }}" as="p" hint-placeholder-count="4"><span style="position:absolute;left:{{ p.x }};transform:translateX({{ p.tx }});white-space:nowrap">{{ p.short }}</span></sc-for></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px 20px;font-size:12.5px;color:#4C5A6E">
+                <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:#0E6B4F"></span>Full score</span>
+                <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:#FFFFFF;border:2px solid #7C8AA0"></span>Early score, under 3 months or 30 trades</span>
+              </div>
+              <sc-if value="{{ hasStarter }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px;padding:12px 16px;border-radius:14px;border:1px dashed #B8C0CA">
+                  <span style="width:36px;height:36px;border-radius:10px;background:#F3F4F2;color:#4C5A6E;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg></span>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700;color:#0B1F3A">2 Feb 2026 · Starter read</span><span style="font-size:13px;color:#4C5A6E">3 closed trades. No score yet, so it isn't on the chart.</span></div>
+                </div>
+              </sc-if>
+              <div style="padding:18px;border-radius:16px;background:#FAFAF8;border:1px solid #DDE2E7;display:flex;flex-direction:column;gap:12px">
+                <span style="font-size:14px;font-weight:700;color:#0B1F3A">{{ selTitle }}</span>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 20px">
+                  <sc-for list="{{ selPillars }}" as="q" hint-placeholder-count="5">
+                    <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#1C2430">{{ q.name }}</span><span style="font-weight:700;color:#0B1F3A">{{ q.score }}</span></div><div style="height:6px;border-radius:999px;background:#E7F1ED;overflow:hidden"><div style="height:100%;width:{{ q.w }};background:#0E6B4F;border-radius:999px"></div></div></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ noHistory }}" hint-placeholder-val="{{ false }}">
+              <div style="display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:20px;padding:22px;border-radius:16px;border:1px dashed #B8C0CA">
+                <span style="width:52px;height:52px;border-radius:50%;border:2.5px solid #0E6B4F;display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-size:18px;font-weight:700;color:#0B1F3A">{{ latest.score }}</span>
+                <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:var(--site-font-display);font-size:19px;font-weight:700;color:#0B1F3A">Upload a newer statement to start your history</span><span style="font-size:14px;line-height:1.5;color:#4C5A6E">You have one result so far. Each new upload adds a point to this chart, so you can see what changed.</span></div>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- coach notes -->
+          <div class="ac-span ac-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Your coach notes</span><span style="font-size:13px;color:#6B7684">{{ notesHint }}</span></div>
+            <div class="ac-two">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1.5px solid #0E6B4F;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#0E6B4F">Working for you</span>
+                <sc-for list="{{ working }}" as="n" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:16px;background:#E7F1ED">
+                    <sc-if value="{{ n.tag }}" hint-placeholder-val="{{ true }}"><span style="align-self:flex-start;padding:3px 10px;border-radius:999px;background:#FFFFFF;font-size:11px;font-weight:700;letter-spacing:0.04em;color:#0E6B4F">{{ n.tag }}</span></sc-if>
+                    <span style="font-size:15px;line-height:1.5;font-weight:500;color:#0B1F3A">{{ n.text }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1.5px solid #A9781F;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#7A5A16">Costing you</span>
+                <sc-for list="{{ costing }}" as="n" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:16px;background:#F5EBD6">
+                    <sc-if value="{{ n.tag }}" hint-placeholder-val="{{ true }}"><span style="align-self:flex-start;padding:3px 10px;border-radius:999px;background:#FFFFFF;font-size:11px;font-weight:700;letter-spacing:0.04em;color:{{ n.tagFg }}">{{ n.tag }}</span></sc-if>
+                    <span style="font-size:15px;line-height:1.5;font-weight:500;color:#3D2C0B">{{ n.text }}</span>
+                    <span style="padding-top:8px;border-top:1px solid rgba(122,90,22,0.2);font-size:14px;line-height:1.5;font-weight:700;color:#3D2C0B">{{ n.action }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <!-- past reports -->
+          <div class="ac-span ac-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684;margin-bottom:8px">Past reports</span>
+            <sc-for list="{{ reports }}" as="r" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:16px;padding:10px 0;border-top:1px solid #EEF0F2">
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;color:#0B1F3A">{{ r.date }}</span><span style="font-size:13px;color:#6B7684">{{ r.band }}</span></div>
+                <span style="font-family:var(--site-font-display);font-size:22px;font-weight:700;color:#0B1F3A;font-variant-numeric:tabular-nums">{{ r.score }}</span>
+                <a href="./Manager Test Report PDF.dc.html" aria-label="{{ r.aria }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;min-width:44px;padding:0 16px;border-radius:999px;border:1px solid #DDE2E7;color:#0B1F3A;font-size:13px;font-weight:600" style-hover="border-color:#0B1F3A;color:#0B1F3A"><svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path></svg><span class="ac-dsk">PDF</span></a>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <p style="margin:0;max-width:80ch;font-size:13px;line-height:1.6;color:#6B7684">The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.</p>
+      </section>
+      <div class="ac-mobbar">
+        <button type="button" sc-camel-on-click="{{ upload }}" style="width:100%;height:56px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>Upload a new statement</button>
+      </div>
+    </sc-if>
+
+    <!-- SETTINGS -->
+    <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+      <section class="ac-wrap" style="padding-top:clamp(24px,4vw,48px);padding-bottom:clamp(56px,8vw,104px);display:flex;flex-direction:column;gap:20px;max-width:800px">
+        <h1 style="margin:0;font-family:var(--site-font-display);font-size:clamp(30px,3.6vw,44px);font-weight:700;letter-spacing:-0.04em;line-height:1.04;color:#0B1F3A">Settings</h1>
+        <sc-if value="{{ notDeleted }}" hint-placeholder-val="{{ true }}">
+          <form sc-camel-on-submit="{{ save }}" class="ac-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:18px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Your details</span>
+            <div style="display:flex;flex-direction:column;gap:7px"><label for="st-name" style="font-size:14px;font-weight:600;color:#0B1F3A">Full name</label><input id="st-name" type="text" autocomplete="name" value="{{ sName }}" sc-camel-on-input="{{ setSName }}" style="height:50px;padding:0 14px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:16px;color:#1C2430"></div>
+            <div style="display:flex;flex-direction:column;gap:7px"><label for="st-phone" style="font-size:14px;font-weight:600;color:#0B1F3A">Phone (WhatsApp)</label>
+              <div style="display:flex;gap:8px"><sc-raw-select aria-label="Country code" value="{{ sCc }}" sc-camel-on-change="{{ setSCc }}" style="height:50px;width:112px;flex-shrink:0;padding:0 10px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:15px;font-weight:600;color:#0B1F3A"><sc-for list="{{ countries }}" as="k" hint-placeholder-count="1"><option value="{{ k.v }}">{{ k.l }}</option></sc-for></sc-raw-select><input id="st-phone" type="tel" autocomplete="tel-national" inputmode="tel" value="{{ sPhone }}" sc-camel-on-input="{{ setSPhone }}" style="height:50px;min-width:0;flex:1;padding:0 14px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:16px;color:#1C2430"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:7px"><label for="st-email" style="font-size:14px;font-weight:600;color:#0B1F3A">Email</label><input id="st-email" type="email" autocomplete="email" value="{{ sEmail }}" sc-camel-on-input="{{ setSEmail }}" style="height:50px;padding:0 14px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:16px;color:#1C2430"><span style="font-size:13px;color:#6B7684">Sign-in links and reports go to this address.</span></div>
+
+            <span style="margin-top:8px;padding-top:20px;border-top:1px solid #DDE2E7;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6B7684">Email preferences</span>
+            <sc-for list="{{ prefs }}" as="p" hint-placeholder-count="2">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:44px">
+                <div style="display:flex;flex-direction:column;gap:2px"><span id="{{ p.id }}" style="font-size:15px;font-weight:600;color:#0B1F3A">{{ p.label }}</span><span style="font-size:13px;line-height:1.45;color:#6B7684">{{ p.help }}</span></div>
+                <button type="button" role="switch" aria-checked="{{ p.on }}" aria-labelledby="{{ p.id }}" sc-camel-on-click="{{ p.toggle }}" style="position:relative;width:52px;height:32px;flex-shrink:0;border:none;border-radius:999px;background:{{ p.bg }};cursor:pointer;padding:0"><span style="position:absolute;top:3px;left:{{ p.knob }};width:26px;height:26px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(11,31,58,0.25);transition:left 0.15s"></span></button>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:center;gap:16px;padding-top:6px">
+              <button type="submit" style="height:52px;padding:0 28px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">Save changes</button>
+              <sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}"><span role="status" style="font-size:14px;font-weight:600;color:#0E6B4F">Saved</span></sc-if>
+            </div>
+          </form>
+
+          <div class="ac-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:14px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#A23B2E">Delete account</span>
+            <p style="margin:0;font-size:15px;line-height:1.55;color:#1C2430">Deletes your profile, score history, reports and goals. Your statements were never stored.</p>
+            <sc-if value="{{ notConfirming }}" hint-placeholder-val="{{ true }}">
+              <button type="button" sc-camel-on-click="{{ askDelete }}" style="align-self:flex-start;height:48px;padding:0 22px;border-radius:999px;border:1px solid #A23B2E;background:#FFFFFF;color:#A23B2E;font-size:13px;font-weight:700;letter-spacing:0.04em;cursor:pointer">Delete my account and data</button>
+            </sc-if>
+            <sc-if value="{{ confirming }}" hint-placeholder-val="{{ false }}">
+              <div role="alertdialog" aria-labelledby="st-del-t" style="display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:16px;background:#F5E4E1;border:1px solid rgba(162,59,46,0.25)">
+                <span id="st-del-t" style="font-family:var(--site-font-display);font-size:20px;font-weight:700;color:#7A2A20">Delete your account and data?</span>
+                <span style="font-size:14px;line-height:1.55;color:#1C2430">This can't be undone. You can always take the test again later with a new account.</span>
+                <div style="display:flex;flex-wrap:wrap;gap:10px">
+                  <button type="button" sc-camel-on-click="{{ doDelete }}" style="height:48px;padding:0 22px;border:none;border-radius:999px;background:#A23B2E;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.04em;cursor:pointer">Yes, delete everything</button>
+                  <button type="button" sc-camel-on-click="{{ cancelDelete }}" style="height:48px;padding:0 22px;border-radius:999px;border:1px solid #0B1F3A;background:#FFFFFF;color:#0B1F3A;font-size:13px;font-weight:700;letter-spacing:0.04em;cursor:pointer">Cancel</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ deleted }}" hint-placeholder-val="{{ false }}">
+          <div role="status" class="ac-pad" style="background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+            <span style="font-family:var(--site-font-display);font-size:24px;font-weight:700;color:#0B1F3A">Your account and data have been deleted.</span>
+            <span style="font-size:15px;line-height:1.55;color:#4C5A6E">We've sent a confirmation to your email. Thank you for taking the Manager Test.</span>
+            <a href="./Manager Test.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-size:15px;font-weight:700;color:#0E6B4F">Back to the Manager Test</a>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;signin&quot;,&quot;check&quot;,&quot;expired&quot;,&quot;dashboard&quot;,&quot;first&quot;,&quot;settings&quot;,&quot;firstfull&quot;],&quot;default&quot;:&quot;signin&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { view: 'signin', email: '', emailErr: '', resent: false, sel: null, acctIx: 0, acctOpen: false, multi: true, mode: 'full', goalState: 'auto', goal: { kind: 'pillar', pillar: 1, from: 47, target: 70 }, draft: null, sName: 'Karim Haddad', sCc: '+961', sPhone: '3 100 200', sEmail: 'karim@example.com', retest: true, monthly: true, updates: false, saved: false, confirm: false, deleted: false };
+
+  componentDidMount() {
+    const q = new URLSearchParams(window.location.search);
+    const v = q.get('view') || this.props.view || 'signin';
+    const s = { view: v };
+    if (v === 'expired' || v === 'check') s.email = 'karim@example.com';
+    if (v === 'first') { s.view = 'dashboard'; s.mode = 'first'; }
+    if (v === 'firstfull') { s.view = 'dashboard'; s.mode = 'firstfull'; }
+    if (q.get('accounts') === 'one') s.multi = false;
+    if (q.get('acctmenu') === '1') s.acctOpen = true;
+    const g = q.get('goal'); if (g) { s.goalState = g; if (g === 'change') s.draft = { kind: q.get('kind') || 'pillar', pillar: 1, target: 70, band: 'Professional Grade' }; }
+    if (!g && (q.get('goalset') === '1')) s.goalState = 'active';
+    if (q.get('confirm') === '1') s.confirm = true;
+    this.setState(s);
+  }
+  componentDidUpdate(prev) { if (prev.view !== this.props.view && this.props.view) this.componentDidMount(); }
+
+  data() {
+    const A0 = [['3 Mar 2026', 'Mar', 48, [55, 40, 52, 47, 44], true], ['7 Apr 2026', 'Apr', 51, [58, 43, 54, 50, 46], true], ['12 May 2026', 'May', 52, [60, 41, 55, 50, 49]], ['14 Jul 2026', 'Jul', 58, [64, 47, 60, 57, 52]], ['15 Sep 2026', 'Sep', 61, [68, 52, 64, 60, 56]], ['16 Nov 2026', 'Nov', 67, [74, 58, 71, 66, 62]]];
+    const A1 = [['10 Aug 2026', 'Aug', 44, [52, 38, 47, 44, 36]], ['12 Oct 2026', 'Oct', 49, [57, 42, 51, 49, 40]]];
+    return [
+      { broker: 'IC Markets', mask: '••• 482', meta: 'Live account · 14 months · 186 trades', H: A0, starter: true },
+      { broker: 'Exness', mask: '••• 917', meta: 'Live account · 8 months · 112 trades', H: A1, starter: false },
+    ];
+  }
+
+  renderVals() {
+    const s = this.state, mode = s.mode;
+    const accts = this.data(), ai = s.multi ? s.acctIx : 0, A = accts[ai];
+    let H = A.H, starter = A.starter;
+    if (mode === 'first') { H = [A.H[A.H.length - 1]]; starter = false; }
+    if (mode === 'firstfull' && ai === 0) H = A.H.slice(0, 3);
+    const band = (x) => (x >= 80 ? 'Professional Grade' : x >= 60 ? 'Emerging Manager' : x >= 40 ? 'Building' : 'Developing');
+    const yPct = (v) => 100 - ((v - 40) / 40) * 100;
+    const xPct = (i) => (H.length === 1 ? 50 : 4 + (i / (H.length - 1)) * 92);
+    const sel = s.sel == null ? H.length - 1 : Math.min(s.sel, H.length - 1), cur = H[sel];
+    const C = 2 * Math.PI * 88, L = H[H.length - 1], P = H[H.length - 2];
+    const PN = ['Risk control', 'Discipline', 'Consistency', 'Risk-adjusted return', 'Track record depth'];
+    const lastEarly = H.reduce((k, h, i) => (h[4] ? i : k), -1);
+    const pt = (h, i) => xPct(i).toFixed(2) + ',' + yPct(h[2]).toFixed(2);
+    const auth = { signin: ['Sign in to The Manager Test', 'Enter the email you used for your report. We\'ll send you a sign-in link.', 'Send sign-in link'],
+      check: ['Check your email', 'We sent you a sign-in link.', ''],
+      expired: ['This sign-in link has expired', 'Links work once, for 15 minutes. Enter your email and we\'ll send you a new one.', 'Send a new link'] }[s.view] || ['', '', ''];
+    const go = (v) => () => { this.setState({ view: v, saved: false }); window.scrollTo(0, 0); };
+    const first = mode === 'first';
+    const W = [['The London session is your edge: 64% of your profit comes from it.', 'Improved'], ['Your average loss stays under 1% of the account.', 'Improved'], ['Steady pace: 4 to 6 trades a week for 14 months.', 'Improved']];
+    const K = [['Gold produced 70% of your losses. Without it, your profit factor would be 1.9.', 'Pause gold or trade it at half size until you understand why it costs you.', 'Still costing you'], ['After a loss, you trade 1.6× bigger.', 'Keep the next trade after a loss at the same size or smaller.', 'Improved'], ['A third of your losing trades come on Fridays.', 'Stop opening new trades after Friday midday for one month.', 'Still costing you']];
+    // goal
+    const g = s.goal, lp = L[3];
+    let goal;
+    if (g.kind === 'band') {
+      const min = { 'Building': 40, 'Emerging Manager': 60, 'Professional Grade': 80 }[g.band] || 80, from = g.from ?? L[2];
+      const pct = Math.max(0, Math.min(100, Math.round(((L[2] - from) / Math.max(1, min - from)) * 100)));
+      goal = { title: 'Reach ' + g.band, pct, w: pct + '%', fromLabel: 'Started at ' + from, nowLabel: L[2] + ' now', toLabel: g.band + ' at ' + min, note: (min - L[2]) + ' points to go on your overall score.' };
+    } else {
+      const now = lp[g.pillar], pct = Math.max(0, Math.min(100, Math.round(((now - g.from) / Math.max(1, g.target - g.from)) * 100)));
+      goal = { title: PN[g.pillar] + ' from ' + now + ' to ' + g.target, pct, w: pct + '%', fromLabel: 'Started at ' + g.from, nowLabel: now + ' now', toLabel: 'Goal ' + g.target,
+        note: s.goalState === 'auto' ? 'We picked your lowest pillar. You can change it any time.' : (g.target - now) + ' points to go. Your biggest lever: keep your size flat after a loss.' };
+    }
+    const d = s.draft || { kind: 'pillar', pillar: g.pillar ?? 1, target: g.target ?? 70, band: 'Professional Grade' };
+    const setD = (patch) => this.setState({ draft: { ...d, ...patch } });
+    const curP = lp[Number(d.pillar)];
+    const tgt = [5, 10, 15, 20].map((x) => Math.min(95, Math.ceil((curP + x) / 5) * 5)).filter((x, i, a) => a.indexOf(x) === i);
+    const bandsAbove = ['Building', 'Emerging Manager', 'Professional Grade'].filter((b) => ({ 'Building': 40, 'Emerging Manager': 60, 'Professional Grade': 80 }[b] > L[2]));
+    return {
+      signedIn: ['dashboard', 'settings'].includes(s.view),
+      nav: [['dashboard', 'Dashboard'], ['settings', 'Settings']].map(([k, label]) => ({ label, onClick: go(k), current: s.view === k ? 'page' : 'false', bg: s.view === k ? '#E7F1ED' : 'transparent' })),
+      isAuth: ['signin', 'check', 'expired'].includes(s.view), isCheck: s.view === 'check', isExpired: s.view === 'expired', notExpired: s.view !== 'expired',
+      showEmailForm: s.view === 'signin' || s.view === 'expired',
+      authTitle: auth[0], authBody: auth[1], authCta: auth[2],
+      authIconBg: s.view === 'expired' ? '#F5EBD6' : '#E7F1ED', authIconFg: s.view === 'expired' ? '#7A5A16' : '#0E6B4F',
+      email: s.email, emailErr: s.emailErr, emailInv: s.emailErr ? 'true' : 'false', emailBorder: s.emailErr ? '#A23B2E' : '#DDE2E7',
+      setEmail: (e) => this.setState({ email: e.target.value, emailErr: '' }),
+      sendLink: (e) => { e.preventDefault(); if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.email.trim())) { this.setState({ emailErr: 'Please enter a valid email' }); return; } this.setState({ view: 'check', resent: false }); },
+      resend: () => this.setState({ resent: true }), resendLabel: s.resent ? 'Link sent again' : 'Resend link',
+      goSignin: go('signin'),
+      isDash: s.view === 'dashboard', isSettings: s.view === 'settings',
+      upload: () => { window.location.href = './Manager Test.dc.html'; },
+      multiAcct: s.multi, oneAcct: !s.multi, acct: { broker: A.broker, mask: A.mask },
+      acctOpen: s.acctOpen, acctOpenStr: s.acctOpen ? 'true' : 'false', toggleAcct: () => this.setState({ acctOpen: !s.acctOpen }),
+      acctList: accts.map((a, i) => ({ broker: a.broker, mask: a.mask, meta: a.meta, score: a.H[a.H.length - 1][2], sel: i === ai ? 'true' : 'false', bg: i === ai ? '#E7F1ED' : 'transparent', pick: () => this.setState({ acctIx: i, acctOpen: false, sel: null }) })),
+      isFirstFull: mode === 'firstfull' && ai === 0,
+      dash: (C * L[2] / 100).toFixed(1) + ' ' + C.toFixed(1),
+      latest: { score: L[2], band: band(L[2]), date: L[0], meta: mode === 'firstfull' && ai === 0 ? 'Live account · 3 months · 41 trades' : A.meta, delta: P ? ((L[2] - P[2] >= 0 ? '+' : '') + (L[2] - P[2]) + ' since your last upload') : '' },
+      gActive: s.goalState === 'auto' || s.goalState === 'active', gAuto: s.goalState === 'auto', gChange: s.goalState === 'change', gReached: s.goalState === 'reached', goal,
+      openChange: () => this.setState({ goalState: 'change', draft: { kind: g.kind, pillar: g.pillar ?? 1, target: g.target ?? 70, band: g.band || 'Professional Grade' } }),
+      cancelChange: () => this.setState({ goalState: 'active', draft: null }),
+      kinds: [['pillar', 'Raise a pillar', 'Pick one pillar and a target'], ['band', 'Reach a band', 'Aim for the next band overall']].map(([k, label, help]) => ({ label, help, on: d.kind === k ? 'true' : 'false', border: d.kind === k ? '#0E6B4F' : '#DDE2E7', bg: d.kind === k ? '#E7F1ED' : '#FFFFFF', pick: () => setD({ kind: k }) })),
+      dPillar: d.kind === 'pillar', dBand: d.kind === 'band',
+      pillarOpts: PN.map((l, i) => ({ v: String(i), l: l + ' · ' + lp[i] })), draftPillar: String(d.pillar), setDraftPillar: (e) => { const p = Number(e.target.value); setD({ pillar: p, target: Math.min(95, Math.ceil((lp[p] + 5) / 5) * 5) }); },
+      targetOpts: tgt.map(String), draftTarget: String(tgt.includes(Number(d.target)) ? d.target : tgt[0]), setDraftTarget: (e) => setD({ target: Number(e.target.value) }),
+      bandOpts: bandsAbove.length ? bandsAbove : ['Professional Grade'], draftBand: d.band, setDraftBand: (e) => setD({ band: e.target.value }),
+      saveGoal: () => { const p = Number(d.pillar); const t = tgt.includes(Number(d.target)) ? Number(d.target) : tgt[0]; this.setState({ goalState: 'active', draft: null, goal: d.kind === 'band' ? { kind: 'band', band: d.band, from: L[2] } : { kind: 'pillar', pillar: p, from: lp[p], target: t } }); },
+      takeNext: () => this.setState({ goalState: 'active', goal: { kind: 'pillar', pillar: 4, from: 62, target: 70 } }),
+      hasHistory: !first, noHistory: first, hasStarter: starter && !first,
+      histHint: first ? '1 upload' : 'Tap a point to see its pillars',
+      linePtsEarly: lastEarly >= 0 ? H.slice(0, Math.min(H.length, lastEarly + 2)).map(pt).join(' ') : '',
+      linePts: H.map(pt).slice(Math.max(0, lastEarly + 1)).join(' '),
+      points: H.map((h, i) => { const on = i === sel, e = !!h[4]; return { x: xPct(i) + '%', y: yPct(h[2]) + '%', labelY: 'calc(' + yPct(h[2]) + '% - 16px)', earlyY: 'calc(' + yPct(h[2]) + '% + 16px)', score: h[2], short: h[1], tx: i === 0 ? '-10%' : i === H.length - 1 ? '-90%' : '-50%', early: e,
+        on: on ? 'true' : 'false', size: on ? '18px' : '14px', fill: e ? '#FFFFFF' : '#0E6B4F', stroke: e ? '#7C8AA0' : '#0E6B4F', ring: on ? '5px' : '3px', ringCol: on ? 'rgba(14,107,79,0.18)' : '#FFFFFF', labelCol: e ? '#4C5A6E' : '#0B1F3A',
+        aria: h[0] + ', ' + (e ? 'early score ' : 'score ') + h[2], select: () => this.setState({ sel: i }) }; }),
+      selTitle: cur[0] + ' · ' + cur[2] + ' · ' + (cur[4] ? 'Early score' : band(cur[2])),
+      selPillars: PN.map((name, i) => ({ name, score: cur[3][i], w: cur[3][i] + '%' })),
+      notesHint: first ? 'From your first upload' : 'Compared with ' + (P ? P[0] : ''),
+      working: W.map(([text, tag]) => ({ text, tag: first ? '' : tag })),
+      costing: K.map(([text, action, tag]) => ({ text, action, tag: first ? '' : tag, tagFg: tag === 'Improved' ? '#0E6B4F' : '#7A5A16' })),
+      reports: [...H].reverse().map((h) => ({ date: h[0], score: h[2], band: h[4] ? 'Early score' : band(h[2]), aria: 'Download report from ' + h[0] })),
+      sName: s.sName, sCc: s.sCc, sPhone: s.sPhone, sEmail: s.sEmail,
+      setSName: (e) => this.setState({ sName: e.target.value, saved: false }), setSCc: (e) => this.setState({ sCc: e.target.value, saved: false }),
+      setSPhone: (e) => this.setState({ sPhone: e.target.value, saved: false }), setSEmail: (e) => this.setState({ sEmail: e.target.value, saved: false }),
+      countries: [['+961', 'LB +961'], ['+971', 'AE +971'], ['+966', 'SA +966'], ['+974', 'QA +974'], ['+965', 'KW +965'], ['+962', 'JO +962'], ['+20', 'EG +20'], ['+33', 'FR +33'], ['+44', 'GB +44'], ['+1', 'US +1']].map(([v, l]) => ({ v, l })),
+      prefs: [['retest', 'Retest reminder', 'An email when your 60-day retest date arrives.'], ['monthly', 'Monthly check-up', 'A reminder each month to upload your latest statement.'], ['updates', 'Updates from Beta', 'Occasional news about webinars and tools.']].map(([k, label, help]) => ({ id: 'st-' + k, label, help, on: s[k] ? 'true' : 'false', bg: s[k] ? '#0E6B4F' : '#8A94A3', knob: s[k] ? '23px' : '3px', toggle: () => this.setState({ [k]: !s[k], saved: false }) })),
+      save: (e) => { e.preventDefault(); this.setState({ saved: true }); }, saved: s.saved,
+      notDeleted: !s.deleted, deleted: s.deleted, confirming: s.confirm, notConfirming: !s.confirm,
+      askDelete: () => this.setState({ confirm: true }), cancelDelete: () => this.setState({ confirm: false }),
+      doDelete: () => { this.setState({ deleted: true, confirm: false }); window.scrollTo(0, 0); },
+    };
+  }
+}
+</script>
+
+
+<div id="__claude_design_branding"><style>#__claude_design_branding{position:fixed;right:16px;bottom:16px;z-index:2147483646;display:flex;align-items:center;gap:7px;height:30px;padding:0 5px 0 10px;border-radius:999px;font-family:"Anthropic Sans",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;font-size:12.5px;font-weight:400;line-height:1;letter-spacing:normal;text-transform:none;color:#141413;background:rgba(255,255,255,.86);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:0 0 0 .5px rgba(31,30,29,.14),0 2px 10px rgba(0,0,0,.09)}
+#__claude_design_branding *{box-sizing:border-box;margin:0}
+#__claude_design_branding a{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+#__claude_design_branding a:hover span{text-decoration:underline}
+#__claude_design_branding svg{flex:none}
+#__claude_design_branding a svg{color:#D97757}
+#__claude_design_branding button{width:20px;height:20px;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:currentColor;opacity:.55;border:0;background:none;cursor:pointer;flex:none;font:inherit;transition:opacity .14s}
+#__claude_design_branding button:hover{opacity:1;background:rgba(127,127,127,.22)}
+@media print{#__claude_design_branding{display:none}}</style><a href="https://claude.com/product/design" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 20 21" fill="none" aria-hidden="true"><path fill="currentColor" d="M9.99902 0C15.5258 0.000170936 19.999 4.50643 19.999 10.0547C19.999 11.7656 19.5863 12.9976 18.7861 13.8203C17.9924 14.6362 16.9465 14.9138 15.9854 15.0078C15.05 15.0993 14.0097 15.0262 13.2549 15.0186C12.8524 15.0145 12.5177 15.0267 12.2441 15.0703C11.9682 15.1144 11.8143 15.1813 11.7305 15.2432C11.4745 15.4322 11.3353 15.7121 11.2656 16.1602C11.2303 16.3875 11.2168 16.6362 11.209 16.9131C11.2017 17.1715 11.1986 17.4893 11.1807 17.7705C11.1469 18.2975 11.0495 19.0865 10.4199 19.5908C9.7846 20.0996 8.88652 20.1057 7.85449 19.877C7.36399 19.7682 6.88652 19.6232 6.42578 19.4453C2.66989 17.9949 0.000187748 14.3414 0 10.0547C0 4.50643 4.47223 0.000171048 9.99902 0ZM9.99902 1.60547C5.36781 1.60564 1.60547 5.38391 1.60547 10.0547C1.60566 13.6582 3.84823 16.7296 7.00391 17.9482C7.39027 18.0974 7.79085 18.2184 8.20215 18.3096C9.1375 18.5169 9.384 18.3633 9.41602 18.3379C9.4524 18.3087 9.54558 18.1915 9.5791 17.668C9.5947 17.4239 9.59473 17.1786 9.60352 16.8672C9.61179 16.5742 9.62831 16.2435 9.67969 15.9131C9.78359 15.2455 10.0474 14.4906 10.7764 13.9521C11.1479 13.6778 11.5842 13.5493 11.9912 13.4844C12.4007 13.4191 12.8434 13.4088 13.2705 13.4131C14.1753 13.4222 15.0071 13.4905 15.8291 13.4102C16.6257 13.3322 17.2249 13.1235 17.6357 12.7012C18.0401 12.2855 18.3935 11.5261 18.3936 10.0547C18.3936 5.38391 14.6302 1.60564 9.99902 1.60547ZM5.11621 9.86719C5.86386 9.91468 6.45486 10.5348 6.45508 11.2939C6.45506 12.0838 5.81519 12.7245 5.02539 12.7246C4.28481 12.7246 3.67573 12.1617 3.60254 11.4404L3.59473 11.2939L3.60156 11.1533C3.66942 10.4596 4.23282 9.91186 4.93359 9.86719H5.11621ZM14.9814 7.19141C15.729 7.23889 16.3199 7.85919 16.3203 8.61816C16.3203 9.40801 15.6804 10.0487 14.8906 10.0488C14.1501 10.0487 13.5409 9.48586 13.4678 8.76465L13.46 8.61816L13.4668 8.47754C13.5348 7.78403 14.0983 7.23618 14.7988 7.19141H14.9814ZM6.4541 4.93457C7.20161 4.9822 7.79275 5.60231 7.79297 6.36133C7.79288 7.151 7.15291 7.7917 6.36328 7.79199C5.62274 7.79199 5.01369 7.22903 4.94043 6.50781L4.93262 6.36133L4.93945 6.2207C5.00731 5.52698 5.5707 4.97922 6.27148 4.93457H6.4541ZM11.3867 3.59668C12.1343 3.64419 12.7253 4.26436 12.7256 5.02344C12.7256 5.81326 12.0857 6.45393 11.2959 6.4541C10.5553 6.4541 9.94622 5.89123 9.87305 5.16992L9.86523 5.02344L9.87207 4.88281C9.93996 4.18912 10.5033 3.64133 11.2041 3.59668H11.3867Z"></path></svg><span>Made with Claude Design</span></a><button type="button" aria-label="Dismiss" onclick="this.parentElement.remove()"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg></button></div></body></html>
