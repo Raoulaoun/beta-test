@@ -2,7 +2,8 @@
 // in-memory outbox. On the production site a missing key is an error, never a silent skip.
 import { isProductionSite } from "../site.ts";
 
-export type Mail = { to: string; subject: string; html: string; text: string; kind: string };
+export type Attachment = { filename: string; content: Buffer };
+export type Mail = { to: string; subject: string; html: string; text: string; kind: string; attachments?: Attachment[] };
 export const outbox: Mail[] = [];
 
 export async function sendMail(mail: Mail): Promise<{ id: string | null }> {
@@ -15,7 +16,8 @@ export async function sendMail(mail: Mail): Promise<{ id: string | null }> {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
-    body: JSON.stringify({ from: process.env.MAIL_FROM, to: [mail.to], subject: mail.subject, html: mail.html, text: mail.text }),
+    body: JSON.stringify({ from: process.env.MAIL_FROM, to: [mail.to], subject: mail.subject, html: mail.html, text: mail.text,
+      ...(mail.attachments?.length ? { attachments: mail.attachments.map((a) => ({ filename: a.filename, content: a.content.toString("base64") })) } : {}) }),
     signal: AbortSignal.timeout(10_000),
   });
   if (!res.ok) throw new Error(`email provider error ${res.status}`);

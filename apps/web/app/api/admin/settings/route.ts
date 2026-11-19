@@ -1,4 +1,4 @@
-import { SETTING_KEYS, setLinks, validLink } from "../../../../lib/server/settings.ts";
+import { SETTING_KEYS, setLinks, validSetting } from "../../../../lib/server/settings.ts";
 import { adminGuard } from "../../../../lib/server/adminRoute.ts";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +11,7 @@ export async function POST(req: Request): Promise<Response> {
   for (const k of SETTING_KEYS) {
     if (typeof body[k] !== "string") continue;
     const v = body[k].trim();
-    if (!validLink(v)) return Response.json({ error: "invalid_link", field: k }, { status: 422 });
+    if (!validSetting(k, v)) return Response.json({ error: "invalid_link", field: k }, { status: 422 });
     values[k] = v;
   }
   await setLinks(values, g.admin.email);

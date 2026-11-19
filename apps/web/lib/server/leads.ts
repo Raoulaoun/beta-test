@@ -9,6 +9,8 @@ export const MANAGE: Record<string, "no" | "friends_family" | "formal"> = {
   "No": "no", "Yes, friends and family": "friends_family", "Yes, formally": "formal",
 };
 export const RETEST_DAYS = 60;
+// docs/spec.md follow-up: Developing retests at 90 days, every other band at 60.
+export const retestDays = (band: string | null | undefined) => (band === "developing" ? 90 : RETEST_DAYS);
 
 export type LeadInput = {
   result_id: string; token: string; name: string; email: string; cc: string; phone: string;
@@ -29,20 +31,25 @@ export function normaliseEmail(email: string): string {
   return email.trim().toLowerCase();
 }
 
+// A WhatsApp number from the picker's code and the typed number: E.164 and country, or null.
+export function mobileNumber(cc: string, phone: string): { phone: string; country: string } | null {
+  const parsed = parsePhoneNumberFromString(`${cc || ""}${(phone || "").replace(/[^\d]/g, "")}`);
+  const type = parsed?.getType();
+  if (!parsed || !parsed.isValid() || !(type === "MOBILE" || type === "FIXED_LINE_OR_MOBILE")) return null;
+  return { phone: parsed.number, country: PICKER_COUNTRY[cc] ?? parsed.country ?? "" };
+}
+
 // The browser shows the design's messages; the server only says which fields failed.
 export function validateLead(v: LeadInput): { errors: FieldErrors; phone?: string; country?: string } {
   const errors: FieldErrors = {};
   if (!v.name?.trim() || v.name.trim().length > 120) errors.name = true;
   const email = normaliseEmail(v.email || "");
   if (!EMAIL.test(email) || email.length > 254) errors.email = true;
-  const parsed = parsePhoneNumberFromString(`${v.cc || ""}${(v.phone || "").replace(/[^\d]/g, "")}`);
-  const type = parsed?.getType();
-  const mobile = !!parsed && parsed.isValid() && (type === "MOBILE" || type === "FIXED_LINE_OR_MOBILE");
+  const mobile = mobileNumber(v.cc, v.phone);
   if (!mobile) errors.phone = true;
   if (!(v.manage in MANAGE)) errors.manage = true;
   if (v.consent !== true) errors.consent = true;
-  const country = mobile ? (PICKER_COUNTRY[v.cc] ?? parsed!.country) : undefined;
-  return { errors, phone: mobile ? parsed!.number : undefined, country };
+  return { errors, phone: mobile?.phone, country: mobile?.country };
 }
 
 export type LeadOutcome =
@@ -64,7 +71,7 @@ export async function submitLead(v: LeadInput, signedInAccountId: string | null)
     const profile = {
       name: v.name.trim(), phone, country, managingForOthers: MANAGE[v.manage],
       consentContact: true, consentMarketing: !!v.updates,
-      retestReminderAt: v.remind ? new Date(now.getTime() + RETEST_DAYS * 86_400_000) : null,
+      retestReminderAt: v.remind ? new Date(now.getTime() + retestDays(result.band) * 86_400_000) : null,
       retestReminders: !!v.remind,
       updatedAt: now,
     };

@@ -1,11 +1,18 @@
 // Values the team can change in /admin without a deploy.
 import { db, schema as s } from "../db/index.ts";
 
-export const SETTING_KEYS = ["link_webinar", "link_managers_room", "link_beta"] as const;
+// webinar_when: the next webinar's date and time as shown in the PDF's Next step page
+// (e.g. "Thursday 26 November · 8:00 PM Beirut"); plain text, empty hides the line.
+export const SETTING_KEYS = ["link_webinar", "link_managers_room", "link_beta", "webinar_when"] as const;
+export const TEXT_KEYS: readonly SettingKey[] = ["webinar_when"];
 export type SettingKey = (typeof SETTING_KEYS)[number];
 export type Links = Record<SettingKey, string>;
 
-export const DEFAULT_LINKS: Links = { link_webinar: "", link_managers_room: "", link_beta: "https://betaapp.me" };
+export const DEFAULT_LINKS: Links = { link_webinar: "", link_managers_room: "", link_beta: "https://betaapp.me", webinar_when: "" };
+
+export function validSetting(key: SettingKey, v: string): boolean {
+  return TEXT_KEYS.includes(key) ? v.length <= 80 && !/[<>]/.test(v) : validLink(v);
+}
 
 export async function getLinks(): Promise<Links> {
   try {
@@ -32,7 +39,7 @@ export async function setLinks(values: Partial<Links>, by: string): Promise<void
   for (const key of SETTING_KEYS) {
     const value = values[key];
     if (value === undefined) continue;
-    if (!validLink(value)) throw new Error(`invalid link: ${key}`);
+    if (!validSetting(key, value)) throw new Error(`invalid setting: ${key}`);
     await db().insert(s.siteSettings).values({ key, value, updatedBy: by })
       .onConflictDoUpdate({ target: s.siteSettings.key, set: { value, updatedBy: by, updatedAt: new Date() } });
   }

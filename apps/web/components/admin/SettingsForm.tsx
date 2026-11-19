@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { sx } from "../../lib/sx.ts";
 
-type Links = { link_webinar: string; link_managers_room: string; link_beta: string };
+type Links = { link_webinar: string; link_managers_room: string; link_beta: string; webinar_when: string };
 const FIELDS: [keyof Links, string][] = [["link_webinar", "Webinar"], ["link_managers_room", "Beta Managers Room"], ["link_beta", "Beta page"]];
 const input = "height:44px;padding:0 14px;border-radius:12px;border:1px solid #DDE2E7;background:#FFFFFF;font-size:14px;color:#1C2430";
 
@@ -23,7 +23,10 @@ export function SettingsForm({ initial }: { initial: Links }) {
           <input name={k} type="url" placeholder="https://…" value={v[k]} onChange={(e) => { setV({ ...v, [k]: e.target.value }); setState("idle"); }} style={sx(input)} />
         </label>
       ))}
-      <span style={sx("font-size:13px;color:#6B7684")}>An empty link hides that card. Links must start with https://.</span>
+      <label style={sx("display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#0B1F3A")}>Next webinar date and time (PDF report)
+        <input name="webinar_when" type="text" placeholder="Thursday 26 November · 8:00 PM Beirut" maxLength={80} value={v.webinar_when} onChange={(e) => { setV({ ...v, webinar_when: e.target.value }); setState("idle"); }} style={sx(input)} />
+      </label>
+      <span style={sx("font-size:13px;color:#6B7684")}>An empty link hides that card. Links must start with https://. An empty date hides the date line in the report.</span>
       <div style={sx("display:flex;align-items:center;gap:14px")}>
         <button type="submit" style={sx("height:44px;padding:0 22px;border:none;border-radius:999px;background:#0B1F3A;color:#FFFFFF;font-size:13px;font-weight:600;cursor:pointer")}>Save</button>
         {state === "saved" && <span role="status" style={sx("font-size:13px;font-weight:600;color:#0E6B4F")}>Saved</span>}

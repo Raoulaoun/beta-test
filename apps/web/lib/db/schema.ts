@@ -111,6 +111,10 @@ export const goals = pgTable("goals", {
   active: boolean("active").notNull().default(true),
   achievedAt: ts("achieved_at"),
   achievedResultId: uuid("achieved_result_id").references(() => results.id, { onDelete: "set null" }),
+  // auto: set from the lowest pillar ("Set automatically"); suggested: proposed after a goal
+  // was reached ("Suggested next goal"); active: chosen or accepted by the trader.
+  status: text("status").notNull().default("auto"),
+  fromValue: integer("from_value"),                     // pillar score (or overall score) when set
   createdAt: created(),
 }, (t) => [uniqueIndex("goals_one_active_idx").on(t.accountId).where(sql`${t.active}`)]);
 

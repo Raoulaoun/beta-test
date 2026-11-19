@@ -82,6 +82,22 @@ export async function requestKnownSignIn(cookieHeader: string | null, resultId: 
   return requestSignIn(account.email);
 }
 
+// PLACEHOLDER copy until supplied (docs/spec.md launch checklist).
+export const DELETED_EMAIL = {
+  subject: "Your Manager Test account has been deleted",
+  body: "Your Manager Test account, score history, reports and goals have been deleted. Your statements were never stored.\n\nThank you for taking the Manager Test.",
+};
+
+// Settings → "Yes, delete everything": the confirmation email goes out first (the address
+// is gone afterwards), then the account and everything that hangs off it.
+export async function deleteAccountWithConfirmation(accountId: string): Promise<void> {
+  const [a] = await db().select({ email: s.accounts.email }).from(s.accounts).where(eq(s.accounts.id, accountId));
+  if (!a) return;
+  await sendMail({ to: a.email, subject: DELETED_EMAIL.subject, text: DELETED_EMAIL.body,
+    html: `<p>${DELETED_EMAIL.body.replace(/\n/g, "<br>")}</p>`, kind: "account_deleted" }).catch(() => undefined);
+  await deleteAccount(accountId);
+}
+
 export async function deleteAccount(accountId: string): Promise<void> {
   await db().delete(s.accounts).where(eq(s.accounts.id, accountId));
 }
