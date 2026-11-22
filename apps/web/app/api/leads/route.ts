@@ -3,6 +3,7 @@ import { sessionAccount } from "../../../lib/server/session.ts";
 import { verifyTurnstile } from "../../../lib/server/turnstile.ts";
 import { knownCookie, rememberDevice } from "../../../lib/server/known.ts";
 import { newToken } from "../../../lib/server/crypto.ts";
+import { sendReport } from "../../../lib/server/report.ts";
 
 export const dynamic = "force-dynamic";
 const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { "cache-control": "no-store" } });
@@ -22,6 +23,8 @@ export async function POST(req: Request): Promise<Response> {
     // Same answer whether the email was new or not: never reveal who has an account. The
     // known-device cookie is set either way; for an existing email sent by someone not signed
     // in as it, it is a token that matches nothing.
+    // The report goes to the email given, with the PDF attached (after the response).
+    void sendReport(body.result_id, out.email, out.accountId);
     const token = out.pending ? newToken() : await rememberDevice(out.accountId);
     return Response.json({ ok: true, sent_to: out.email }, { headers: { "cache-control": "no-store", "set-cookie": knownCookie(token) } });
   } catch {

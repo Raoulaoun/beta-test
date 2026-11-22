@@ -321,6 +321,8 @@ It appears on the results screen, on every PDF page and on the calculator pages.
 - [ ] Copy for the sign-in email (placeholder in the code until supplied)
 - [ ] Copy for the "sign-in link sent" state of the signed-out banner (placeholder: "Sign-in link sent. Check your email.")
 - [ ] Copy for the account-deleted confirmation email (placeholder in the code until supplied)
+- [ ] Company postal address for the email footer (placeholder "[Company postal address]" in the report email)
+- [ ] One-click unsubscribe page (the report email links to Settings until the Phase 9 emails add it)
 
 ## Build order and acceptance tests
 

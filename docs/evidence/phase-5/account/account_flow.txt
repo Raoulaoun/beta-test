@@ -1,0 +1,26 @@
+ok   report email sent (Your Manager Test report: 69, Emerging Manager)
+ok   PDF attached (Manager-Test-Report-Karim.pdf, 164031 bytes)
+ok   report email carries the disclaimer
+ok   signed out: /dashboard goes to sign-in
+ok   check-your-email view
+ok   the link opens the dashboard
+ok   welcome by first name
+ok   latest result is the uploaded score
+ok   one result: "Upload a newer statement to start your history"
+ok   goal set automatically
+ok   one trading account, named without digits
+ok   signed-in upload: "Saved to your dashboard"
+ok   history chart has 2 points (2)
+ok   two past reports
+ok   tapping a point shows its pillars
+ok   the second result reached the goal: reached card with the next suggestion
+ok   pillar goal saved (already in the top band)
+ok   goal change kept after reload
+ok   Download report gives the PDF (Manager-Test-Report-Karim.pdf, 164361 bytes)
+ok   someone signed out cannot download it
+ok   email shown, read-only
+ok   retest days from the band
+ok   a bad phone number is refused
+ok   details and preferences saved
+ok   deletion confirmation email sent
+ok   after deletion: signed out

@@ -7,5 +7,6 @@ export const dynamic = "force-dynamic";
 
 export function GET(): Response {
   if (process.env.DEV_OUTBOX !== "1" || isProductionSite()) return new Response(null, { status: 404 });
-  return Response.json(outbox.map(({ to, subject, text, kind }) => ({ to, subject, text, kind })));
+  return Response.json(outbox.map(({ to, subject, text, kind, attachments }) => ({ to, subject, text, kind,
+    attachments: (attachments ?? []).map((a) => ({ filename: a.filename, bytes: a.content.length, pdf: a.content.subarray(0, 5).toString() === "%PDF-" })) })));
 }

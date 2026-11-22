@@ -1,8 +1,8 @@
 import { sx } from "../lib/sx.ts";
 import { AccountAvatar } from "./AccountAvatar.tsx";
 
-export const DISCLAIMER =
-  "The Manager Test analyzes past trading results for educational purposes only. It is not investment advice, does not predict future performance, and is not an assessment for admission to the Beta platform. Results depend entirely on the statement provided.";
+export { DISCLAIMER } from "../lib/disclaimer.ts";
+import { DISCLAIMER } from "../lib/disclaimer.ts";
 
 export function AppHeader({ onHome }: { onHome: (e: React.MouseEvent) => void }) {
   return (

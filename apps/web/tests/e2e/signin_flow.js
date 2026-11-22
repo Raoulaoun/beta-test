@@ -30,7 +30,7 @@ const check = (ok, msg) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${msg}`); if (
   check(scanned.ok() && (await scanned.text()).includes('method="post"'), 'link scanners get a confirm page, token kept');
 
   await p.goto(link.replace(/^https?:\/\/[^/]+/, base), { waitUntil: 'networkidle' });
-  check(p.url().includes('signedin=1'), 'opening the link signs in');
+  check(p.url().endsWith('/dashboard'), 'opening the link signs in and lands on the dashboard');
   // Same-origin fetch from the page: the browser sends the Secure cookie on 127.0.0.1.
   const inPage = (url, method = 'GET') => p.evaluate(async ([u, m]) => { const r = await fetch(u, { method: m }); return { status: r.status, body: r.status === 204 ? null : await r.json() }; }, [url, method]);
   const me = (await inPage('/api/me')).body;
@@ -38,8 +38,11 @@ const check = (ok, msg) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${msg}`); if (
   const cookie = (await ctx.cookies()).find((c) => c.name === 'mt_session');
   check(cookie && cookie.httpOnly && cookie.sameSite === 'Lax', 'session cookie is httpOnly, SameSite=Lax');
 
-  const again = await p.goto(link.replace(/^https?:\/\/[^/]+/, base), { waitUntil: 'networkidle' });
-  check(p.url().includes('signin=expired'), 'the same link does not work twice');
+  const fresh = await browser.newContext();
+  const fp = await fresh.newPage();
+  await fp.goto(link.replace(/^https?:\/\/[^/]+/, base), { waitUntil: 'networkidle' });
+  check(fp.url().includes('/signin?expired=1') && await fp.isVisible('[data-testid="auth-expired"]'), 'the same link does not work twice: link-expired page');
+  await fresh.close();
 
   await p.goto(base + '/', { waitUntil: 'networkidle' });
   await p.setInputFiles('[data-testid="dropzone"] input[type=file]', file);
