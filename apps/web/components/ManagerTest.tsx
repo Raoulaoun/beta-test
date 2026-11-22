@@ -144,6 +144,7 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
     setExitOpen(false);
     setFormOpen(null);
     setScreen("sent");
+    window.dispatchEvent(new Event("mt:signed-in")); // the form signs this browser in: refresh the header
     window.scrollTo(0, 0);
   };
   // Every button that leads to the lead form opens it in the modal, and says which one it
@@ -173,6 +174,7 @@ export default function ManagerTest({ initial = {}, links }: { initial?: Initial
       {screen === "analyzing" && <Analyzing fileName={fileName} step={step} />}
       {screen === "error" && <ErrorCard err={err} fileName={fileName} onFile={handleFile} onExport={goExport} />}
       {screen === "results" && result && <Results r={result} initialForm={initial.form} showFormErrors={initial.formErrors} onExport={goExport} onSent={onSent}
+        onSignedIn={() => setResult((cur) => (cur ? { ...cur, saved_to_account: true, known_account: false } : cur))}
         formOpen={formOpen} onCloseForm={() => setFormOpen(null)} onOpenForm={(el, source) => openForm(source ?? "results_button", el)} />}
       {screen === "sent" && <Sent sentTo={sentTo} links={links} />}
       <Footer />

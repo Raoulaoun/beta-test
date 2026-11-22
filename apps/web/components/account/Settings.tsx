@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { sx } from "../../lib/sx.ts";
 import { errorCopy } from "../../lib/view.ts";
+import { SignOutIcon, signOut } from "./Menu.tsx";
 
 // Settings (design/account, view=settings). The email is shown but can't be changed in v1.
 export type SettingsData = { email: string; name: string; cc: string; phone: string; retest_reminders: boolean; updates: boolean; monthly_checkup: boolean; retest_days: number };
@@ -98,6 +99,11 @@ export function Settings({ initial, preview }: { initial: SettingsData; preview?
               {failed && <span role="alert" style={sx("font-size:13px;color:#A23B2E")}>{errorCopy("server").join(" ")}</span>}
             </div>
           </form>
+          <div className="ac-pad" data-testid="signed-in-here" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:14px")}>
+            <span style={sx(cap)}>Signed in on this browser</span>
+            <p style={sx("margin:0;font-size:15px;line-height:1.55;color:#1C2430")}>You stay signed in here for a year. On a shared computer, sign out when you're done.</p>
+            <button type="button" onClick={() => signOut(!!preview)} style={sx("align-self:flex-start;display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:1px solid #0B1F3A;background:#FFFFFF;color:#0B1F3A;font-size:13px;font-weight:700;letter-spacing:0.04em;cursor:pointer")}><SignOutIcon size={16} width="2.2" />Sign out</button>
+          </div>
           <div className="ac-pad" style={sx("background:#FFFFFF;border:1px solid #DDE2E7;border-radius:24px;display:flex;flex-direction:column;gap:14px")}>
             <span style={sx("font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#A23B2E")}>Delete account</span>
             <p style={sx("margin:0;font-size:15px;line-height:1.55;color:#1C2430")}>Deletes your profile, score history, reports and goals. Your statements were never stored.</p>

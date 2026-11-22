@@ -75,11 +75,14 @@ export function chips(r: ScoreResult): string[] {
   ];
 }
 
-// Starter reads leave out the months chip: under 5 trades it mostly reads "0 months".
+// Starter read chips (design/flow screen=starter): account, closed trades, period.
 export function starterChips(r: ScoreResult): string[] {
-  const [account, , trades] = chips(r);
-  return [account, trades];
+  const [account, period] = chips(r);
+  return [account, plural(r.history.closed_trades, "closed trade", "closed trades"), period];
 }
+
+export const EXPORT_GUIDE_LINK = "See the export guide";
+export const coachMore = (n: number) => `${n} more coach ${n === 1 ? "note" : "notes"} in your full report`;
 
 export const DIAL_C = 2 * Math.PI * 88;
 export function dash(score: number): string {

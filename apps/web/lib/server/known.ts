@@ -1,6 +1,6 @@
 // Known device: a browser that signed in to, or created, an account. Lets the results screen
-// say "You already have a Manager Test account" and send a sign-in link to that account's
-// email without the browser ever holding the email. Random token in an httpOnly cookie;
+// say "You already have a Manager Test account" and offer to sign in with a code. The browser
+// never holds the email. Random token in an httpOnly cookie;
 // only its SHA-256 is stored. Never set for a lead that used someone else's email.
 import { and, eq, gt } from "drizzle-orm";
 import { db, schema as s } from "../db/index.ts";
@@ -31,3 +31,11 @@ export async function knownAccount(cookieHeader: string | null) {
     .where(and(eq(s.knownDevices.tokenHash, sha256(token)), gt(s.knownDevices.expiresAt, new Date())));
   return row?.account ?? null;
 }
+
+// Sign out: "Nothing about your account is left on this browser."
+export async function forgetDevice(cookieHeader: string | null): Promise<void> {
+  const token = readCookie(cookieHeader, KNOWN_COOKIE);
+  if (token) await db().delete(s.knownDevices).where(eq(s.knownDevices.tokenHash, sha256(token)));
+}
+
+export const clearKnownCookie = `${KNOWN_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;

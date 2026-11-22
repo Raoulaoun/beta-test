@@ -10,7 +10,9 @@ export async function POST(req: Request): Promise<Response> {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim()) || email.length > 254) return Response.json({ error: "invalid_email" }, { status: 422 });
   try {
     const out = await requestSignInCode(email);
-    return out === "rate_limited" ? Response.json({ error: "rate_limited" }, { status: 429 }) : Response.json({ ok: true });
+    return out.outcome === "rate_limited"
+      ? Response.json({ error: "rate_limited", minutes: out.minutes }, { status: 429 })
+      : Response.json({ ok: true });
   } catch {
     return Response.json({ error: "server_error" }, { status: 500 });
   }

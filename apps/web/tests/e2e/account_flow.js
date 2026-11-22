@@ -1,5 +1,5 @@
 // The account journey in a real browser against the live stack and database:
-// lead → report email with the PDF → sign in → dashboard → second upload → goal → PDF →
+// lead → report email with the PDF → sign in with a code → dashboard → second upload → goal → PDF →
 // settings → delete. Screenshots of the real screens at 1440 and 390.
 // Usage: node account_flow.js <base> <fixturesDir> <outDir>
 const { chromium, devices } = require('playwright');
@@ -51,15 +51,14 @@ async function upload(p, file) {
   // ---------- sign in (another device) ----------
   await p.goto(base + '/dashboard');
   check(p.url().endsWith('/signin'), 'signed out: /dashboard goes to sign-in');
-  await p.fill('#ac-email', email);
-  await p.click('button:has-text("Send sign-in link")');
-  await p.waitForSelector('[data-testid="auth-check"]');
-  check((await p.textContent('[data-testid="auth-check"]')).includes(`Sent to ${email}`), 'check-your-email view');
-  const mail = await waitMail(p, email, 'sign_in');
-  await p.goto(/https?:\/\/\S+token=[\w-]+/.exec(mail.text)[0].replace(/^https?:\/\/[^/]+/, base));
+  await p.fill('#si-email', email);
+  await p.click('button:has-text("Send code")');
+  await p.waitForSelector('[data-testid="signin"][data-step="code"]');
+  const mail = await waitMail(p, email, 'sign_in_code');
+  await p.fill('#si-code', mail.subject.slice(0, 6));
   await p.waitForURL('**/dashboard', { timeout: 15000 }).catch(() => null);
   await p.waitForSelector('h1');
-  check(p.url().endsWith('/dashboard'), 'the link opens the dashboard');
+  check(p.url().endsWith('/dashboard'), 'the emailed code opens the dashboard');
   check((await p.textContent('h1')) === 'Welcome back, Karim', 'welcome by first name');
   check(Number(await p.textContent('[data-testid="latest"] span[style*="60px"]')) === first, 'latest result is the uploaded score');
   check(await p.isVisible('[data-testid="no-history"]'), 'one result: "Upload a newer statement to start your history"');
@@ -69,7 +68,7 @@ async function upload(p, file) {
 
   // ---------- second upload while signed in ----------
   await upload(p, 'disciplined.xlsx');
-  check(await p.isVisible('[data-testid="saved-banner"]'), 'signed-in upload: "Saved to your dashboard"');
+  check(await p.isVisible('[data-testid="saved-banner"]'), 'signed-in upload: result saved to the history');
   await p.goto(base + '/dashboard', { waitUntil: 'networkidle' });
   const points = await p.$$('[data-testid="chart-point"]');
   check(points.length === 2, `history chart has 2 points (${points.length})`);

@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { chips, starterChips, dash, errorCopy, errorScreen, isFileError, nudgeParts, panelView, pillarRows, precheck, progressRows, COPY, ERROR_LINES, CAP_NOTE } from "../../lib/view.ts";
+import { chips, coachMore, starterChips, dash, errorCopy, errorScreen, isFileError, nudgeParts, panelView, pillarRows, precheck, progressRows, COPY, ERROR_LINES, CAP_NOTE } from "../../lib/view.ts";
 import { DESIGN_FIXTURES } from "../../lib/fixtures.ts";
 import type { ScoreResult } from "../../lib/types.ts";
 
@@ -65,8 +65,8 @@ test("chips match the design and switch to Demo account", () => {
   assert.equal(chips(many)[2], "9,711 trades", "thousand separators");
 });
 
-test("starter reads drop the months chip", () => {
-  assert.deepEqual(starterChips(DESIGN_FIXTURES.starter), ["Live account", "3 trades"]);
+test("starter read chips: account, closed trades, period (design/flow screen=starter)", () => {
+  assert.deepEqual(starterChips(DESIGN_FIXTURES.starter), ["Live account", "3 closed trades", "2 weeks"]);
 });
 
 test("dial, pillars and progress bars", () => {
@@ -91,4 +91,9 @@ test("red-flag panel: one row per flag, cap note once, summary from the engine",
     assert.deepEqual(v.rows.map((x) => [x.capping, x.showCapNote]), [[true, true], [true, false], [false, false]]);
   }
   assert.ok(CAP_NOTE.startsWith("Martingale, grid trading"));
+});
+
+test("coach link: how many more notes the full report holds", () => {
+  assert.equal(coachMore(4), "4 more coach notes in your full report");
+  assert.equal(coachMore(1), "1 more coach note in your full report");
 });

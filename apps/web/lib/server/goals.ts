@@ -145,12 +145,13 @@ export type Lever = { area: string; action: string | null };
 function card(g: Goal, latest: Scored, lever: string | null) {
   if (g.kind === "band") {
     const b = bandByCode(g.band)!;
-    const now = latest.score ?? 0, from = g.fromValue ?? now;
+    // design/account: a score that fell below the start moves the start down with it.
+    const now = latest.score ?? 0, from = Math.min(g.fromValue ?? now, now);
     const pct = Math.max(0, Math.min(100, Math.round(((now - from) / Math.max(1, b.floor - from)) * 100)));
     return { kind: "band" as const, band: b.code, title: `Reach ${b.name}`, pct, fromLabel: `Started at ${from}`, nowLabel: `${now} now`,
       toLabel: `${b.name} at ${b.floor}`, note: `${Math.max(0, b.floor - now)} points to go on your overall score.` };
   }
-  const now = pillarNow(latest, g.pillar), from = g.fromValue ?? now, target = g.target ?? now;
+  const now = pillarNow(latest, g.pillar), from = Math.min(g.fromValue ?? now, now), target = g.target ?? now;
   const pct = Math.max(0, Math.min(100, Math.round(((now - from) / Math.max(1, target - from)) * 100)));
   const toGo = `${Math.max(0, target - now)} points to go.`;
   return { kind: "pillar" as const, pillar: g.pillar, title: `${PILLAR_NAMES[g.pillar ?? ""]} from ${now} to ${target}`, pct,

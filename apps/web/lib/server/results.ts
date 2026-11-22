@@ -18,8 +18,13 @@ type EngineResult = Omit<ScoreResult, "coach"> & {
 
 // What the browser may see of the coach: the free top 1 + 1 (the full set is for the
 // PDF and the dashboard, stored in result_insights).
+// `more`: how many further notes the full report holds (up to 3 working + 3 costing).
 export function freeCoach(r: EngineResult): ScoreResult["coach"] {
-  return r.coach ? { top: r.coach.top } : null;
+  if (!r.coach) return null;
+  const f = r.coach.findings ?? [];
+  const inReport = Math.min(3, f.filter((x) => x.polarity === "working").length) + Math.min(3, f.filter((x) => x.polarity === "costing").length);
+  const shown = (r.coach.top.working ? 1 : 0) + (r.coach.top.costing ? 1 : 0);
+  return { top: r.coach.top, more: Math.max(0, inReport - shown) };
 }
 
 // What is kept of a result: everything shown, minus the masked account number and the

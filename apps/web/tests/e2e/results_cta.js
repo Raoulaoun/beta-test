@@ -99,20 +99,34 @@ async function sources(db, id) {
     check(cookie && cookie.httpOnly && !cookie.value.includes('@'), `@${width} account created: known-device cookie, httpOnly, no email in it`);
 
     check(await p.evaluate(async () => (await (await fetch('/api/me')).json()).signed_in), `@${width} sending the form signed this browser in`);
-    await ctx.clearCookies({ name: 'mt_session' }); // signed out again (another day, or signed out)
+    await ctx.clearCookies({ name: 'mt_session' }); // signed out again (another day), still a known browser
     const saved = await upload(p);
     await p.waitForSelector('[data-testid="signed-out-banner"]', { timeout: 5000 }).catch(() => null);
     const text = await p.textContent('[data-testid="signed-out-banner"]').catch(() => '');
-    check(text.includes('You already have a Manager Test account. Sign in to save this result to your history.') && text.includes('Send me a sign-in link'),
+    check(text.includes('You already have a Manager Test account. Sign in to save this result to your history.') && text.includes('Sign in with a code'),
       `@${width} same browser, signed out: the banner, word for word`);
     await p.screenshot({ path: path.join(outDir, `banner-${width}.png`) });
-    await p.click('[data-testid="signed-out-banner"] button');
-    await p.waitForSelector('[data-testid="signin-sent"]', { timeout: 5000 });
-    const mail = (await (await p.request.get(base + '/api/dev/outbox')).json()).reverse().find((m) => m.to === email);
-    check(!!mail && mail.kind === 'sign_in', `@${width} sign-in link sent to the account's email`);
-    await p.screenshot({ path: path.join(outDir, `banner-${width}-sent.png`) });
-    const link = /https?:\/\/\S+token=[\w-]+/.exec(mail.text)[0].replace(/^https?:\/\/[^/]+/, base);
-    await p.goto(link, { waitUntil: 'networkidle' });
+    await p.click('[data-testid="banner-signin"]');
+    await p.waitForSelector('[data-testid="signin-dialog"]');
+    check((await p.textContent('#si-title')) === 'Sign in to save this result', `@${width} the sign-in dialog: "Sign in to save this result"`);
+    await p.screenshot({ path: path.join(outDir, `banner-${width}-signin.png`) });
+    await p.keyboard.press('Escape');
+    await p.waitForSelector('[data-testid="signin-dialog"]', { state: 'detached' });
+    check(await p.evaluate(() => document.activeElement?.dataset.testid === 'banner-signin'), `@${width} Esc closes it; focus back on the button`);
+    await p.click('[data-testid="banner-signin"]');
+    await p.fill('#si-email', email);
+    await p.click('[data-testid="signin-dialog"] button:has-text("Send code")');
+    await p.waitForSelector('[data-testid="signin"][data-step="code"]');
+    let mail = null;
+    for (let i = 0; i < 40 && !mail; i++) { mail = (await (await p.request.get(base + '/api/dev/outbox')).json()).reverse().find((m) => m.to === email && m.kind === 'sign_in_code'); if (!mail) await p.waitForTimeout(250); }
+    check(!!mail, `@${width} code emailed to the account's email`);
+    await p.screenshot({ path: path.join(outDir, `banner-${width}-code.png`) });
+    await p.fill('#si-code', mail.subject.slice(0, 6));
+    await p.waitForSelector('[data-testid="saved-banner"]', { timeout: 10000 }).catch(() => null);
+    check(await p.isVisible('[data-testid="saved-banner"]') && !(await p.isVisible('[data-testid="signed-out-banner"]')), `@${width} signed in: "You're signed in. This result is saved to your history."`);
+    await p.waitForSelector('[data-testid="account-avatar"]', { timeout: 5000 }).catch(() => null);
+    check(await p.isVisible('[data-testid="account-avatar"]'), `@${width} header now shows the avatar`);
+    await p.screenshot({ path: path.join(outDir, `banner-${width}-saved.png`) });
     const { rows } = await db.query('select r.account_id, a.email from results r left join accounts a on a.id = r.account_id where r.id = $1', [saved.id]);
     check(rows[0]?.email === email, `@${width} after signing in, this result is in the account's history`);
     await ctx.close();

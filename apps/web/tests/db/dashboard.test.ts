@@ -7,8 +7,8 @@ import { saveResult } from "../../lib/server/results.ts";
 import { dashboard } from "../../lib/server/dashboard.ts";
 import { acceptSuggested, changeGoal, goalView, refreshGoals } from "../../lib/server/goals.ts";
 import { getSettings, updateSettings } from "../../lib/server/accountSettings.ts";
-import { knownAccount, KNOWN_COOKIE, rememberDevice } from "../../lib/server/known.ts";
-import { deleteAccount, deleteAccountWithConfirmation, requestKnownSignIn, verifySignIn } from "../../lib/server/auth.ts";
+import { forgetDevice, knownAccount, KNOWN_COOKIE, rememberDevice } from "../../lib/server/known.ts";
+import { deleteAccount, deleteAccountWithConfirmation } from "../../lib/server/auth.ts";
 import { outbox } from "../../lib/server/mailer.ts";
 import { DESIGN_FIXTURES } from "../../lib/fixtures.ts";
 
@@ -254,32 +254,13 @@ test("settings: details and email choices; email can't change; bad phone refused
 
 // ---------- known device and the signed-out banner ----------
 
-test("known device: recognised by its cookie; the link holds this result and sign-in attaches it", async () => {
-  const a = await account();
-  const token = await rememberDevice(a);
-  const cookie = `${KNOWN_COOKIE}=${token}`;
-  assert.equal((await knownAccount(cookie))?.id, a);
-  assert.equal(await knownAccount(`${KNOWN_COOKIE}=nonsense`), null);
-  const { id, accessToken } = await saveResult({ ...structuredClone(DESIGN_FIXTURES.results), account: { ...DESIGN_FIXTURES.results.account, platform: "MT5" as const } }, ctx);
-  assert.equal(await requestKnownSignIn(`${KNOWN_COOKIE}=nonsense`, id, accessToken), "unknown");
-  assert.equal(await requestKnownSignIn(cookie, id, accessToken), "sent");
-  assert.equal(outbox.length, 1);
-  assert.equal(outbox[0].to, "karim@example.com");
-  let [r] = await db().select().from(s.results).where(eq(s.results.id, id));
-  assert.deepEqual([r.accountId, r.pendingAccountId], [null, a], "held, not attached, until the link is used");
-  const link = /token=([\w-]+)/.exec(outbox[0].text)![1];
-  assert.equal((await verifySignIn(link)).ok, true);
-  [r] = await db().select().from(s.results).where(eq(s.results.id, id));
-  assert.equal(r.accountId, a);
-});
-
-test("known device: a wrong result token holds nothing", async () => {
+test("known device: recognised by its cookie; sign out forgets it", async () => {
   const a = await account();
   const cookie = `${KNOWN_COOKIE}=${await rememberDevice(a)}`;
-  const { id } = await saveResult({ ...structuredClone(DESIGN_FIXTURES.results), account: { ...DESIGN_FIXTURES.results.account, platform: "MT5" as const } }, ctx);
-  assert.equal(await requestKnownSignIn(cookie, id, "wrong"), "sent");
-  const [r] = await db().select().from(s.results).where(eq(s.results.id, id));
-  assert.equal(r.pendingAccountId, null);
+  assert.equal((await knownAccount(cookie))?.id, a);
+  assert.equal(await knownAccount(`${KNOWN_COOKIE}=nonsense`), null);
+  await forgetDevice(cookie);
+  assert.equal(await knownAccount(cookie), null, "nothing about the account is left on this browser");
 });
 
 // ---------- deletion ----------

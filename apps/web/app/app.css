@@ -3,18 +3,19 @@
 .mt-hover-mint:hover { color: #9FDCBE !important; }
 html { scroll-behavior: auto; }
 .mt-hover-border:hover { border-color: #0B1F3A !important; }
+.mt-hover-navy:hover { color: #0B1F3A !important; }
 
 /* Lead-form modal (built from the design's exit prompt): bottom sheet on phones, centered
    dialog from 900px, the results layout's breakpoint. */
 .mt-modal-ov { font-family:var(--site-font-body); color:#1C2430; position:fixed; left:0; right:0; top:var(--mt-vvt,0px); height:var(--mt-vvh,100dvh); z-index:60; background:rgba(11,31,58,0.62); display:flex; align-items:flex-end; justify-content:center; }
 .mt-modal { position:relative; width:100%; height:calc(var(--mt-vvh,100dvh) - 12px); overflow-y:auto; overscroll-behavior:contain; background:#FFFFFF; border-radius:24px 24px 0 0; padding:0 20px calc(24px + env(safe-area-inset-bottom)); display:flex; flex-direction:column; box-shadow:0 -20px 60px -30px rgba(0,0,0,0.5); animation:mtsheet 0.28s ease; outline:none; }
-.mt-modal-x { position:sticky; top:0; align-self:flex-end; flex-shrink:0; margin:12px -8px -40px 0; z-index:1; width:44px; height:44px; border:none; border-radius:50%; background:rgba(255,255,255,0.92); color:#6B7684; font-size:24px; line-height:1; cursor:pointer; }
+.mt-modal-x { position:sticky; top:10px; align-self:flex-end; flex-shrink:0; margin:10px -10px -44px 0; z-index:1; width:44px; height:44px; border:none; border-radius:50%; background:#F3F4F2; color:#0B1F3A; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 .mt-modal form { padding-top:16px; }
 @keyframes mtsheet { from { transform:translateY(40px); opacity:0; } }
 @keyframes mtpop { from { transform:translateY(12px); opacity:0; } }
 @media (min-width:900px) {
   .mt-modal-ov { align-items:center; padding:24px; }
-  .mt-modal { max-width:520px; height:auto; max-height:calc(var(--mt-vvh,100dvh) - 48px); border-radius:24px; padding:0 36px 36px; box-shadow:0 40px 80px -30px rgba(0,0,0,0.6); animation:mtpop 0.2s ease; }
+  .mt-modal { max-width:560px; height:auto; max-height:calc(var(--mt-vvh,100dvh) - 48px); border-radius:24px; padding:0 36px 36px; box-shadow:0 40px 80px -30px rgba(0,0,0,0.6); animation:mtpop 0.2s ease; }
   .mt-modal form { padding-top:24px; }
 }
 @media (prefers-reduced-motion:reduce) { .mt-modal { animation:none; } }
@@ -45,3 +46,18 @@ html { scroll-behavior: auto; }
   .ac-dsk { display:inline-flex; }
   .ac-mobbar { display:none; }
 }
+
+/* Sign in with a code (design: Manager Test Sign In). */
+@keyframes sispin { to { transform:rotate(360deg); } }
+@keyframes sicaret { 50% { opacity:0; } }
+.si-input:focus { border-color:#0E6B4F !important; box-shadow:0 0 0 3px rgba(14,107,79,0.22); }
+.ac-hover-green:hover { background:#0B5A42 !important; color:#FFFFFF !important; }
+
+/* Results: sign-in dialog from the signed-out banner (design/flow .mt-si): bottom sheet on
+   phones, 520px dialog from 900px. */
+.mt-si-back { position:fixed; inset:0; z-index:69; background:rgba(11,31,58,0.62); }
+.mt-si { position:fixed; z-index:70; left:0; right:0; bottom:0; max-height:calc(100% - 24px); overflow-y:auto; background:#FFFFFF; border-radius:24px 24px 0 0; padding:28px 20px calc(24px + env(safe-area-inset-bottom)); font-family:var(--site-font-body); color:#1C2430; outline:none; animation:mtsheet 0.28s ease; }
+@media (min-width:900px) {
+  .mt-si { left:50%; right:auto; bottom:auto; top:50%; width:520px; transform:translate(-50%,-50%); border-radius:24px; padding:36px; animation:none; }
+}
+.mt-hover-navybg:hover { background:#14304F !important; color:#FFFFFF !important; }

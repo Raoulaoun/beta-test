@@ -65,6 +65,9 @@ const PAGES = (p: Payload) => (p.score_type === "starter" ? 4 : 7);
 const PLAN_PAGE = 5;
 
 // The report email, from design/emails/report-email.
+// design/emails/report-email: the "Your dashboard" block (a plain link; nothing in it signs in).
+const DASHBOARD_BLOCK = "Your score history, your goal and your coach notes, all in one place. On this device it opens straight away. Anywhere else, we'll email you a code.";
+
 export function reportEmail(p: Payload, name: string | null, filename: string, links: Awaited<ReturnType<typeof getLinks>>, retest: string | null) {
   const site = siteUrl();
   const hi = firstName(name);
@@ -113,6 +116,11 @@ export function reportEmail(p: Payload, name: string | null, filename: string, l
 </td></tr>${scoreBlock}
 <tr><td class="px" style="padding:20px 40px 0;${font};">${fixBlock}
 <p style="margin:16px 0 0;font-size:14px;line-height:21px;color:#4C5A6E;">Attached: <strong style="color:#0B1F3A;">${esc(filename)}</strong> (${PAGES(p)} pages)</p></td></tr>${webinar}
+<tr><td class="px" style="padding:28px 40px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #DDE2E7;border-bottom:1px solid #DDE2E7;"><tr><td valign="top" style="padding:20px 16px 20px 0;${font};">
+<p style="margin:0;font-size:12px;line-height:16px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#6B7684;">Your dashboard</p>
+<p style="margin:8px 0 0;font-size:15px;line-height:23px;color:#1C2430;">${DASHBOARD_BLOCK}</p>
+<p style="margin:10px 0 0;font-size:15px;line-height:23px;"><a href="${site}/dashboard" style="color:#0E6B4F;font-weight:bold;text-decoration:underline;">Open my dashboard →</a></p>
+</td></tr></table></td></tr>
 <tr><td class="px" style="padding:24px 40px 32px;${font};">${retestLine}<p style="margin:0;font-size:15px;line-height:23px;color:#1C2430;">The Beta team</p></td></tr>
 <tr><td class="px" bgcolor="#FAFAF8" style="background-color:#FAFAF8;padding:24px 40px;border-top:1px solid #DDE2E7;${font};">
 <p style="margin:0;font-size:12px;line-height:18px;color:#4C5A6E;">${esc(DISCLAIMER)}</p>
@@ -123,6 +131,7 @@ export function reportEmail(p: Payload, name: string | null, filename: string, l
     starter ? "" : `Your score is ${p.score}, ${p.band?.name ?? ""}. ${p.band?.meaning ?? ""}`,
     fix ? `Your first fix: ${fix.name}. ${fix.diagnosis} Page ${PLAN_PAGE} of your report walks you through the fix, step by step, with fixes 2 and 3.` : "",
     `Attached: ${filename} (${PAGES(p)} pages)`,
+    "", `Your dashboard: ${DASHBOARD_BLOCK} Open my dashboard: ${site}/dashboard`,
     links.link_webinar ? `Free live webinar${links.webinar_when ? " · " + links.webinar_when : ""}: Your Money Management Journey Starts Here. Save my free seat: ${links.link_webinar}` : "",
     retest ? `Improving your record? Take the test again in ${days} days, on or after ${longDate(retest)}, at ${site}.` : "",
     "The Beta team", "", DISCLAIMER,

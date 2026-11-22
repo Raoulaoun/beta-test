@@ -21,20 +21,28 @@ Then open, for example, `http://127.0.0.1:8765/flow/index.html?screen=results&fl
 
 | Folder | Parameters | States |
 | --- | --- | --- |
-| `flow/` | `screen` = `landing`, `analyzing`, `error`, `results`, `short`, `sent` | The public tool: landing with upload and export tutorial, analyzing, errors, results with lead form, not enough history, confirmation with share card |
+| `flow/` | `screen` = `landing`, `analyzing`, `error`, `results`, `short`, `early`, `starter`, `sent` | The public tool: landing with upload and export tutorial, analyzing, errors, results with lead form, not enough history, confirmation with share card |
 | | `err` = `mt4`, `empty`, `notstatement`, `toolarge` | Error variants (with `screen=error`) |
 | | `flags` = `none`, `warn` | Results with no red flags, or with the martingale warning |
-| | `tab=mobile` | Export tutorial on its "On mobile" tab |
+| | `tab` = `mobile`, `mt4` | Export tutorial on its "On mobile" or "MT4" tab |
+| | `auth=in` | Signed in: avatar in the headers instead of "Sign in" |
+| | `known=1`, `si` = a sign-in state | Signed-out banner for a known browser; `si` opens the sign-in dialog in that state |
+| | `saved=1` | "You're signed in. This result is saved to your history." |
+| | `lead=modal`, `sheet=1` | Lead form as a CTA card that opens a sheet (not used: the inline form stays), or the sheet open |
 | | `step` = `0`–`3` | Analyzing progress |
 | | `form=errors` | Lead form validation errors |
 | | `exit=1` | Exit prompt open |
 | `pdf-report/` | none | Full PDF report, all pages |
 | `calculators/` | `calc` = `position`, `ruin`, `drawdown`, `compound`, `rr` | The five calculators |
 | `admin/` | `view` = `leads`, `detail`, `pipeline`, `funnel`, `drops` | Funnel CRM |
-| `emails/report-email/` | none | Report delivery email |
+| `emails/report-email/` | none | Report delivery email, with the "Your dashboard" block |
+| `emails/code-email/` | `#dark` | Sign-in code email, light and dark |
+| `emails/monthly-checkup/` | none | Monthly check-up email (Phase 9) |
 | `emails/digest-email/` | none | Daily digest email (admin) |
 | `share-card/component.html` | `format` = `story`, `post`; `name` | Share card source. Rendered inside `flow/` on the `sent` screen; it does not run on its own |
-| `account/` | `view` = `signin`, `check`, `expired`, `dashboard`, `first`, `firstfull`, `settings` | Signed-in area: sign-in (request, check your email, link expired), dashboard, settings |
+| `account/` | `view` = `signin`, `signedout`, `dashboard`, `first`, `firstfull`, `settings` | Signed-in area: sign in with a code, signed out, dashboard, settings |
+| | `si` = `email`, `invalid`, `code`, `typing`, `wrong`, `expired`, `locked`, `ratelimit`, `resent`, `checking` | Sign-in states (with `view=signin`) |
+| | `menu=1` | Avatar menu open (name, email, Dashboard, Settings, Sign out) |
 | | `accounts=one`, `acctmenu=1` | Dashboard with one trading account, or with the account switcher open |
 | | `goal` = `auto` (default), `active`, `change` (+ `kind` = `pillar`, `band`), `reached` | Goal card states |
 | | `confirm=1` | Settings with the delete-account confirmation (the "deleted" state follows "Yes, delete everything") |
@@ -91,3 +99,5 @@ dashboard-account-menu, dashboard-first, dashboard-first-full, goal-active,
 goal-change-pillar, goal-change-band, goal-reached, settings, settings-delete-confirm,
 settings-deleted. Full-page captures: fixed elements (the phone upload button) show where
 the viewport ended, not where they sit on the page.
+
+`screenshots/v2/`: renders of the sign-in-with-code update (60 frames: flow, sign-in states, account, emails).

@@ -90,7 +90,8 @@ test("coach: every finding is stored as an aggregate; the payload keeps only the
   assert.deepEqual(Object.keys(mon.data as object).sort(), ["action", "impact", "net", "text"]);
   const [row] = await db().select().from(s.results).where(eq(s.results.id, id));
   const coach = (row.payload as { coach: Record<string, unknown> }).coach;
-  assert.deepEqual(Object.keys(coach), ["top"], "payload holds the free top only");
+  assert.deepEqual(Object.keys(coach), ["top", "more"], "payload holds the free top only, and how many more the report has");
+  assert.equal(coach.more, 2, "2 working + 2 costing in the report, 2 shown");
   await db().delete(s.results).where(eq(s.results.id, id));
   assert.equal((await db().select().from(s.resultInsights).where(eq(s.resultInsights.resultId, id))).length, 0, "insights go with the result");
 });

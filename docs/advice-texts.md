@@ -314,6 +314,52 @@ One row per flag found. With several flags, the score is capped once, at the low
 3. Right-click again and choose Save as Detailed Report (or Save as Report), then save the file.
 4. Upload the saved file here.
 
+## Sign in with a code, sign out and dashboard links
+
+From the approved design (Manager Test Board: sign-in component, flow, account, code email,
+report email). Use word for word.
+
+| Where | Copy |
+| --- | --- |
+| Header link (signed out) | Sign in |
+| Sign-in title | Sign in to The Manager Test |
+| Sign-in title, from the results banner | Sign in to save this result |
+| Sign-in body | Enter the email you used for your report. We'll send you a code to sign in. |
+| Email error | Enter a full email address, like name@example.com. |
+| Email step note | No password needed. We'll email you a 6-digit code. |
+| Buttons | Send code / Sending · Sign in / Checking · Send a new code · Resend code · Use a different email |
+| Code title | Enter your code |
+| Code body | We sent a 6-digit code to {email}. |
+| Code field label | 6-digit code |
+| Code helper | It works for 10 minutes. Not there? Check your spam folder. |
+| Wrong code | That code isn't right. Check the email and try again. {n} tries left. ("1 try left.") |
+| Expired code | This code has expired. Codes work for 10 minutes. Send a new one to continue. |
+| Too many wrong tries | Too many wrong tries, so this code has stopped working. Send a new one to continue. |
+| Too many codes | You've asked for 5 codes in the last hour. Try again in {minutes} minutes, or use the newest code you already have. |
+| Code resent | Code sent again. Use the newest one. |
+| Results banner, signed out on a known browser | You already have a Manager Test account. Sign in to save this result to your history. · Button: Sign in with a code |
+| Results banner, signed in | You're signed in. This result is saved to your history. · Link: Open my dashboard |
+| Short-period nudge link | See the export guide |
+| Coach notes link | {n} more coach notes in your full report ("1 more coach note …") |
+| Starter metric tip prefix | Tip · |
+| Confirmation card | Your dashboard is ready · Score history, goals and coach notes. You're signed in on this browser. · Button: Open my dashboard |
+| Account menu | Dashboard · Settings · Sign out |
+| Settings block | Signed in on this browser · You stay signed in here for a year. On a shared computer, sign out when you're done. · Button: Sign out |
+| Signed out | You're signed out · Nothing about your account is left on this browser. Your history is safe. Sign in with a code any time. · Buttons: Back to the Manager Test, Sign in again |
+
+**Code email** (design/emails/code-email)
+
+- Subject: {code} is your Manager Test code
+- Preview: It works for 10 minutes. If you didn't ask for it, you can ignore this email.
+- Title: Your sign-in code · Type it on the sign-in screen to open your dashboard.
+- Box: Your code · {code} · It works for 10 minutes.
+- Body: If you didn't ask for this, ignore this email. Nobody can sign in without the code, and it stops working on its own. · We will never ask you for this code by phone, WhatsApp or chat. · The Beta team
+- Footer: The Manager Test by Beta · [Company postal address] · You're receiving this because someone asked to sign in with this email at managertest.betaapp.me. · Privacy policy
+
+**Report email, dashboard block**
+
+- Your dashboard · Your score history, your goal and your coach notes, all in one place. On this device it opens straight away. Anywhere else, we'll email you a code. · Open my dashboard →
+
 ## Coach insights (for approval)
 
 Each finding is one line plus one action. "After a big win" has three variants: size-up ≥1.3× and give-back ≥50% (main row), size-up only, give-back only. {segment}, {share}, {pf\_without} and the other fields come from the analysis. A segment needs at least 10 trades.

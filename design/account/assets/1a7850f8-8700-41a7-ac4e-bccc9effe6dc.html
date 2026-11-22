@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  @keyframes sispin { to { transform:rotate(360deg); } }
+  @keyframes sicaret { 50% { opacity:0; } }
+</style>
+</helmet>
+<div style="font-family:var(--site-font-body);color:#1C2430;width:100%;background:#FFFFFF;border:{{ cardBorder }};border-radius:24px;padding:{{ cardPad }};display:flex;flex-direction:column;gap:18px;box-sizing:border-box">
+  <span aria-hidden="true" style="width:56px;height:56px;border-radius:18px;background:{{ iconBg }};color:{{ iconFg }};display:flex;align-items:center;justify-content:center">
+    <sc-if value="{{ isEmail }}" hint-placeholder-val="{{ true }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></sc-if>
+    <sc-if value="{{ isCode }}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path><path d="M12 14.5v2.5"></path></svg></sc-if>
+  </span>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <h1 id="si-title" style="margin:0;font-family:var(--site-font-display);font-size:clamp(26px,3vw,32px);font-weight:700;letter-spacing:-0.035em;line-height:1.08;color:#0B1F3A">{{ title }}</h1>
+    <p style="margin:0;font-size:16px;line-height:1.55;color:#4C5A6E;text-wrap:pretty">{{ bodyA }}<strong style="font-weight:700;color:#0B1F3A;overflow-wrap:anywhere">{{ bodyEmail }}</strong>{{ bodyB }}</p>
+  </div>
+
+  <sc-if value="{{ isEmail }}" hint-placeholder-val="{{ true }}">
+    <form onSubmit="{{ sendCode }}" novalidate="{{ true }}" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <label for="si-email" style="font-size:14px;font-weight:600;color:#0B1F3A">Email</label>
+        <input id="si-email" type="email" autocomplete="email" inputmode="email" value="{{ email }}" onInput="{{ setEmail }}" aria-invalid="{{ emailInv }}" aria-describedby="si-email-err" style="height:52px;padding:0 14px;border-radius:12px;border:1px solid {{ emailBorder }};background:#FFFFFF;font-size:16px;color:#1C2430;outline:none" style-focus="border-color:#0E6B4F;box-shadow:0 0 0 3px rgba(14,107,79,0.22)">
+        <sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><span id="si-email-err" role="alert" style="font-size:14px;line-height:1.45;color:#A23B2E">{{ emailErr }}</span></sc-if>
+      </div>
+      <button type="submit" aria-busy="{{ sendingStr }}" style="height:56px;border:none;border-radius:999px;background:#0E6B4F;color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">{{ sendSpinner }}{{ sendLabel }}</button>
+      <span style="font-size:13px;line-height:1.5;color:#6B7684">No password needed. We'll email you a 6-digit code.</span>
+    </form>
+  </sc-if>
+
+  <sc-if value="{{ isCode }}" hint-placeholder-val="{{ false }}">
+    <form onSubmit="{{ verify }}" novalidate="{{ true }}" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label for="si-code" style="font-size:14px;font-weight:600;color:#0B1F3A">6-digit code</label>
+        <div style="position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;opacity:{{ boxesOpacity }}">
+          <sc-for list="{{ boxes }}" as="b" hint-placeholder-count="6">
+            <span aria-hidden="true" style="height:60px;border-radius:12px;border:{{ b.border }};background:{{ b.bg }};box-shadow:{{ b.ring }};display:flex;align-items:center;justify-content:center;font-family:var(--site-font-display);font-size:26px;font-weight:700;color:#0B1F3A;font-variant-numeric:tabular-nums">{{ b.d }}{{ b.caret }}</span>
+          </sc-for>
+          <input id="si-code" ref="{{ codeRef }}" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6" value="{{ code }}" onInput="{{ setCode }}" onFocus="{{ onFocus }}" onBlur="{{ onBlur }}" disabled="{{ codeDisabled }}" aria-invalid="{{ codeInv }}" aria-describedby="si-code-msg" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;border:none;background:transparent;font-size:16px;color:transparent;caret-color:transparent;cursor:text">
+        </div>
+        <sc-if value="{{ msg }}" hint-placeholder-val="{{ false }}">
+          <div id="si-code-msg" role="{{ msgRole }}" style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:{{ msgBg }};font-size:14px;line-height:1.5;color:{{ msgFg }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="{{ msgIcon }}"></path></svg>
+            <span>{{ msg }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ showHelper }}" hint-placeholder-val="{{ true }}">
+          <span id="si-code-msg" style="font-size:13px;line-height:1.5;color:#6B7684">It works for 10 minutes. Not there? Check your spam folder.</span>
+        </sc-if>
+      </div>
+      <button type="submit" aria-busy="{{ checkingStr }}" disabled="{{ primaryDisabled }}" style="height:56px;border:none;border-radius:999px;background:{{ primaryBg }};color:#FFFFFF;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">{{ checkSpinner }}{{ primaryLabel }}</button>
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px">
+        <button type="button" onClick="{{ resend }}" disabled="{{ resendDisabled }}" style="min-height:44px;border:none;background:transparent;padding:0;font-size:15px;font-weight:600;color:{{ resendFg }};cursor:pointer">Resend code</button>
+        <button type="button" onClick="{{ changeEmail }}" style="min-height:44px;border:none;background:transparent;padding:0;font-size:15px;font-weight:600;color:#0E6B4F;cursor:pointer">Use a different email</button>
+      </div>
+    </form>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;480px&quot;,&quot;height&quot;:&quot;560px&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;email&quot;,&quot;invalid&quot;,&quot;code&quot;,&quot;typing&quot;,&quot;wrong&quot;,&quot;expired&quot;,&quot;locked&quot;,&quot;ratelimit&quot;,&quot;resent&quot;,&quot;checking&quot;],&quot;default&quot;:&quot;email&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;email&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;embedded&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onDone&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;}}">
+class Component extends DCLogic {
+  state = { step: 'email', email: '', emailErr: '', sending: false, code: '', status: 'idle', tries: 5, focused: false };
+  codeRef = React.createRef();
+  DEMO = '418207';
+
+  componentDidMount() { this.applyPreset(); }
+  componentDidUpdate(prev, prevState) {
+    if (prev.state !== this.props.state || prev.email !== this.props.email) this.applyPreset();
+    if (prevState.step !== 'code' && this.state.step === 'code' && !this.props.state) this.focusCode();
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  focusCode() { setTimeout(() => { const el = this.codeRef.current; el && el.focus(); }, 30); }
+
+  applyPreset() {
+    const st = this.props.state || 'email';
+    const email = this.props.email || (st === 'email' ? '' : 'karim@example.com');
+    const base = { email, emailErr: '', sending: false, code: '', status: 'idle', tries: 5, step: 'code' };
+    const P = {
+      email: { step: 'email' },
+      invalid: { step: 'email', email: 'karim@example', emailErr: "Enter a full email address, like name@example.com." },
+      code: {},
+      typing: { code: '418', focused: true },
+      wrong: { code: '418270', status: 'wrong', tries: 4 },
+      expired: { code: '418207', status: 'expired' },
+      locked: { code: '', status: 'locked', tries: 0 },
+      ratelimit: { status: 'ratelimit' },
+      resent: { status: 'resent' },
+      checking: { code: '418207', status: 'checking' },
+    }[st] || { step: 'email' };
+    this.setState({ ...base, ...P });
+  }
+
+  done() {
+    if (typeof this.props.onDone === 'function') this.props.onDone();
+    else window.location.href = './Manager Test Account.dc.html?view=dashboard';
+  }
+
+  renderVals() {
+    const s = this.state, embedded = !!this.props.embedded;
+    const spinner = (on) => (on ? React.createElement('span', { 'aria-hidden': true, style: { width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.35)', borderTopColor: '#FFFFFF', animation: 'sispin 0.8s linear infinite', display: 'inline-block' } }) : null);
+    const isCode = s.step === 'code';
+    const st = s.status;
+    const dead = st === 'expired' || st === 'locked';
+    const err = st === 'wrong' || dead;
+    const M = {
+      wrong: ["That code isn't right. Check the email and try again. " + s.tries + (s.tries === 1 ? ' try left.' : ' tries left.'), 'alert', '#F5E4E1', '#7A2A20', 'M12 8v4M12 16h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'],
+      expired: ['This code has expired. Codes work for 10 minutes. Send a new one to continue.', 'alert', '#F5EBD6', '#3D2C0B', 'M12 7v5l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'],
+      locked: ['Too many wrong tries, so this code has stopped working. Send a new one to continue.', 'alert', '#F5E4E1', '#7A2A20', 'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4'],
+      ratelimit: ["You've asked for 5 codes in the last hour. Try again in 40 minutes, or use the newest code you already have.", 'alert', '#F5EBD6', '#3D2C0B', 'M12 8v4M12 16h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z'],
+      resent: ['Code sent again. Use the newest one.', 'status', '#E7F1ED', '#0B3D2E', 'M20 6 9 17l-5-5'],
+    }[st];
+    const digits = s.code.split('');
+    const activeIx = Math.min(digits.length, 5);
+    const boxes = Array.from({ length: 6 }, (_, i) => {
+      const filled = i < digits.length, active = s.focused && !dead && st !== 'checking' && i === activeIx;
+      const caret = active && !filled ? React.createElement('span', { style: { width: 2, height: 28, background: '#0E6B4F', animation: 'sicaret 1s step-end infinite' } }) : null;
+      return { d: digits[i] || '', caret, bg: dead ? '#F3F4F2' : '#FFFFFF',
+        border: (err && !dead ? '1.5px solid #A23B2E' : active ? '1.5px solid #0E6B4F' : filled ? '1.5px solid #8A94A3' : '1px solid #DDE2E7'),
+        ring: active ? '0 0 0 3px rgba(14,107,79,0.18)' : 'none' };
+    });
+    const checking = st === 'checking';
+    const primaryLabel = dead ? 'Send a new code' : checking ? 'Checking' : 'Sign in';
+    const go = (patch) => this.setState(patch);
+    return {
+      cardBorder: embedded ? 'none' : '1px solid #DDE2E7', cardPad: embedded ? '0' : 'clamp(22px,3vw,32px)',
+      isEmail: !isCode, isCode,
+      iconBg: isCode ? '#E6ECF5' : '#E7F1ED', iconFg: isCode ? '#0B1F3A' : '#0E6B4F',
+      title: isCode ? 'Enter your code' : (this.props.title || 'Sign in to The Manager Test'),
+      bodyA: isCode ? 'We sent a 6-digit code to ' : "Enter the email you used for your report. We'll send you a code to sign in.",
+      bodyEmail: isCode ? s.email : '', bodyB: isCode ? '.' : '',
+      email: s.email, emailErr: s.emailErr, emailInv: s.emailErr ? 'true' : 'false', emailBorder: s.emailErr ? '#A23B2E' : '#DDE2E7',
+      setEmail: (e) => go({ email: e.target.value, emailErr: '' }),
+      sendingStr: s.sending ? 'true' : 'false', sendSpinner: spinner(s.sending), sendLabel: s.sending ? 'Sending' : 'Send code',
+      sendCode: (e) => {
+        e.preventDefault();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.email.trim())) { go({ emailErr: 'Enter a full email address, like name@example.com.' }); return; }
+        go({ sending: true }); clearTimeout(this.t);
+        this.t = setTimeout(() => this.setState({ sending: false, step: 'code', code: '', status: 'idle', tries: 5 }), 700);
+      },
+      codeRef: this.codeRef, code: s.code,
+      setCode: (e) => {
+        const v = e.target.value.replace(/\D/g, '').slice(0, 6);
+        const keep = st === 'ratelimit' || st === 'resent' ? st : 'idle';
+        this.setState({ code: v, status: dead ? st : keep });
+        if (v.length === 6 && !dead) setTimeout(() => this.verify(), 0);
+      },
+      onFocus: () => go({ focused: true }), onBlur: () => go({ focused: false }),
+      boxes, boxesOpacity: dead ? '0.6' : '1', codeDisabled: dead || checking,
+      codeInv: err ? 'true' : 'false',
+      msg: M ? M[0] : '', msgRole: M ? M[1] : 'status', msgBg: M ? M[2] : '', msgFg: M ? M[3] : '', msgIcon: M ? M[4] : '',
+      showHelper: !M,
+      checkingStr: checking ? 'true' : 'false', checkSpinner: spinner(checking), primaryLabel,
+      primaryBg: '#0E6B4F', primaryDisabled: checking,
+      verify: (e) => { e && e.preventDefault(); if (dead) { this.resendNow(); return; } this.verify(); },
+      resend: () => this.resendNow(), resendDisabled: st === 'ratelimit' || checking, resendFg: st === 'ratelimit' ? '#8A94A3' : '#0E6B4F',
+      changeEmail: () => { clearTimeout(this.t); go({ step: 'email', code: '', status: 'idle' }); setTimeout(() => { const el = document.getElementById('si-email'); el && el.focus(); }, 30); },
+    };
+  }
+
+  resendNow() {
+    this.setState({ code: '', status: 'resent', tries: 5 });
+    this.focusCode();
+  }
+
+  verify() {
+    const s = this.state;
+    if (s.status === 'checking' || s.status === 'expired' || s.status === 'locked') return;
+    if (s.code.length < 6) { this.setState({ status: 'wrong', tries: s.tries }); return; }
+    this.setState({ status: 'checking' }); clearTimeout(this.t);
+    this.t = setTimeout(() => {
+      if (this.state.code === this.DEMO) { this.setState({ status: 'idle' }); this.done(); return; }
+      const tries = this.state.tries - 1;
+      this.setState(tries <= 0 ? { status: 'locked', tries: 0, code: '' } : { status: 'wrong', tries, code: '' });
+      this.focusCode();
+    }, 900);
+  }
+}
+</script>
+</body>
+</html>

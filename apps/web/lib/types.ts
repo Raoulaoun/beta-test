@@ -21,7 +21,7 @@ export type CoachFinding = {
   text: string; action: string | null; data: Record<string, unknown>;
 };
 // What the browser gets: the free top "working" and top "costing" finding only.
-export type CoachTop = { top: { working: CoachFinding | null; costing: CoachFinding | null } };
+export type CoachTop = { top: { working: CoachFinding | null; costing: CoachFinding | null }; more?: number };
 
 export type StarterMetric = {
   key: string; name: string; display: string; score: number;
@@ -48,7 +48,7 @@ export type ScoreResult = {
   retest_default: boolean;
   notes: string[];
   coach?: CoachTop | null;
-  known_account?: boolean; // signed out on a browser that has an account: offer a sign-in link
+  known_account?: boolean; // signed out on a browser that has an account: offer to sign in with a code
   // Added by the web app's /api/score
   result_id?: string;
   access_token?: string;

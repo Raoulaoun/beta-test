@@ -13,8 +13,8 @@ const CASES = [
   ['blown.xlsx', { screen: 'results', maxScore: 30, flagCodes: ['blown_account'] }],
   ['losses-held-open.xlsx', { screen: 'results', flagCodes: ['losses_held_open'] }],
   ['short-history.xlsx', { screen: 'results', label: 'Early score', maxScore: 69, earlyLine: /^Early score, based on \d+ trades over 2 months\. Upload more history for your full score\.$/, progress: true, noNudge: true }],
-  ['early-nudge.xlsx', { screen: 'results', label: 'Early score', exactScore: 69, nudge: 'Your file only covers 3 weeks. Did you choose All History? Export again for a more accurate score.', progress: true }],
-  ['starter.xlsx', { screen: 'starter', starterMetrics: 3, progress: true, nudge: true }],
+  ['early-nudge.xlsx', { screen: 'results', label: 'Early score', exactScore: 69, nudge: 'Your file only covers 3 weeks. Did you choose All History? Export again for a more accurate score.See the export guide', progress: true }],
+  ['starter.xlsx', { screen: 'starter', starterMetrics: 3, nudge: true }], // design: no progress bars on the starter read
   ['mt4-statement.htm', { screen: 'results', minScore: 75, flags: 'none' }],
   ['mt4-detailed.htm', { screen: 'results', maxScore: 40, flagCodes: ['martingale', 'no_stops'] }],
   ['mt4-no-trades.htm', { screen: 'error', err: 'empty' }],
