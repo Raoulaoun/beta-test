@@ -29,7 +29,10 @@ const check = (ok, msg) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${msg}`); if (
   const scanned = await p.request.get(link.replace(/^https?:\/\/[^/]+/, base));
   check(scanned.ok() && (await scanned.text()).includes('method="post"'), 'link scanners get a confirm page, token kept');
 
-  await p.goto(link.replace(/^https?:\/\/[^/]+/, base), { waitUntil: 'networkidle' });
+  check(await p.evaluate(async () => (await (await fetch('/api/me')).json()).signed_in), 'sending the form signed this browser in');
+  await ctx.clearCookies({ name: 'mt_session' });
+  await p.goto(link.replace(/^https?:\/\/[^/]+/, base));
+  await p.waitForURL('**/dashboard', { timeout: 15000 }).catch(() => null);
   check(p.url().endsWith('/dashboard'), 'opening the link signs in and lands on the dashboard');
   // Same-origin fetch from the page: the browser sends the Secure cookie on 127.0.0.1.
   const inPage = (url, method = 'GET') => p.evaluate(async ([u, m]) => { const r = await fetch(u, { method: m }); return { status: r.status, body: r.status === 204 ? null : await r.json() }; }, [url, method]);

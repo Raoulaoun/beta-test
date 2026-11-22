@@ -1,4 +1,5 @@
 import { sx } from "../../lib/sx.ts";
+import { RenewSession } from "./Renew.tsx";
 
 // Header and page frame from design/account. Signed in: Dashboard / Settings and the
 // initials avatar.
@@ -23,6 +24,7 @@ export function AccountShell({ current, initials, children }: { current?: "dashb
         )}
       </header>
       <main style={sx("flex:1")}>{children}</main>
+      {current && <RenewSession />}
     </div>
   );
 }

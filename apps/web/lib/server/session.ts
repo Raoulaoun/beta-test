@@ -1,11 +1,13 @@
 // Account sessions: a random token in an httpOnly, Secure, SameSite=Lax cookie; only its
-// SHA-256 is stored. 30 days, deleted on sign-out or account deletion.
-import { and, eq, gt } from "drizzle-orm";
+// SHA-256 is stored. A year, renewed on visits (renewSession); deleted on sign-out or account
+// deletion.
+import { and, eq, gt, lt } from "drizzle-orm";
 import { db, schema as s } from "../db/index.ts";
 import { newToken, sha256 } from "./crypto.ts";
 
 export const SESSION_COOKIE = "mt_session";
-export const SESSION_DAYS = 30;
+export const SESSION_DAYS = 365;
+const RENEW_AFTER_DAYS = 1; // renewed at most once a day
 
 export function readCookie(header: string | null, name: string): string | null {
   for (const part of (header || "").split(";")) {
@@ -40,4 +42,16 @@ export async function sessionAccount(cookieHeader: string | null) {
 export async function endSession(cookieHeader: string | null): Promise<void> {
   const token = readCookie(cookieHeader, SESSION_COOKIE);
   if (token) await db().delete(s.sessions).where(eq(s.sessions.tokenHash, sha256(token)));
+}
+
+// On a visit: push the session's end a year out again. Returns the cookie to set, or null.
+export async function renewSession(cookieHeader: string | null): Promise<string | null> {
+  const token = readCookie(cookieHeader, SESSION_COOKIE);
+  if (!token) return null;
+  const now = Date.now();
+  const renewBefore = new Date(now + (SESSION_DAYS - RENEW_AFTER_DAYS) * 86_400_000);
+  const [row] = await db().update(s.sessions).set({ expiresAt: new Date(now + SESSION_DAYS * 86_400_000) })
+    .where(and(eq(s.sessions.tokenHash, sha256(token)), gt(s.sessions.expiresAt, new Date(now)), lt(s.sessions.expiresAt, renewBefore)))
+    .returning({ id: s.sessions.id });
+  return row ? sessionCookie(token, SESSION_DAYS * 86_400) : null;
 }

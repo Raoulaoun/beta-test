@@ -36,6 +36,13 @@
       "when": 1795094227360,
       "tag": "0004_goal_status",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1795333563135,
+      "tag": "0005_sign_in_codes",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { submitLead, type LeadInput } from "../../../lib/server/leads.ts";
-import { sessionAccount } from "../../../lib/server/session.ts";
+import { createSession, SESSION_DAYS, sessionAccount, sessionCookie } from "../../../lib/server/session.ts";
 import { verifyTurnstile } from "../../../lib/server/turnstile.ts";
 import { knownCookie, rememberDevice } from "../../../lib/server/known.ts";
 import { newToken } from "../../../lib/server/crypto.ts";
@@ -26,7 +26,16 @@ export async function POST(req: Request): Promise<Response> {
     // The report goes to the email given, with the PDF attached (after the response).
     void sendReport(body.result_id, out.email, out.accountId);
     const token = out.pending ? newToken() : await rememberDevice(out.accountId);
-    return Response.json({ ok: true, sent_to: out.email }, { headers: { "cache-control": "no-store", "set-cookie": knownCookie(token) } });
+    const headers = new Headers({ "cache-control": "no-store" });
+    headers.append("set-cookie", knownCookie(token));
+    // Signed in on this browser straight away (no email, no code), unless someone is already
+    // signed in here. For an email that already has an account, typed by someone not signed in
+    // as it, the session cookie is one that matches nothing: same response, no access.
+    if (!account) {
+      const session = out.pending ? newToken() : await createSession(out.accountId);
+      headers.append("set-cookie", sessionCookie(session, SESSION_DAYS * 86_400));
+    }
+    return Response.json({ ok: true, sent_to: out.email }, { headers });
   } catch {
     return json({ error: "server_error" }, 500);
   }

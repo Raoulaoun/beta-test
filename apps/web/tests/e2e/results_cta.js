@@ -98,6 +98,8 @@ async function sources(db, id) {
     const cookie = (await ctx.cookies()).find((c) => c.name === 'mt_known');
     check(cookie && cookie.httpOnly && !cookie.value.includes('@'), `@${width} account created: known-device cookie, httpOnly, no email in it`);
 
+    check(await p.evaluate(async () => (await (await fetch('/api/me')).json()).signed_in), `@${width} sending the form signed this browser in`);
+    await ctx.clearCookies({ name: 'mt_session' }); // signed out again (another day, or signed out)
     const saved = await upload(p);
     await p.waitForSelector('[data-testid="signed-out-banner"]', { timeout: 5000 }).catch(() => null);
     const text = await p.textContent('[data-testid="signed-out-banner"]').catch(() => '');

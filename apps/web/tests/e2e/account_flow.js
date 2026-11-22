@@ -41,7 +41,14 @@ async function upload(p, file) {
   check(!!att && att.pdf && att.filename === 'Manager-Test-Report-Karim.pdf' && att.bytes > 50_000, `PDF attached (${att && att.filename}, ${att && att.bytes} bytes)`);
   check(!!report && report.text.includes('educational purposes only'), 'report email carries the disclaimer');
 
-  // ---------- sign in ----------
+  // ---------- signed in by the form, on this browser ----------
+  await p.goto(base + '/dashboard', { waitUntil: 'load' });
+  check(p.url().endsWith('/dashboard') && (await p.textContent('h1')) === 'Welcome back, Karim', 'sending the form signed this browser in: the dashboard opens directly');
+  const session = (await ctx.cookies()).find((c) => c.name === 'mt_session');
+  check(!!session && session.httpOnly && session.expires - Date.now() / 1000 > 364 * 86400, 'a year-long, httpOnly session');
+  await ctx.clearCookies({ name: 'mt_session' });
+
+  // ---------- sign in (another device) ----------
   await p.goto(base + '/dashboard');
   check(p.url().endsWith('/signin'), 'signed out: /dashboard goes to sign-in');
   await p.fill('#ac-email', email);
@@ -49,7 +56,9 @@ async function upload(p, file) {
   await p.waitForSelector('[data-testid="auth-check"]');
   check((await p.textContent('[data-testid="auth-check"]')).includes(`Sent to ${email}`), 'check-your-email view');
   const mail = await waitMail(p, email, 'sign_in');
-  await p.goto(/https?:\/\/\S+token=[\w-]+/.exec(mail.text)[0].replace(/^https?:\/\/[^/]+/, base), { waitUntil: 'networkidle' });
+  await p.goto(/https?:\/\/\S+token=[\w-]+/.exec(mail.text)[0].replace(/^https?:\/\/[^/]+/, base));
+  await p.waitForURL('**/dashboard', { timeout: 15000 }).catch(() => null);
+  await p.waitForSelector('h1');
   check(p.url().endsWith('/dashboard'), 'the link opens the dashboard');
   check((await p.textContent('h1')) === 'Welcome back, Karim', 'welcome by first name');
   check(Number(await p.textContent('[data-testid="latest"] span[style*="60px"]')) === first, 'latest result is the uploaded score');

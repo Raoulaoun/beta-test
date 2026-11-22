@@ -318,7 +318,7 @@ It appears on the results screen, on every PDF page and on the calculator pages.
 - [ ] Privacy policy published
 - [ ] **Blocker:** real export screenshots (desktop + mobile) replace the tutorial placeholders. No video clip in v1.
 - [ ] Counsel review of coach-insight wording (instrument, session and direction named only to describe the trader's own past results)
-- [ ] Copy for the sign-in email (placeholder in the code until supplied)
+- [ ] Copy for the sign-in code email (placeholder in the code until the design brief docs/design-briefs/sign-in-with-code.md is answered)
 - [ ] Copy for the "sign-in link sent" state of the signed-out banner (placeholder: "Sign-in link sent. Check your email.")
 - [ ] Copy for the account-deleted confirmation email (placeholder in the code until supplied)
 - [ ] Company postal address for the email footer (placeholder "[Company postal address]" in the report email)

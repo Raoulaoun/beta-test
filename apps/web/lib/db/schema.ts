@@ -159,6 +159,11 @@ export const authTokens = pgTable("auth_tokens", {
   accountId: uuid("account_id").references(() => accounts.id, { onDelete: "cascade" }),
   email: text("email").notNull(),                       // for the per-email rate limit
   tokenHash: text("token_hash").notNull(),
+  // kind = code: a 6-digit code typed on the sign-in screen; only its hash (with the email)
+  // is kept, and it stops working after 5 wrong tries.
+  kind: text("kind").notNull().default("link"),
+  codeHash: text("code_hash"),
+  attempts: integer("attempts").notNull().default(0),
   expiresAt: ts("expires_at").notNull(),
   usedAt: ts("used_at"),
   createdAt: created(),
