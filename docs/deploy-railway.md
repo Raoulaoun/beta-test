@@ -82,8 +82,9 @@ settings are new in Phase 3).
    | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` | Phase 3. Railway's private database address (see step 0 below). |
    | `SITE_URL` | `https://web-xxxx.up.railway.app` | Phase 3. Your web address, no trailing slash; sign-in links point here. Set it after Generate Domain. |
    | `ADMIN_TOTP_KEY` | 64 random hex characters | Phase 3. Encrypts admin authenticator secrets. Generate with `openssl rand -hex 32`. **Never change it**: existing admins could no longer sign in. |
-   | `RESEND_API_KEY` | from resend.com → API Keys | Phase 3, optional on test deploys. Without it, no email is sent (sign-in links included). Required on the live site. |
-   | `MAIL_FROM` | e.g. `The Manager Test <hello@betaapp.me>` | With `RESEND_API_KEY`. The domain must be verified in Resend (SPF/DKIM records on `betaapp.me`). |
+   | `BREVO_API_KEY` | Brevo → SMTP & API → API Keys → Generate a new API key | Optional on test deploys. Without it, no email is sent (sign-in links and reports included). Required on the live site. |
+   | `MAIL_FROM` | e.g. `hello@betaapp.me` (address only) | With `BREVO_API_KEY`. Must be on a domain authenticated in Brevo (see "Email: Brevo" below). |
+   | `MAIL_FROM_NAME` | e.g. `The Manager Test by Beta` | Optional; the sender name in the inbox. Defaults to `The Manager Test by Beta`. |
    | `TURNSTILE_SECRET_KEY` | from Cloudflare → Turnstile → your widget | Phase 3, optional on test deploys (the form check is skipped without it). Required on the live site: without it the live form refuses leads. |
    | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | from the same Turnstile widget | The public half. Read at build time; change it, and Railway rebuilds. |
 
@@ -152,7 +153,7 @@ Replace `https://web-xxxx.up.railway.app` with your generated domain.
 | `web` | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` | Railway reference variable. |
 | `web` | `SITE_URL` | your web address | Set by you after Generate Domain. |
 | `web` | `ADMIN_TOTP_KEY` | 64 hex characters | Generated once by you (`openssl rand -hex 32`). Never change. |
-| `web` | `RESEND_API_KEY`, `MAIL_FROM` | from Resend | Optional on test deploys; required live. |
+| `web` | `BREVO_API_KEY`, `MAIL_FROM`, `MAIL_FROM_NAME` | from Brevo | Optional on test deploys; required live. |
 | `web` | `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | from Cloudflare Turnstile | Optional on test deploys; required live. |
 | `scoring` | `ACCOUNT_FINGERPRINT_SECRET` | 64 hex characters | Generated once by you. Never change. Lives only on `scoring`, never in the database. |
 | `web` | `SITE_ENV` | unset, or `production` | Unset on every test/staging deploy. Set to `production` **only** on the live site at launch; it makes the site indexable. Changing it triggers a rebuild, which is needed (it is read at build time). |
@@ -168,9 +169,31 @@ Do **not** set these on Railway:
 The confirmation-screen links (webinar, Managers Room, Beta page) are not variables: set them
 in `/admin` → **Settings**. They apply at once, with no deploy.
 
-Secrets (`ADMIN_TOTP_KEY`, `ACCOUNT_FINGERPRINT_SECRET`, `RESEND_API_KEY`,
+Secrets (`ADMIN_TOTP_KEY`, `ACCOUNT_FINGERPRINT_SECRET`, `BREVO_API_KEY`,
 `TURNSTILE_SECRET_KEY`): add them with Railway's **Sealed** option on the variable, so their
 values can't be read back in the dashboard.
+
+## Email: Brevo
+
+The web app sends every email (sign-in links, the report with its PDF, the deletion
+confirmation, and the Phase 9 sequences) through Brevo's transactional API.
+
+1. **Authenticate the domain.** Brevo → Senders, Domains & Dedicated IPs → **Domains** →
+   Add a domain → `betaapp.me`. Brevo shows DNS records (a Brevo code TXT record, DKIM
+   records and a DMARC record). Add them where `betaapp.me`'s DNS is hosted, then click
+   **Verify** in Brevo. Until the domain shows "Authenticated", emails may be refused or land
+   in spam.
+2. **Add the sender.** Senders → Add a sender → name `The Manager Test by Beta`, email
+   `hello@betaapp.me` (or the address you prefer on that domain).
+3. **Create the API key.** SMTP & API → API Keys → Generate a new API key → name it
+   `manager-test`. Copy it once; Brevo won't show it again.
+4. **Authorised IPs.** Security → Authorised IPs: if IP blocking is on, Brevo refuses calls
+   from Railway (its outgoing IPs change). Turn it off for API keys, or the emails fail with 401.
+5. **Railway.** On `web` → Variables: `BREVO_API_KEY` (sealed), `MAIL_FROM` =
+   `hello@betaapp.me`, optionally `MAIL_FROM_NAME`. Railway redeploys `web`.
+6. **Test.** Upload a statement, send the lead form with your own email: the report arrives
+   with the PDF attached. Then sign in from `/signin`. Brevo → Transactional → Logs shows each
+   email (tagged `report`, `sign_in`, `account_deleted`).
 
 ## How redeploys work
 
@@ -211,4 +234,6 @@ through.
 | Deploy stops at the pre-deploy step | A migration failed | Read the pre-deploy log; the previous version is still serving. |
 | `/admin` sign-in says the code didn't work | Phone clock drift, or `ADMIN_TOTP_KEY` changed since the admin was created | Check the phone's time is automatic. If the key changed, create the admin again. |
 | `/health` on `scoring` shows `"fingerprint": false` | `ACCOUNT_FINGERPRINT_SECRET` not set | Add it to `scoring` and redeploy. Results scored without it can't be grouped later. |
-| Sign-in emails never arrive on a test deploy | No `RESEND_API_KEY` | Expected on test deploys; add the key and a verified `MAIL_FROM` to test email. |
+| Sign-in emails never arrive on a test deploy | No `BREVO_API_KEY` | Expected on test deploys; add the key and an authenticated `MAIL_FROM` to test email. |
+| Emails fail with "email provider error 401" | Wrong or revoked `BREVO_API_KEY`, or Brevo blocks the request's IP | Generate a new key; in Brevo → Security → Authorised IPs, turn IP blocking off for the API (Railway's outgoing IPs change). |
+| Emails fail with "email provider error 400" | `MAIL_FROM` is not a sender Brevo accepts | Use an address on the authenticated domain (Senders, Domains & Dedicated IPs → Domains). |

@@ -274,7 +274,7 @@ Two small services on Railway, separate from the Beta platform: a Next.js site a
 | PDF | HTML templates rendered to PDF in the scoring service (WeasyPrint) | Full report |
 | Share cards | Server-side image generation in Next.js (Satori / OG image) | Story and post PNGs |
 | Database | Postgres on Railway | Leads and results; never raw statements |
-| Email | A transactional email service (Resend or Postmark) plus a scheduled job for sequences | Report delivery, follow-up, daily digest |
+| Email | Brevo (transactional API) plus a scheduled job for sequences | Report delivery, follow-up, daily digest |
 | CRM | Built-in funnel CRM: admin area of the same Next.js app, same database | Single source for follow-up |
 | Protection | Cloudflare Turnstile, rate limit 10 uploads per IP per hour | Stop bots and abuse |
 | Analytics | Meta Pixel and GA4 events: upload\_started, score\_shown, lead\_submitted, card\_downloaded, calculator\_used | Ad optimization and funnel tracking |

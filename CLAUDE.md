@@ -75,7 +75,7 @@ scoring takes a parsed statement, whatever produced it.
   → metrics → pillars → red flags → band → insights. PDF via WeasyPrint from HTML templates.
 - Postgres on Railway: results (anonymous until converted), leads, pipeline stages,
   notes, email log, retests.
-- Email: Resend (transactional, scheduled sequences, daily digest).
+- Email: Brevo (transactional API: reports, sign-in links, follow-up sequences, daily digest).
 - Protection: Cloudflare Turnstile on the form; 10 uploads per IP per hour.
 - Analytics: Meta Pixel and GA4 events `upload_started`, `score_shown`, `lead_submitted`,
   `card_downloaded`, `calculator_used`, `form_opened` (with its `source`: `results_button`,
